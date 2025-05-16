@@ -3,6 +3,43 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-white: oklch(1 0 0);
+  --color-black: oklch(0 0 0);
+
+  --color-main-50: oklch(0.87 0.09 296);
+  --color-main-100: oklch(0.85 0.10 296);
+  --color-main-150: oklch(0.83 0.11 296);
+  --color-main-200: oklch(0.81 0.13 296);
+  --color-main-250: oklch(0.79 0.14 296);
+  --color-main-300: oklch(0.77 0.15 296);
+  --color-main-350: oklch(0.75 0.17 296);
+  --color-main-400: oklch(0.73 0.18 296);
+  --color-main-450: oklch(0.71 0.19 296);
+  --color-main-500: oklch(0.69 0.20 296);
+  --color-main-550: oklch(0.67 0.21 296);
+  --color-main-600: oklch(0.65 0.22 296);
+  --color-main-650: oklch(0.63 0.23 296);
+  --color-main-700: oklch(0.61 0.24 296);
+
+  --color-gray-50: oklch(0.967 0.004 252.0);
+  --color-gray-100: oklch(0.944 0.005 252.0);
+  --color-gray-200: oklch(0.900 0.005 252.0);
+  --color-gray-300: oklch(0.829 0.006 250.0);
+  --color-gray-400: oklch(0.679 0.022 250.0);
+  --color-gray-500: oklch(0.520 0.031 250.0);
+  --color-gray-600: oklch(0.390 0.030 252.0);
+  --color-gray-700: oklch(0.290 0.026 252.0);
+  --color-gray-800: oklch(0.200 0.025 252.0);
+  --color-gray-900: oklch(0.120 0.025 255.0);
+
+  --color-red-600: oklch(0.550 0.265 27.0);
+  --color-red-700: oklch(0.500 0.265 27.0);
+  --color-red-800: oklch(0.450 0.265 27.0);
+  --color-red-900: oklch(0.400 0.265 27.0);
+  --color-red-950: oklch(0.350 0.265 27.0);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -116,6 +153,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
