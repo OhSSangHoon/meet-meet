@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '@/providers/AuthProvider';
 import { regexEmail, regexPassword } from './shared/utils/vaildator';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,7 +15,9 @@ export default function SigninForm() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [errorResponseMessage, setErrorResponseMessage] = useState<string | null>(null);
 
-    const router = useRouter();
+    const { signin } = useContext(AuthContext);
+
+
 
     const handlePasswordVisibility = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -51,23 +53,15 @@ export default function SigninForm() {
         }
 
         try {
-            const result = await axios.post('/api/auth/signin', { email, password });
-            if (result.status === 200) {
-                alert('로그인에 성공했습니다.')
-                localStorage.setItem('token', result.data.token);
-                router.replace('/');
-            }
+            await signin(email, password)
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;
-                if (serverError) {
-                    setErrorResponseMessage(serverError.message);
-                } else {
-                    setErrorResponseMessage('로그인 처리 중 오류가 발생했습니다.');
-                }
+                if (serverError) setErrorResponseMessage(serverError.message);
+                else setErrorResponseMessage('로그인 처리 중 오류가 발생했습니다.');
             } else {
                 setErrorResponseMessage('알 수 없는 오류가 발생했습니다.');
-                console.error(error);
+                console.log(error);
             }
         }
     }
@@ -119,7 +113,9 @@ export default function SigninForm() {
                             onChange={handlePasswordChange}
                             required
                         />
-                        <button className='absolute right-2.5 top-1/4 cursor-pointer hover:opacity-60 transition-all duration-200 ease-in-out'
+                        <button
+                            type='button'
+                            className='absolute right-2.5 top-1/4 cursor-pointer hover:opacity-60 transition-all duration-200 ease-in-out'
                             onClick={handlePasswordVisibility}
                         >
                             <Image src={isPasswordVisible ? "/images/visibility_on.svg" : "/images/visibility_off.svg"} alt="비밀번호 보기 숨김" width={24} height={24} />

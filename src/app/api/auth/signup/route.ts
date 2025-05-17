@@ -4,7 +4,7 @@ import axios, { AxiosError } from 'axios';
 export async function POST(req: NextRequest) {
     const { email, password, name, companyName } = await req.json();
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URI_DEV}/auths/signup`, {
+        const response = await axios.post(`${process.env.API_URI_DEV}/auths/signup`, {
             email,
             password,
             name,

@@ -1,20 +1,18 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Navbar() {
-    const { token } = useContext(AuthContext);
+    const [userName, setUserName] = useState('');
 
-    const router = useRouter();
+    const { token, signout } = useContext(AuthContext);
 
-    const handleSignout = () => {
-        localStorage.removeItem('token');
-        router.replace('/signin')
-    }
+    useEffect(() => {
+        setUserName(JSON.parse(localStorage.getItem('user_name') || '유저'));
+    }, [])
 
     return (
         <div
@@ -27,7 +25,7 @@ export default function Navbar() {
                         alt="logo image"
                         width={100}
                         height={100}
-                        className='w-[6rem] h-[6rem] hover:opacity-50 duration-300 ease-in-out'
+                        className='w-[6rem] h-[6rem] pointer-events-none'
                     />
                 </Link>
                 <Link href="/gatherings" className='hover:opacity-50 duration-300 ease-in-out'>모임찾기</Link>
@@ -35,11 +33,13 @@ export default function Navbar() {
                 <Link href='/reviews' className='hover:opacity-50 duration-300 ease-in-out'>모든 리뷰</Link>
             </div>
             <div className='flex items-center'>
-                {token ? (
-                    <button onClick={handleSignout} className='cursor-pointer hover:opacity-50 duration-300 ease-in-out'>로그아웃</button>
-                ) : (
-                    <Link href='/signin' className='hover:opacity-50 duration-300 ease-in-out'>로그인</Link>
+                {token && (
+                    <div className='flex items-center gap-2'>
+                        <span className='font-bold text-main-600'>{userName}</span>
+                        <button onClick={() => signout()} className='cursor-pointer hover:opacity-50 duration-300 ease-in-out'>로그아웃</button>
+                    </div>
                 )}
+                {!token && <Link href='/signin' className='hover:opacity-50 duration-300 ease-in-out'>로그인</Link>}
             </div>
         </div>
     );

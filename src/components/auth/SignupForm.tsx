@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useContext, useState } from 'react';
 import { regexEmail, regexPassword } from './shared/utils/vaildator';
+import { AuthContext } from '@/providers/AuthProvider';
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
@@ -23,7 +23,8 @@ export default function SignupForm() {
 
     const [errorResponseMessage, setErrorResponseMessage] = useState<string | null>(null);
 
-    const router = useRouter();
+    const { signup } = useContext(AuthContext)
+
 
     const handlePasswordVisibility = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -87,11 +88,7 @@ export default function SignupForm() {
         }
 
         try {
-            const result = await axios.post('/api/auth/signup', { email, password, name, companyName })
-            if (result.status === 200) {
-                alert('회원가입이 완료되었습니다.')
-                router.replace('/signin')
-            }
+            await signup(email, password, name, companyName);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;
