@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${pretendard.variable} antialiased`}
+        className={`${pretendard.variable} font-pretendard`}
       >
         <Providers>
           <Navbar />

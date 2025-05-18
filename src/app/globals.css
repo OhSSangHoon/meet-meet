@@ -4,6 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  /* 브레이크 포인트 */
+  --breakpoint-sm: 375px;
+  --breakpoint-md: 744px;
+
   /* 컬러 */
   --color-white: oklch(1 0 0);
   --color-black: oklch(0 0 0);

@@ -1,4 +1,3 @@
-import { Info } from "lucide-react"
 // import ProfileEditIcon from "../icons/profile-edit-icon.svg";
 
 export default function ProfileCard() {
