@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from 'next/font/local';
 import "./globals.css";
 import Providers from "@/providers/Providers";
+import Navbar from '@/components/shared/ui/Navbar';
 
 const pretendard = localFont({
   src: '../fonts/PretendardVariable.woff2',
@@ -39,9 +40,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${pretendard.variable}  antialiased`}
+        className={`${pretendard.variable} font-pretendard`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
   );
