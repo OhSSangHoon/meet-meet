@@ -10,6 +10,7 @@ type AuthContextType = {
     signup: (email: string, password: string, name: string, companyName: string) => Promise<void>;
     signin: (email: string, password: string) => Promise<void>;
     signout: () => Promise<void>;
+    userName: string;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -17,13 +18,15 @@ export const AuthContext = createContext<AuthContextType>({
     setToken: () => { },
     signup: async () => { },
     signin: async () => { },
-    signout: async () => { }
+    signout: async () => { },
+    userName: ''
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [previousPath, setPreviousPath] = useState<string>('/');
+    const [userName, setUserName] = useState('');
 
     const router = useRouter();
     const pathname = usePathname();
@@ -60,10 +63,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             const result = await axios.post('/api/auth/fetch-user', { token });
             if (result.status === 200) {
                 console.log(result.data);
-                localStorage.setItem('user_name', JSON.stringify(result.data.name));
-                localStorage.setItem('user_id', JSON.stringify(result.data.id));
-                localStorage.setItem('user_company_name', JSON.stringify(result.data.companyName));
-                localStorage.setItem('user_image', JSON.stringify(result.data.image));
+                localStorage.setItem('user_name', result.data.name);
+                localStorage.setItem('user_id', result.data.id);
+                localStorage.setItem('user_company_name', result.data.companyName);
+                localStorage.setItem('user_image', result.data.image);
+                setUserName(result.data.name);
             }
         } catch (error) {
             throw error;
@@ -72,6 +76,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const signout = async () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('user_company_name');
+        localStorage.removeItem('user_image');
         setToken(null);
         const result = await axios.post('/api/auth/signout');
         if (result.status === 200) console.log('로그아웃에 성공했습니다.')
@@ -88,27 +96,27 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         initAuth();
     }, []);
 
+    // 유저 이름 감지
     useEffect(() => {
-        if (pathname !== '/signin' && !pathname.includes('/auth/')) {
-            setPreviousPath(pathname);
-            console.log('Previous path set to:', pathname);
-        }
+        const userName = localStorage.getItem('user_name');
+        if (userName) setUserName(userName);
+    }, []);
+
+    useEffect(() => {
+        if (pathname !== '/signin' && !pathname.includes('/auth/')) setPreviousPath(pathname);
     }, [pathname]);
 
     useEffect(() => {
         if (!isLoading && !token && pathname.startsWith('/mypage')) {
-            console.log('AuthProvider: 로그인이 필요합니다.');
             alert('로그인이 필요합니다.')
             router.replace('/signin');
         }
 
-        if (!isLoading && token && pathname === '/signin') {
-            router.replace(previousPath);
-        }
+        if (!isLoading && token && pathname === '/signin') router.replace(previousPath);
     }, [isLoading, token, pathname, router, previousPath]);
 
     return (
-        <AuthContext.Provider value={{ token, setToken, signup, signin, signout }}>
+        <AuthContext.Provider value={{ token, setToken, signup, signin, signout, userName }}>
             {children}
         </AuthContext.Provider>
     );

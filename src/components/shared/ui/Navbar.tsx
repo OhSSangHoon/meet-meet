@@ -1,18 +1,12 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Navbar() {
-    const [userName, setUserName] = useState('');
-
-    const { token, signout } = useContext(AuthContext);
-
-    useEffect(() => {
-        setUserName(localStorage.getItem('user_name') ?? '유저');
-    }, []);
+    const { token, signout, userName } = useContext(AuthContext);
 
     return (
         <nav
