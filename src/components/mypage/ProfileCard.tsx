@@ -1,8 +1,23 @@
 "use client";
 
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 export default function ProfileCard() {
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("user_name") || "";
+    const storedCompany = localStorage.getItem("user_company_name") || "";
+    const storedEmail = localStorage.getItem("user_email") || "";
+
+    setName(storedName);
+    setCompany(storedCompany);
+    setEmail(storedEmail);
+  }, []);
+
   return (
     <div className="rounded-lg overflow-hidden border">
       {/* Card Header with Orange Background */}
@@ -29,14 +44,14 @@ export default function ProfileCard() {
           </button>
         </div>
         <div>
-          <div className="text-gray-800 font-bold text-md">홍길동</div>
+          <div className="text-gray-800 font-bold text-md">{name}</div>
           <div className="text-sm text-gray-800 flex gap-2">
             <div className="font-bold">company.</div>
-            <div>코드잇</div>
+            <div>{company}</div>
           </div>
           <div className="text-sm text-gray-800 flex gap-2">
             <div className="font-bold">E-mail.</div>
-            <div> codeit@codeit.com</div>
+            <div>{email}</div>
           </div>
         </div>
       </div>

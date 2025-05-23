@@ -10,7 +10,7 @@ export default function LikedMeetingsPage() {
     {/* ✅ 로고 + 텍스트 묶음 */}
       <div className="flex items-center gap-[13px] h-[72px]">
         <div className="w-[72px] h-[72px]">
-           <img src="/icons/saved-logo.svg" alt="찜 아이콘" width={72} height={72} />
+           <Image src="/icons/saved-logo.svg" alt="찜 아이콘" width={72} height={72} />
         </div>
         <div className="flex flex-col justify-center gap-[4px]">
           <h1 className="text-[24px] font-semibold leading-[32px] text-gray-900">
