@@ -6,6 +6,7 @@ import axios from "axios";
 import Image from "next/image";
 import { Gathering } from "@/lib/types/gatherings";
 import { getSavedGatherings, setSavedGatherings } from "@/lib/api/gatherings";
+import { useRouter } from "next/navigation";
 
 
 // 모임 목록 컴포넌트 속성
@@ -34,7 +35,8 @@ export default function GatheringsList({
 }: GatheringsListProps) {
     const queryClient = useQueryClient();
     const observerRef = useRef<IntersectionObserver | null>(null);
-    
+    const router = useRouter();
+
     // 무한스크롤 활성화 상태
     const [infiniteScrollEnabled, setInfiniteScrollEnabled] = useState(false);
     
@@ -170,17 +172,20 @@ export default function GatheringsList({
                 
                 return (
                     <section
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => router.push(`/gatherings/detail/${gathering.id}`)}
                         key={`${gathering.teamId || 'unknown'}-${gathering.id}`}
                         ref={isLastItem && hasSSRData && fetchFromApi ? lastItemRef : undefined}
-                        className="w-full sm:h-[156px] flex flex-col sm:flex-row justify-start border-1 border-gray-100 rounded-lg"
+                        className="w-full sm:h-[156px] flex flex-col sm:flex-row justify-start border-1 border-gray-100 rounded-lg bg-white"
                     >
-                        {/* 이미지 - 모바일에서는 위쪽에 위치 */}
+                        {/* 이미지 */}
                         <div className="w-full sm:w-1/2 h-[200px] sm:h-full relative">
                             <Image 
                                 src={gathering.image} 
                                 alt="모임 이미지"
                                 fill
-                                className="rounded-t-lg sm:rounded-l-lg sm:rounded-t-none object-cover"  
+                                className="rounded-t-lg sm:rounded-l-lg sm:rounded-t-none object-cover pointer-events-none"
                                 priority={index === 0}
                                 sizes="(max-width: 768px) 100vw, 50vw"
                             />
@@ -190,7 +195,7 @@ export default function GatheringsList({
                             </div>
                         </div>
 
-                        {/* 텍스트 정보와 버튼 - 모바일에서는 아래쪽에 위치 */}
+                        {/* 텍스트 정보와 버튼 */}
                         <div className="w-full sm:w-1/2 flex flex-col sm:flex-row">
                             {/* 텍스트 정보 */}
                             <div className="flex-1 flex flex-col p-4">
