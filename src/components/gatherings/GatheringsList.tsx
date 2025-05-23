@@ -2,10 +2,10 @@
 
 import { useState, useRef, useCallback } from "react";
 import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import axios from "axios";
 import Image from "next/image";
 import { Gathering } from "@/lib/types/gatherings";
+import { getSavedGatherings, setSavedGatherings } from "@/lib/api/gatherings";
 
 
 // 모임 목록 컴포넌트 속성
@@ -25,17 +25,6 @@ const fetchGatheringsPaginated = async (page: number, limit: number) => {
     });
     
     return response.data || [];
-};
-
-// 찜목록 조회
-const getSavedGatherings = (): string[] => {
-    if (typeof window === 'undefined') return [];
-    return JSON.parse(localStorage.getItem('savedGatherings') || '[]');
-};
-
-// 찜목록 저장
-const setSavedGatherings = (ids: string[]): void => {
-    localStorage.setItem('savedGatherings', JSON.stringify(ids));
 };
 
 // 모임 목록 컴포넌트
@@ -117,7 +106,7 @@ export default function GatheringsList({
             }
         }, {
             threshold: 0.1,
-            rootMargin: '50px'
+            rootMargin: '5px'
         });
         
         if (node) observerRef.current.observe(node);
@@ -157,16 +146,16 @@ export default function GatheringsList({
     };
 
     // 날짜 형식 변환
-    const formatDate = (dateTime: string) => {
+    function formatDate(dateTime: string) {
         const date = new Date(dateTime);
-        return date.toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour12: false });
-    };
+        return date.toISOString().split('T')[0];
+    }
 
     // 시간 형식 변환
-    const formatTime = (dateTime: string) => {
+    function formatTime(dateTime: string) {
         const date = new Date(dateTime);
-        return date.toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
-    };
+        return date.toISOString().split('T')[1].slice(0, 5);
+    }
 
     const finalGatherings = hasSSRData ? allGatherings : []; // SSR 데이터 있으면 모든 데이터 표시, 없으면 빈 배열
     const isInitialLoading = !hasSSRData; // SSR 데이터 없으면 로딩 표시
