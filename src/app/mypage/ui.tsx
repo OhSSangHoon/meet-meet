@@ -26,7 +26,7 @@ export default function MyPageUI() {
         getGatherings();
     }, []);
 
-   
+
     return (
         <>
             <main className='contents-container'>

@@ -22,14 +22,14 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
             <div className='relative'>
                 <input
                     ref={ref}
-                    type={type}
+                    type={label === '비밀번호' ? (isPasswordVisible ? 'text' : 'password') : type}
                     id={id}
                     className={`block w-full p-2.5 rounded-lg bg-gray-50 text-sm text-gray-900 border-2 focus:outline-none ${error || errorResponseMessage ? 'border-red-600' : 'focus:border-main-300'}`}
                     placeholder={placeholder}
                     aria-invalid={isSubmitted ? (error ? 'true' : 'false') : undefined}
                     {...props}
                 />
-                {type === 'password' && (
+                {label === '비밀번호' && (
                     <button
                         type="button"
                         className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer hover:opacity-60"

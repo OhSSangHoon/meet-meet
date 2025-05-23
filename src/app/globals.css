@@ -188,7 +188,7 @@ html {
 
 @layer components {
   .contents-container {
-    @apply max-w-screen-lg h-screen mx-auto px-20 pt-8 flex flex-col gap-4 bg-neutral-50;
+    @apply max-w-screen-lg h-full mx-auto px-20 pt-8 flex flex-col gap-4 bg-neutral-50;
   }
 }
 

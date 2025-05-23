@@ -134,9 +134,9 @@ export default function RegisterForm() {
                     </div>
                     {!isPasswordMatch || !passwordCheck ? (
                         <span className='text-red-600 text-sm'>비밀번호가 일치하지 않습니다.</span>
-                    ) : (
-                        <span className='text-green-400 text-sm'>✓</span>
-                    )}
+                    ) :
+                        password.length < 8 ? <span className='text-red-600 text-sm'>비밀번호가 8자 이상이 되도록 해주세요.</span> : <span className='text-green-400 text-sm'>✓</span>
+                    }
                 </div>
                 <SubmitButton
                     isSubmitting={isSubmitting}

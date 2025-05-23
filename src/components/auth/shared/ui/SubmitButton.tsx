@@ -14,8 +14,8 @@ export default function SubmitButton({ isSubmitting, isPasswordMatch, text, prop
     return (
         <button
             type="submit"
-            disabled={isSubmitting || !isPasswordMatch || props?.name === '' || props?.email === '' || props?.companyName === '' || props?.password === ''}
-            className={`w-full rounded-lg ${isSubmitting || !isPasswordMatch || props?.name === '' || props?.email === '' || props?.companyName === '' || props?.password === '' ? 'bg-button-disabled' : 'bg-button hover:bg-button-hover'} px-5 py-2.5 text-center text font-bold text-white cursor-pointer transition-all duration-300 ease-in-out`}
+            disabled={isSubmitting || !isPasswordMatch || props?.name === '' || props?.email === '' || props?.companyName === '' || props?.password.length < 8}
+            className={`w-full rounded-lg ${isSubmitting || !isPasswordMatch || props?.name === '' || props?.email === '' || props?.companyName === '' || props?.password.length < 8 || !isPasswordMatch ? 'bg-button-disabled' : 'bg-button hover:bg-button-hover'} px-5 py-2.5 text-center text font-bold text-white cursor-pointer transition-all duration-300 ease-in-out`}
         >
             {text}
         </button>
