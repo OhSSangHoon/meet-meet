@@ -1,35 +1,41 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState, useContext } from 'react';
 import Image from "next/image";
 import { Heart } from 'lucide-react';
 import { Gathering } from "@/types/gatherings";
 import { AuthContext } from '@/providers/AuthProvider';
-import { getSavedGatherings, setSavedGatherings } from '@/lib/api/gatherings';
+import { useSavedGatherings } from "@/components/gatherings/shared/hooks/useSavedGatherings";
+import { formatDate, formatTime, getTimeRemaining } from "@/components/shared/utils/format";
 import axios from 'axios';
 
-type Category = 'DALLAEMFIT' | 'WORKATION';
-type DallaemfitType = 'ALL' | 'OFFICE_STRETCHING' | 'MINDFULNESS';
+export enum Category {
+  DALLAEMFIT = 'DALLAEMFIT',
+  WORKATION = 'WORKATION',
+}
+
+export enum DallaemfitType {
+  ALL = 'ALL',
+  OFFICE_STRETCHING = 'OFFICE_STRETCHING',
+  MINDFULNESS = 'MINDFULNESS',
+}
 
 export default function LikedMeetingsPage() {
   const { token } = useContext(AuthContext);
-  const queryClient = useQueryClient();
+  const { savedIds: likedList, toggleSaved } = useSavedGatherings();
 
-   if (!token) {
-    return <span className="text-main-500">토큰 없음</span>;
-  }
-
+    
   // 🔁 category + type 통합 상태
-  const [filter, setFilter] = useState<{ category: Category; type: DallaemfitType }>({
-    category: 'DALLAEMFIT',
-    type: 'ALL',
+  const [filter, setFilter] = useState({
+    category: Category.DALLAEMFIT,
+    type: DallaemfitType.ALL,
   });
 
   const handleCategoryChange = (category: Category) => {
     setFilter({
       category,
-      type: category === 'DALLAEMFIT' ? 'ALL' : 'ALL', // 워케이션은 서브타입 없음
+      type: category === Category.DALLAEMFIT ? DallaemfitType.ALL : DallaemfitType.ALL,
     });
   };
 
@@ -39,28 +45,6 @@ export default function LikedMeetingsPage() {
       type,
     }));
   };
-
-  // 찜 목록 조회
-  const { data: likedList = [] } = useQuery({
-    queryKey: ['savedGatherings'],
-    queryFn: getSavedGatherings,
-    staleTime: Infinity,
-  });
-
-  // 찜 토글 기능
-  const toggleSavedMutation = useMutation({
-    mutationFn: (gatheringId: string) => {
-      const currentSaved = getSavedGatherings();
-      const newSaved = currentSaved.includes(gatheringId)
-        ? currentSaved.filter(id => id !== gatheringId)
-        : [...currentSaved, gatheringId];
-      setSavedGatherings(newSaved);
-      return Promise.resolve(newSaved);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['savedGatherings'] });
-    },
-  });
 
   // 전체 모임 목록 불러오기
   const { data: meetings = [] } = useQuery<Gathering[]>({
@@ -77,7 +61,7 @@ export default function LikedMeetingsPage() {
   // 찜한 모임 중 필터 조건에 맞는 항목만 필터링
   const likedGatherings = meetings.filter((g) => {
     if (!likedList.includes(String(g.id))) return false;
-    if (filter.category === 'DALLAEMFIT') {
+    if (filter.category === Category.DALLAEMFIT) {
       if (filter.type === 'ALL') {
         return g.type === 'OFFICE_STRETCHING' || g.type === 'MINDFULNESS';
       } else {
@@ -87,6 +71,10 @@ export default function LikedMeetingsPage() {
       return g.type === 'WORKATION';
     }
   });
+
+  if (!token) {
+    return <span className="text-main-500">토큰 없음</span>;
+  }
 
   return (
     <main className="contents-container">
@@ -104,14 +92,14 @@ export default function LikedMeetingsPage() {
         <div className="w-full flex flex-col justify-start py-5">
           <div className="flex flex-row">
             <button
-              onClick={() => handleCategoryChange('DALLAEMFIT')}
+              onClick={() => handleCategoryChange(Category.DALLAEMFIT)}
               className={`text-gray-900 text-lg font-semibold px-4 py-1 ${filter.category === 'DALLAEMFIT' ? 'border-b-2 border-gray-900' : ''}`}
             >
               주제1
             </button>
             <button
-              onClick={() => handleCategoryChange('WORKATION')}
-              className={`text-gray-900 text-lg font-semibold px-4 py-1 ${filter.category === 'WORKATION' ? 'border-b-2 border-gray-900' : ''}`}
+              onClick={() => handleCategoryChange(Category.WORKATION)}
+              className={`text-gray-900 text-lg font-semibold px-4 py-1 ${filter.category === Category.WORKATION ? 'border-b-2 border-gray-900' : ''}`}
             >
               주제2
             </button>
@@ -121,7 +109,7 @@ export default function LikedMeetingsPage() {
           {filter.category === 'DALLAEMFIT' && (
             <div className="w-full flex flex-col justify-start py-5 border-b-2 border-gray-200">
               <div className="flex flex-row items-center gap-2">
-                {(['ALL', 'OFFICE_STRETCHING', 'MINDFULNESS'] as const).map((type) => (
+                { Object.values(DallaemfitType).map((type) => (
                   <button
                     key={type}
                     onClick={() => handleTypeChange(type)}
@@ -130,7 +118,11 @@ export default function LikedMeetingsPage() {
                       : "bg-gray-200 text-gray-900"
                       } text-sm font-medium px-4 py-2 rounded-lg`}
                   >
-                    {type === 'ALL' ? '전체' : type === 'OFFICE_STRETCHING' ? '오피스 스트레칭' : '마인드풀'}
+                    {type === DallaemfitType.ALL
+                      ? '전체'
+                      : type === DallaemfitType.OFFICE_STRETCHING
+                      ? '오피스 스트레칭'
+                      : '마인드풀'}
                   </button>
                 ))}
               </div>
@@ -143,13 +135,18 @@ export default function LikedMeetingsPage() {
       <div className="space-y-6 pt-4">
         {likedGatherings.map((gathering) => {
           const isLiked = likedList.includes(String(gathering.id));
+
+          const percent = gathering.participantCount
+          ? Math.min((gathering.participantCount / gathering.capacity) * 100, 100)
+          : 0;
+          
           return (
             <div key={gathering.id} className="border rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
               {/* 이미지 영역 */}
               <div className="relative w-full md:w-[20rem] h-[14rem]">
                 <div className="absolute top-2 left-2 bg-main-300 text-white text-xs font-semibold rounded-full px-3 py-1 z-10 flex items-center">
-                  <span className="text-white mr-1">🔔</span>
-                  <span className="font-medium">오늘 21시 마감</span>
+                  <Image src={"/icons/Alarm.svg"} alt="시간" width={24} height={24} />
+                  <span className="font-medium">{getTimeRemaining(gathering?.registrationEnd || '')}</span>
                 </div>
                 <Image
                   src={gathering.image || '/placeholder.jpg'}
@@ -165,25 +162,34 @@ export default function LikedMeetingsPage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center gap-2 text-sm mb-1">
-                      <h1 className="text-lg font-semibold">{gathering.name}</h1>
+                      <h1 className="text-lg font-semibold">{gathering?.name || '로딩 중...'}</h1>
                       <span className="text-gray-400">|</span>
-                      <span className="text-gray-500">{gathering.location}</span>
+                      <span className="text-gray-500">{gathering?.location || '장소'}</span>
                     </div>
                   </div>
                   <button
-                    onClick={() => toggleSavedMutation.mutate(String(gathering.id))}
+                    onClick={() => toggleSaved(String(gathering.id))}
                     className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 ${isLiked ? 'bg-main-300 text-white' : 'bg-[#fff0f5] text-main-300'}`}
                   >
                     <Heart fill={isLiked ? 'currentColor' : 'none'} stroke="currentColor" className="w-4 h-4" />
                   </button>
                 </div>
+                 {/* 날짜 시간 */}
+                  <div className="flex items-center gap-1 text-sm text-gray-500">
+                    <span>{formatDate(gathering?.dateTime || 'OOOO-OO-OO')}</span>
+                    <span>·</span>
+                    <span>{formatTime(gathering?.dateTime || 'OO:OO')}</span>
+                    </div>
+                    {/* 여백 */}
+                    <div className='w-full h-[3rem]'></div>
                 <div>
-                  <div className="flex items-center justify-between text-sm font-medium mb-1 text-main-300">
-                    <span><span>👤</span>18/20</span>
+                  <div className="flex items-center gap-1 text-sm font-medium mb-1 text-main-300">
+                    <Image src={"/icons/person.svg"} alt="인원 수" width={16} height={16} style={{ width: '19px', height: '19px' }} />
+                    <p className="text-gray-700 text-sm font-medium">{gathering.participantCount}/{gathering.capacity}</p>
                     <span className="text-right">개설확정</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-main-300 h-2 rounded-full w-[90%]" />
+                    <div className='bg-main-500 h-2 rounded-full transition-all duration-300' style={{ width: `${percent}%` }}></div>
                   </div>
                 </div>
               </div>
