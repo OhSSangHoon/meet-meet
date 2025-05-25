@@ -1,10 +1,11 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Image from "next/image";
 import { Heart } from 'lucide-react';
 import { Gathering } from "@/types/gatherings";
+import { AuthContext } from '@/providers/AuthProvider';
 import { getSavedGatherings, setSavedGatherings } from '@/lib/api/gatherings';
 import axios from 'axios';
 
@@ -12,7 +13,12 @@ type Category = 'DALLAEMFIT' | 'WORKATION';
 type DallaemfitType = 'ALL' | 'OFFICE_STRETCHING' | 'MINDFULNESS';
 
 export default function LikedMeetingsPage() {
+  const { token } = useContext(AuthContext);
   const queryClient = useQueryClient();
+
+   if (!token) {
+    return <span className="text-main-500">토큰 없음</span>;
+  }
 
   // 🔁 category + type 통합 상태
   const [filter, setFilter] = useState<{ category: Category; type: DallaemfitType }>({
