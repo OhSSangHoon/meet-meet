@@ -1,11 +1,52 @@
-import { useState } from "react";
+"use client";
 
-interface MyReviewListProps {
-  gatherings: any[];
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+import axios from "axios";
+import Image from "next/image";
+
+interface Gathering {
+  id: string;
+  name: string;
+  image: string;
+  location: string;
+  type: string;
+  participantCount: number;
+  capacity: number;
+  dateTime: string;
+  isCompleted?: boolean;
+  isReviewed?: boolean;
 }
 
-export default function MyReviewList({ gatherings }: MyReviewListProps) {
-  const [reviews, setReviews] = useState(0); // 0: 작성 가능한 리뷰, 1: 작성한 리뷰
+export default function MyReviewList() {
+  const [reviews, setReviews] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  const fetchGatherings = async () => {
+    if (!token) throw new Error("토큰 없음");
+    const { data } = await axios.get("/api/gatherings/joined", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  };
+
+  const {
+    data: gatherings = [],
+    isLoading,
+    error,
+  } = useQuery<Gathering[], Error>({
+    queryKey: ["myReviewGatherings"],
+    queryFn: fetchGatherings,
+    enabled: isClient && !!token,
+  });
 
   const reviewedGatherings = gatherings.filter((g) => g.isReviewed);
   const writableGatherings = gatherings.filter((g) => !g.isReviewed);
@@ -17,7 +58,7 @@ export default function MyReviewList({ gatherings }: MyReviewListProps) {
   const list = reviews === 0 ? writableGatherings : reviewedGatherings;
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="w-full flex flex-col justify-start gap-5">
       {/* 탭 버튼 */}
       <div className="mx-5 flex items-center gap-2">
         <button
@@ -36,8 +77,20 @@ export default function MyReviewList({ gatherings }: MyReviewListProps) {
         </button>
       </div>
 
+      {/* 상태 처리 */}
+      {isLoading && (
+        <div className="w-full h-[100px] flex justify-center items-center text-gray-500">
+          로딩 중...
+        </div>
+      )}
+      {error && (
+        <div className="w-full h-[100px] flex justify-center items-center text-red-500">
+          에러 발생: {(error as Error).message}
+        </div>
+      )}
+
       {/* 리뷰 없음 안내 */}
-      {isEmpty ? (
+      {!isLoading && !error && isEmpty ? (
         <div className="w-full h-[100px] flex justify-center items-center text-gray-700">
           <h1>
             {reviews === 0
@@ -49,14 +102,30 @@ export default function MyReviewList({ gatherings }: MyReviewListProps) {
         // 리뷰 목록
         <div className="flex flex-col gap-4">
           {list.map((g) => (
-            <div key={g.id} className="p-4 border rounded-lg shadow-sm bg-white">
-              <p className="font-semibold text-gray-800">
-                {reviews === 0 ? "✏️" : "📝"} {g.name}
+            <button
+              key={g.id}
+              className="w-full min-h-[100px] flex flex-col text-left p-4 border-2 border-blue-500 rounded-lg cursor-pointer hover:opacity-60"
+              onClick={() => router.push(`/gatherings/detail/${g.id}`)}
+            >
+              <h1 className="text-lg font-semibold">{g.name}</h1>
+              <Image
+                src={g.image}
+                alt="모임 이미지"
+                className="rounded-lg"
+                width={100}
+                height={100}
+              />
+              <p className="text-gray-600">위치: {g.location}</p>
+              <p className="text-gray-600">종류: {g.type}</p>
+              <p className="text-gray-600">
+                참여자: {g.participantCount}/{g.capacity}명
               </p>
-              <p className="text-sm text-gray-500">
-                {g.location} - {new Date(g.dateTime).toLocaleDateString()}
-              </p>
-            </div>
+              {g.dateTime && (
+                <p className="text-gray-600">
+                  날짜: {new Date(g.dateTime).toLocaleDateString()}
+                </p>
+              )}
+            </button>
           ))}
         </div>
       )}

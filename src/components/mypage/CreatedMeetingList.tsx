@@ -1,3 +1,5 @@
+"use client";
+
 export default function CreatedMeetingList() {
     return (
       <div className="p-4 text-gray-500">

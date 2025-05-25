@@ -24,3 +24,9 @@ export interface GatheringsListProps {
     // API 호출 여부
     fetchFromApi?: boolean;
 }
+
+export interface JoinedGathering extends Gathering {
+    joinedAt: string;
+    isCompleted: boolean;
+    isReviewed: boolean;
+}

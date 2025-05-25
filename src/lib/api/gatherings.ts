@@ -1,14 +1,14 @@
 import axios from "axios";
-import { Gathering } from "../types/gatherings";
+import { Gathering } from "../../types/gatherings";
 
 
 export const fetchGatheringsPaginated = async () => {
     const token = localStorage.getItem('token');
-    
+
     const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/gatherings`, {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     });
-    
+
     return response.data || [];
 };
 

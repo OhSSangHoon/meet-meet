@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SavrdUI from './ui';
+import LikedMeetingsUI from './ui';
 
 export const metadata: Metadata = {
   title: '찜한 모임 | Meet2',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function LikedMeetingsPage() {
-  return <SavrdUI />;
+  return <LikedMeetingsUI />;
 }
