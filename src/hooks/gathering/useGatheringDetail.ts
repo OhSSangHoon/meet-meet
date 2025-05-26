@@ -23,10 +23,26 @@ export default function useGatheringDetail(
         }
     }
 
+    const fetchGatheringParticipants = async (id: number) => {
+        try {
+            const response = await axios.get(`/api/gatherings/participants?id=${id}`);
+            return response.data;
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                const serverError = error?.response?.data?.error;
+                console.error(serverError?.message);
+            }
+        }
+    }
+
     const { data, isLoading, isError } = useQuery({
         enabled: !!id,
         queryKey: ['gatheringDetail', id],
-        queryFn: () => fetchGatheringDetail(id),
+        queryFn: async () => {
+            const detail = await fetchGatheringDetail(id)
+            const participants = await fetchGatheringParticipants(id)
+            return { detail, participants }
+        },
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
@@ -38,5 +54,5 @@ export default function useGatheringDetail(
         },
     });
 
-    return { data, isLoading, isError, retchIsSaved }
+    return { detail: data?.detail, participants: data?.participants, isLoading, isError, retchIsSaved }
 }

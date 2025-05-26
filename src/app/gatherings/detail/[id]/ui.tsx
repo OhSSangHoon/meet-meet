@@ -14,6 +14,20 @@ import useLeaveGathering from '@/hooks/gathering/useLeaveGathering';
 import useCancelGathering from '@/hooks/gathering/useCancelGathering';
 import Image from 'next/image';
 
+interface Participant {
+    teamId: number;
+    userId: number;
+    gatheringId: number;
+    joinedAt: string;
+    User: {
+        id: number;
+        email: string;
+        name: string;
+        companyName: string;
+        image: string;
+    }
+}
+
 const handleCopyUrl = () => {
     const currentUrl = window.location.href;
     navigator.clipboard.writeText(currentUrl)
@@ -25,7 +39,7 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
 
     const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
-    const { data: detail, isLoading: detailLoading, retchIsSaved } = useGatheringDetail(Number(id));
+    const { detail, participants, isLoading: detailLoading, retchIsSaved } = useGatheringDetail(Number(id));
     const { data: isParticipated, } = useGatheringJoinChecking(Number(id), token);
     const { toggleSaved, savedIds } = useSavedGatherings();
     const { joinGathering } = useJoinGathering(token);
@@ -41,8 +55,10 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
     }, [id, token])
 
     const handleCancel = async (id: number) => {
-        cancelGathering(id)
-        router.replace('/gatherings')
+        if (confirm('모임을 삭제 하시겠습니까?')) {
+            cancelGathering(id)
+            router.replace('/gatherings')
+        }
     }
 
     const handleToggleSaveGathering = () => {
@@ -59,10 +75,10 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
         <>
             <main className='contents-container'>
                 {/* 이미지, 모임 정보 카드 */}
-                <section className='flex gap-4'>
-                    <div className='w-[30rem] h-[14rem]'>
+                <section className='flex flex-col sm:flex-row gap-4'>
+                    <article className='max-w-screen-lg sm:w-[30rem] h-[14rem]'>
                         <div className="relative px-3 bg-white/80 rounded-full flex items-center text-xs">
-                            <div className="absolute top-0 right-0 bg-main-600 rounded-bl-lg rounded-tr-lg px-3 py-1 flex justify-center items-center gap-2 z-10">
+                            <div className="absolute top-3 left-3 bg-main-600 rounded-full px-3 py-1 flex justify-center items-center gap-2 z-10">
                                 <Image src={"/icons/Alarm.svg"} alt="시간" width={24} height={24} />
                                 <span className="font-medium text-white">{getTimeRemaining(detail?.registrationEnd || '')}</span>
                             </div>
@@ -77,16 +93,16 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
                                 className='w-full h-full object-cover rounded-lg'
                             />
                         )}
-                    </div>
-                    <article className='w-[30rem] h-[14rem] px-8 py-10 border-2 border-gray-300 bg-white rounded-lg'
+                    </article>
+                    <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] px-6 py-5 border-2 border-gray-300 bg-white rounded-lg flex flex-col justify-between gap-4'
                     >
-                        {/* 상단 박스 */}
-                        <div className='w-full h-[80%] flex justify-between gap-8'>
+                        {/* 상단 */}
+                        <div className='flex justify-between gap-8'>
                             {/* LEFT */}
                             <div className='flex flex-col'>
                                 {/* 제목, 주소 */}
-                                <div className="flex flex-col text-sm">
-                                    <h2 className="text-xl font-bold overflow-hidden text-ellipsis">{detail?.name || '로딩 중...'}</h2>
+                                <div className="flex flex-col min-w-0">
+                                    <h2 className="text-xl font-bold max-w-full">{detail?.name.slice(0, 15) + '...' || '로딩 중...'}</h2>
                                     <span className="text-gray-500">{detail?.location || '장소'}</span>
                                 </div>
                                 {/* 날짜 시간 */}
@@ -95,8 +111,6 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
                                     <span>·</span>
                                     <span>{formatTime(detail?.dateTime || 'OO:OO')}</span>
                                 </div>
-                                {/* 여백 */}
-                                <div className='w-full h-[3rem]'></div>
                             </div>
                             {/* RIGHT 찜하기 버튼 */}
                             <button
@@ -106,13 +120,28 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
                                 {savedIds.includes(id) ? <Heart className="w-5 h-5 fill-main-500 text-main-500" /> : <Heart className="w-5 h-5" />}
                             </button>
                         </div>
-                        {/* 하단 박스 */}
+                        <div className="w-full border-t-2 border-dotted border-gray-300"></div>
+                        {/* 하단 */}
                         <div className='flex flex-col gap-1'>
                             {/* 모집정원, 개설확정 */}
                             <div className="flex justify-between text-sm">
                                 <div className="flex items-center gap-2">
-                                    <span>모집 정원</span>
-                                    <span>{detail?.participantCount}명</span>
+                                    <span>모집 정원 {detail?.participantCount}명</span>
+                                    <div className="flex items-center">
+                                        {participants?.slice(0, 4).map((participant: Participant, i: number) => (
+                                            <Image
+                                                key={participant?.User?.id}
+                                                src={participant?.User?.image || '/images/default_profile_image.svg'}
+                                                alt="프로필 이미지"
+                                                width={100}
+                                                height={100}
+                                                className={`w-8 h-8 rounded-full border-2 border-white ${i === 0 ? 'ml-0' : '-ml-2'}`}
+                                            />
+                                        ))}
+                                        <div className='w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center'>
+                                            <span className='text-sm font-semibold'>{participants?.length - 4 > 0 ? `+${participants?.length - 4}` : '+10'}</span>
+                                        </div>
+                                    </div>
                                     {/* 정원들의 프로필 이미지 */}
                                 </div>
                                 {detail && detail?.participantCount > 0 ? (
@@ -172,11 +201,11 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
                 </section>
             </main >
             {/* 모임 참가 Footer */}
-            <footer className='sticky bottom-0 w-full h-16 border-t border-gray-300 bg-white'>
-                <div className='max-w-screen-lg h-full mx-auto flex justify-between items-center'>
+            <footer className='sticky bottom-0 w-full h-16 border-t border-gray-300 bg-white' >
+                <div className='max-w-screen-lg h-full mx-auto px-4 md:px-20 flex justify-between items-center'>
                     <div className='flex flex-col gap-1'>
-                        <span className='font-semibold'>모임에 참여해보세요!</span>
-                        <span className='text-xs font-medium'>당신은 모임에 참여해야 합니다.</span>
+                        <span className='font-semibold'>Meet Meet Together</span>
+                        <span className='text-xs font-medium'>모임은 여러분을 기다리고 있어요!</span>
                     </div>
                     {currentUserId === detail?.createdBy ?
                         <div className='flex gap-2'>
@@ -199,7 +228,7 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
                         )
                     }
                 </div>
-            </footer>
+            </footer >
         </>
     );
 }
