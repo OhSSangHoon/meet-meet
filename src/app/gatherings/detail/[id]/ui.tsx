@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useContext, useEffect, useState } from 'react';
+import { use, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/providers/AuthProvider';
 import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/format';
@@ -13,6 +13,7 @@ import useJoinGathering from '@/hooks/gathering/useJoinGathering';
 import useLeaveGathering from '@/hooks/gathering/useLeaveGathering';
 import useCancelGathering from '@/hooks/gathering/useCancelGathering';
 import Image from 'next/image';
+import CheckLoginModal from '@/components/shared/ui/CheckingModal';
 
 interface Participant {
     teamId: number;
@@ -35,9 +36,9 @@ const handleCopyUrl = () => {
 
 export default function GatheringsDetailPageUI({ params }: PageProps) {
     const { id } = use(params);
-    const { token } = useContext(AuthContext);
+    const { token, userId, loginModalOpen, setLoginModalOpen } = useContext(AuthContext);
 
-    const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
     const { detail, participants, isLoading: detailLoading, retchIsSaved } = useGatheringDetail(Number(id));
     const { data: isParticipated, } = useGatheringJoinChecking(Number(id), token);
@@ -48,18 +49,14 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
 
     const router = useRouter();
 
-    useEffect(() => {
-        if (!token) return;
-        const currentUserId = localStorage.getItem('user_id');
-        if (currentUserId) setCurrentUserId(Number(currentUserId));
-    }, [id, token])
+    const handleCancel = async () => setDeleteModalOpen(true);
 
-    const handleCancel = async (id: number) => {
-        if (confirm('모임을 삭제 하시겠습니까?')) {
-            cancelGathering(id)
-            router.replace('/gatherings')
-        }
-    }
+    const handleDeleteConfirm = () => {
+        cancelGathering(Number(id));
+        router.replace('/gatherings');
+        setDeleteModalOpen(false);
+    };
+
 
     const handleToggleSaveGathering = () => {
         toggleSaved(id);
@@ -207,10 +204,13 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
                         <span className='font-semibold'>Meet Meet Together</span>
                         <span className='text-xs font-medium'>모임은 여러분을 기다리고 있어요!</span>
                     </div>
-                    {currentUserId === detail?.createdBy ?
+                    {userId === detail?.createdBy ?
                         <div className='flex gap-2'>
                             <button type="button"
-                                onClick={() => handleCancel(Number(id) || 0)}
+                                onClick={() => {
+                                    if (!token) setDeleteModalOpen(true);
+                                    else handleCancel()
+                                }}
                                 className='w-24 h-[60%] py-1 bg-button-text text-button border-button border-1 rounded-lg cursor-pointer hover:opacity-60 transition duration-300 ease-in'>삭제하기</button>
                             <button type="button"
                                 onClick={handleCopyUrl}
@@ -223,12 +223,22 @@ export default function GatheringsDetailPageUI({ params }: PageProps) {
                                 className='max-w-36 h-[60%] py-1 px-2 bg-button-text text-button border-1 border-button rounded-lg cursor-pointer hover:opacity-60 transition duration-300 ease-in'>참여 취소하기</button>
                         ) : (
                             <button type="button"
-                                onClick={() => joinGathering(Number(id))}
+                                onClick={() => {
+                                    if (!token) setLoginModalOpen(true);
+                                    else joinGathering(Number(id))
+                                }}
                                 className='w-24 h-[60%] py-1 bg-button text-button-text rounded-lg cursor-pointer hover:opacity-60 transition duration-300 ease-in'>참여하기</button>
                         )
                     }
                 </div>
             </footer >
+            <CheckLoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} text='로그인이 필요합니다.' />
+            <CheckLoginModal
+                open={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                text="모임을 삭제 하시겠습니까?"
+                onConfirm={handleDeleteConfirm}
+            />
         </>
     );
 }
