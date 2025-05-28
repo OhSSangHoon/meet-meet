@@ -1,69 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
-interface ErrorResponse {
-  code?: string;
-  message?: string;
-}
-
-export async function POST(req: NextRequest) {
-
-  const authHeader = req.headers.get("authorization"); 
-  const token = authHeader?.split(" ")[1];
-  const { gatheringId, score, comment } = await req.json();
-
-  if (score < 0 || score > 5) {
-    return NextResponse.json(
-      { code: 'INVALID_SCORE', message: 'score는 1부터 5 사이여야 합니다' },
-      { status: 400 }
-    );
-  }
-
+/**
+ * 리뷰 목록 조회 API
+ * @param request
+ * @returns 필터 및 정렬 조건에 따른 리뷰 목록
+ */
+export async function GET(request: NextRequest) {
   try {
-    const response = await axios.post(
-      `${process.env.API_URI_DEV}/reviews`,
-      {
-        gatheringId,
-        score,
-        comment
+    const searchParams = request.nextUrl.searchParams;
+
+    // 외부 API 호출 (백엔드 서버의 리뷰 API)
+    const response = await axios.get(`${process.env.API_URI_DEV}/reviews`, {
+      params: Object.fromEntries(searchParams),
+      headers: {
+        Authorization: request.headers.get('Authorization') || '',
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    });
 
-    return new NextResponse(JSON.stringify(response.data), { status: 201 });
-    
+    // 성공 응답 반환
+    return NextResponse.json(response.data);
   } catch (error) {
-    const err = error as AxiosError<ErrorResponse>;
-    const errorCode = err.response?.data?.code;
+    console.error('리뷰 목록 조회 중 오류 발생:', error);
 
-    switch (errorCode) {
-      case 'INVALID_TOKEN':
+    // 에러 핸들링: axios 에러 처리
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.error('서버 응답 상태:', error.response.status);
+        console.error('서버 응답 데이터:', error.response.data);
+        return NextResponse.json(error.response.data, {
+          status: error.response.status || 500,
+        });
+      } else if (error.request) {
+        console.error('요청은 성공했으나 응답이 없음');
         return NextResponse.json(
-          { code: 'INVALID_TOKEN', message: '유효하지 않은 토큰입니다' },
-          { status: 401 }
+          { code: 'SERVER_ERROR', message: '서버에서 응답이 없습니다.' },
+          { status: 500 },
         );
-      case 'FORBIDDEN':
+      } else {
+        console.error('요청 설정 오류:', error.message);
         return NextResponse.json(
-          { code: 'FORBIDDEN', message: '모임에 참석하지 않았습니다' },
-          { status: 403 }
+          { code: 'REQUEST_ERROR', message: error.message },
+          { status: 500 },
         );
-      case 'NOT_FOUND':
-        return NextResponse.json(
-          { code: 'NOT_FOUND', message: '모임을 찾을 수 없습니다' },
-          { status: 404 }
-        );
-      default:
-        return NextResponse.json(
-          {
-            code: 'UNKNOWN_ERROR',
-            message: err.response?.data?.message || '알 수 없는 오류가 발생했습니다',
-          },
-          { status: 500 }
-        );
+      }
     }
+
+    // 알 수 없는 오류
+    return NextResponse.json(
+      { code: 'UNKNOWN_ERROR', message: '알 수 없는 오류가 발생했습니다.' },
+      { status: 500 },
+    );
   }
 }
