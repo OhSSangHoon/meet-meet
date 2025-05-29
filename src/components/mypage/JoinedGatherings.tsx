@@ -7,7 +7,6 @@ import { AuthContext } from '@/providers/AuthProvider';
 import Image from 'next/image';
 import axios from 'axios';
 
-
 export interface GatheringData {
   id: string;
   name: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import ProfileCard from "@/components/mypage/ProfileCard";
 import JoinedGatherings from "@/components/mypage/JoinedGatherings";
 import MyReviews from "@/components/mypage/MyReviews";
@@ -48,7 +48,9 @@ export default function MyPageUI() {
           </div>
 
           {/* 탭에 따른 내용 */}
-          {selectedTab === MypageTab.JoinedGatherings && <JoinedGatherings />}
+          <Suspense fallback={<div>로딩 중...</div>}>
+            <JoinedGatherings />
+          </Suspense>
           {selectedTab === MypageTab.MyReviews && <MyReviews />}
           {selectedTab === MypageTab.CreatedGatherings && <CreatedGatherings />}
         </div>
