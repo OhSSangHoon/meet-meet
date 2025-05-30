@@ -1,5 +1,5 @@
 import { Reviews } from '@/types/reviews';
-import GatheringsDetailPageUI from './ui';
+import GatheringsDetailUI from './ClientPage';
 
 export interface PageProps {
     params: { id: string };
@@ -48,5 +48,5 @@ export default async function GatheringsDetailPage({ params }: PageProps) {
     const { id } = await params;
     const detailReviews = await getDetailReview(id);
 
-    return <GatheringsDetailPageUI id={id} detailReviews={detailReviews} />
+    return <GatheringsDetailUI id={id} detailReviews={detailReviews} />
 }
