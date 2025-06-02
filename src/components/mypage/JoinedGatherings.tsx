@@ -6,20 +6,22 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { formatDate, formatTime, getTimeRemaining } from '../shared/utils/format';
 import { UserRoundCheck, CheckCircle, Hand } from "lucide-react"
-import ConfirmDialog from '@/components/shared/ui/ConfirmDialog';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 export default function JoinedGatherings() {
+  const { token } = useContext(AuthContext);
+
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const { token } = useContext(AuthContext);
 
   const { data: gatherings = [], isLoading, error } = useFetchJoinedGatherings(token!);
 
   const { leaveGathering } = useLeaveGathering({
     token,
-    onErrorCallback: (message) => {
+    onCallback: (message) => {
       setErrorMessage(message);
       setErrorModalOpen(true);
     },
@@ -161,7 +163,6 @@ export default function JoinedGatherings() {
         </div>
       ))}
 
-      {/* 에러 확인용 */}
       <ConfirmDialog
         open={errorModalOpen}
         text={errorMessage}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ProfileCard from "@/components/mypage/ProfileCard";
 import JoinedGatherings from "@/components/mypage/JoinedGatherings";
-import CreatedReviews from "@/components/mypage/CreatedReviews";
+import MyReviews from "@/components/mypage/MyReviews";
 import CreatedGatherings from "@/components/mypage/CreatedGatherings";
 
 enum MypageTab {
@@ -50,7 +50,7 @@ export default function MyPageUI({ teamId }: { teamId: string }) {
 
           {/* 탭에 따른 내용 */}
           {selectedTab === MypageTab.JoinedGatherings && <JoinedGatherings />}
-          {selectedTab === MypageTab.MyReviews && <CreatedReviews teamId={teamId} />}
+          {selectedTab === MypageTab.MyReviews && <MyReviews teamId={teamId} />}
           {selectedTab === MypageTab.CreatedGatherings && <CreatedGatherings />}
         </div>
       </div>

@@ -1,14 +1,16 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { GatheringApiParams } from '@/types/gatheringApi';
 import axios from 'axios';
 
 /**
  * 모임 생성 훅
- * @param token 토큰
+* @param token 토큰
+* @param onCallback 모달에 표시할 메세지를 전달
  * @returns {function} createGathering - 모임 생성 함수
  */
-export const useCreateGathering = (token: string | null) => {
+export const useCreateGathering = ({ token, onCallback }: GatheringApiParams) => {
     const queryClient = useQueryClient();
 
     const createGathering = useMutation({
@@ -25,13 +27,14 @@ export const useCreateGathering = (token: string | null) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['gatherings', 'infinite'] });
             queryClient.invalidateQueries({ queryKey: ["createdGatherings", token] });
+            onCallback?.('모임을 생성했습니다');
         },
         onError: (error) => {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;
-                alert(serverError?.message || '에러가 발생했습니다.');
+                onCallback?.(serverError?.message || '에러가 발생했습니다');
             } else {
-                alert(error.message);
+                onCallback?.(error.message);
             }
         }
     });

@@ -13,15 +13,12 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
     ({ label, id, type, placeholder, error, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
         <div className="w-full flex flex-col gap-2">
-            <label htmlFor={id} className="block text-sm text-gray-900 font-bold">
-                {label}
-            </label>
+            <label htmlFor={id} className="block text-sm text-gray-900 font-bold">{label}</label>
             <div className='relative'>
                 <input
                     ref={ref}
                     type={label === '비밀번호' ? (isPasswordVisible ? 'text' : 'password') : type}
                     id={id}
-                    disabled={disabled}
                     placeholder={placeholder}
                     aria-invalid={disabled ? (error ? 'true' : 'false') : undefined}
                     className={`block w-full p-2.5 rounded-lg bg-gray-50 text-sm text-gray-900 border-2 focus:outline-none ${error || errorResponseMessage ? 'border-red-600' : 'focus:border-main-300'}`}

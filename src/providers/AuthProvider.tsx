@@ -4,12 +4,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createContext, useState, Dispatch, SetStateAction, useEffect } from "react";
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import ConfirmDialog from '@/components/shared/ui/ConfirmDialog';
+import dynamic from 'next/dynamic';
+
+const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 type AuthContextType = {
     token: string | null;
-    loginModalOpen: boolean;
-    setLoginModalOpen: Dispatch<SetStateAction<boolean>>;
+    loginDialogOpen: boolean;
+    setLoginDialogOpen: Dispatch<SetStateAction<boolean>>;
     setToken: Dispatch<SetStateAction<string | null>>;
     signup: (email: string, password: string, name: string, companyName: string) => Promise<void>;
     signin: (email: string, password: string) => Promise<void>;
@@ -20,8 +22,8 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>({
     token: null,
-    loginModalOpen: false,
-    setLoginModalOpen: () => { },
+    loginDialogOpen: false,
+    setLoginDialogOpen: () => { },
     setToken: () => { },
     signup: async () => { },
     signin: async () => { },
@@ -36,8 +38,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [userId, setUserId] = useState(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [previousPath, setPreviousPath] = useState<string>('/');
-    const [loginModalOpen, setLoginModalOpen] = useState(false);
-
+    const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+    const [signupDialogOpen, setSignupDialogOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const router = useRouter();
@@ -47,7 +49,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         try {
             const result = await axios.post('/api/auth/signup', { email, password, name, companyName })
             if (result.status === 200) {
-                alert('회원가입이 완료되었습니다.')
+                setSignupDialogOpen(true);
                 router.replace('/login')
             }
         } catch (error) {
@@ -115,7 +117,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     useEffect(() => {
         // 마이페이지 접근 시 로그인 확인
-        if (!isLoading && !token && pathname.startsWith('/mypage')) setLoginModalOpen(true);
+        if (!isLoading && !token && pathname.startsWith('/mypage')) setLoginDialogOpen(true);
         // 로그인 후 이전 경로 저장
         if (pathname !== '/login' && !pathname.includes('/auth/')) setPreviousPath(pathname);
         // 로그인 후 로그인 페이지 접근 시 이전 경로로 이동
@@ -123,17 +125,27 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }, [isLoading, token, pathname, router, previousPath]);
 
     const handleLoginModalConfirm = () => {
-        setLoginModalOpen(false);
+        setLoginDialogOpen(false);
         router.replace('/login');
     };
 
+    const handleSignupModalConfirm = () => {
+        setSignupDialogOpen(false);
+        router.replace('/');
+    };
+
     return (
-        <AuthContext value={{ token, userName, userId, loginModalOpen, setLoginModalOpen, setToken, signup, signin, signout }}>
+        <AuthContext value={{ token, userName, userId, loginDialogOpen, setLoginDialogOpen, setToken, signup, signin, signout }}>
             {children}
             <ConfirmDialog
-                open={loginModalOpen}
+                open={loginDialogOpen}
                 onClose={handleLoginModalConfirm}
-                text="로그인이 필요합니다."
+                text="로그인이 필요합니다"
+            />
+            <ConfirmDialog
+                open={signupDialogOpen}
+                onClose={handleSignupModalConfirm}
+                text="회원가입이 완료되었습니다"
             />
         </AuthContext>
     );

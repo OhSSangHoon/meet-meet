@@ -3,9 +3,12 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { useCreateReview } from '@/hooks/api/useCreateReview';
+import dynamic from 'next/dynamic';
+
+const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 interface ReviewDialogProps {
-  reviewData: {
+  reviewFormData: {
     teamId: string;
     gatheringId: number;
     userId: number;
@@ -14,29 +17,30 @@ interface ReviewDialogProps {
 }
 
 export default function CreateReviewDialog({
-  reviewData,
+  reviewFormData,
   onClose,
 }: ReviewDialogProps) {
   const { token } = useContext(AuthContext);
 
   const [score, setScore] = useState(1);
   const [comment, setComment] = useState('');
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    text: string;
+    onConfirm?: () => void;
+  }>({
+    open: false,
+    text: '',
+  });
 
-  const { createReview } = useCreateReview(onClose);
+  const { createReview } = useCreateReview({
+    token,
+    onCallback: (message) => openConfirmDialog(message)
+  });
 
-  const handleSubmit = () => {
-    if (!token) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
+  const openConfirmDialog = (text: string, onConfirm?: () => void) => setConfirmDialog({ open: true, text, onConfirm });
 
-    createReview({
-      gatheringId: reviewData.gatheringId,
-      score,
-      comment,
-      token,
-    });
-  };
+  const handleSubmit = () => createReview({ gatheringId: reviewFormData.gatheringId, score, comment, });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -75,6 +79,12 @@ export default function CreateReviewDialog({
           </button>
         </div>
       </div>
+      <ConfirmDialog
+        open={confirmDialog.open}
+        text={confirmDialog.text}
+        onClose={() => setConfirmDialog({ open: false, text: '' })}
+        onConfirm={confirmDialog.onConfirm}
+      />
     </div>
   );
 }

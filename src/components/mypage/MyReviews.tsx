@@ -7,13 +7,15 @@ import { formatDate, formatTime } from '../shared/utils/format';
 import { JoinedGathering } from '@/types/gatherings';
 import { UserRoundCheck } from 'lucide-react';
 import Image from 'next/image';
-import CreateReviewDialog from './CreateReviewDialog';
+import dynamic from 'next/dynamic';
 
-export default function CreatedReviews({ teamId }: { teamId: string }) {
+const CreateReviewDialog = dynamic(() => import('./CreateReviewDialog'), { ssr: false });
+
+export default function MyReviews({ teamId }: { teamId: string }) {
   const { token, userId } = useContext(AuthContext);
 
   const [reviews, setReviews] = useState(0);
-  const [selectedReviewData, setSelectedReviewData] = useState<{
+  const [reviewableGathering, setReviewableGathering] = useState<{
     teamId: string;
     userId: number;
     gatheringId: number
@@ -98,7 +100,7 @@ export default function CreatedReviews({ teamId }: { teamId: string }) {
                   <button
                     type="button"
                     className="max-w-36 padding-button rounded-lg bg-main-500 text-sm text-white cursor-pointer hover:opacity-70"
-                    onClick={() => setSelectedReviewData({ teamId, userId: userId, gatheringId: Number(gathering.id) })}
+                    onClick={() => setReviewableGathering({ teamId, userId: userId, gatheringId: Number(gathering.id) })}
                   >
                     리뷰 작성하기
                   </button>
@@ -110,10 +112,10 @@ export default function CreatedReviews({ teamId }: { teamId: string }) {
       )}
 
       {/* 리뷰 작성 모달 */}
-      {selectedReviewData && (
+      {reviewableGathering && (
         <CreateReviewDialog
-          reviewData={selectedReviewData}
-          onClose={() => setSelectedReviewData(null)}
+          reviewFormData={reviewableGathering}
+          onClose={() => setReviewableGathering(null)}
         />
       )}
     </div >

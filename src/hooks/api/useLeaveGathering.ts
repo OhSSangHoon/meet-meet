@@ -6,10 +6,10 @@ import axios from 'axios';
 
 /** 모임 참여 취소 훅
 * @param token 토큰
-* @param onErrorCallback 에러 콜백 함수 (모달에 표시할 메세지를 전달 받음)
+* @param onCallback 모달에 표시할 메세지를 전달
 * @returns {function} leaveGathering - 모임 참여 취소 함수
 */
-export const useLeaveGathering = ({ token, onErrorCallback }: GatheringApiParams) => {
+export const useLeaveGathering = ({ token, onCallback }: GatheringApiParams) => {
     const queryClient = useQueryClient();
 
     const leaveGathering = useMutation({
@@ -22,14 +22,14 @@ export const useLeaveGathering = ({ token, onErrorCallback }: GatheringApiParams
             queryClient.invalidateQueries({ queryKey: ["gatheringDetail", id] });
             queryClient.invalidateQueries({ queryKey: ["checkGatheringJoined"] });
             queryClient.invalidateQueries({ queryKey: ["joinedGatherings", token] });
-            alert('참여 취소했습니다.');
+            onCallback?.('참여 취소했습니다');
         },
         onError: (error) => {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;
-                onErrorCallback?.(serverError?.message || '에러가 발생했습니다.');
+                onCallback?.(serverError?.message || '에러가 발생했습니다');
             } else {
-                onErrorCallback?.(error.message);
+                onCallback?.(error.message);
             }
         }
     });

@@ -3,15 +3,18 @@
 import { AuthContext } from '@/providers/AuthProvider';
 import { useState, useRef, useEffect, useContext } from "react";
 import { useCreateGathering } from '@/hooks/api/useCreateGathering';
+import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
 import { XIcon } from "lucide-react";
+import axios from 'axios';
+import dynamic from 'next/dynamic';
 import SelectionService from "./SelectionService";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from 'axios';
+
+const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 export default function CreateGatheringDialog({ onClose }: { onClose: () => void }) {
     const { token } = useContext(AuthContext);
-    const { createGathering } = useCreateGathering(token); // isLoading 제거
 
     // 폼 데이터 상태 관리
     const [formData, setFormData] = useState({
@@ -24,11 +27,11 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     // 파일명 상태
     const [fileName, setFileName] = useState("");
 
-    // 이미지 파일
-    const [imageFile, setImageFile] = useState<File | null>(null);
-
     // 파일 입력 요소에 접근하기 위한 ref
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // 이미지 파일
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     // 모임 날짜
     const [meetingDate, setMeetingDate] = useState<Date | null>(null);
@@ -42,6 +45,13 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     // 제출 상태 관리 (기존 방식 유지)
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // 모임 생성 완료/실패 모달
+    const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({ open: false, text: '' });
+
+    const { createGathering } = useCreateGathering({
+        token,
+        onCallback: (message) => openConfirmDialog(setConfirmDialog, message),
+    });
 
     // 입력 필드 변경 핸들러
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -59,6 +69,8 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
             type
         }));
     };
+
+
     // 모달이 열릴 때 스크롤 방지 및 레이아웃 시프트 방지
     useEffect(() => {
         const originalBodyOverFlow = document.body.style.overflow;
@@ -167,9 +179,10 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
         // 모임 생성 요청
         createGathering(apiFormData, {
             onSuccess: () => {
-                alert('모임 생성 완료');
-                setIsSubmitting(false);
-                onClose();
+                openConfirmDialog(setConfirmDialog, '모임 생성 완료', () => {
+                    setIsSubmitting(false);
+                    onClose();
+                });
             },
             onError: (error: unknown) => {
                 console.error('모임 생성 실패:', error);
@@ -177,11 +190,11 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
 
                 if (axios.isAxiosError(error)) {
                     const serverError = error?.response?.data?.error;
-                    alert(serverError?.message || '에러가 발생했습니다.');
+                    openConfirmDialog(setConfirmDialog, serverError?.message);
                 } else if (error instanceof Error) {
-                    alert(error.message);
+                    openConfirmDialog(setConfirmDialog, error.message);
                 } else {
-                    alert('알 수 없는 에러가 발생했습니다.');
+                    openConfirmDialog(setConfirmDialog, '알 수 없는 에러가 발생했습니다');
                 }
             }
         });
@@ -338,6 +351,13 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                     </form>
                 </div>
             </div>
+            {/* 모임 생성 완료/실패 모달 */}
+            <ConfirmDialog
+                open={confirmDialog.open}
+                text={confirmDialog.text}
+                onClose={() => setConfirmDialog({ open: false, text: '' })}
+                onConfirm={confirmDialog.onConfirm}
+            />
         </div>
     );
 }

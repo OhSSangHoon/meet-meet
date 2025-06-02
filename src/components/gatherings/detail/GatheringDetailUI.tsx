@@ -9,8 +9,9 @@ import { useJoinGathering } from '@/hooks/api/useJoinGathering';
 import { useCancelGathering } from '@/hooks/api/useCancelGathering';
 import { useLeaveGathering } from '@/hooks/api/useLeaveGathering';
 import { AuthContext } from '@/providers/AuthProvider';
+import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
 import { ReviewItem, Reviews } from '@/types/reviews';
-import ConfirmDialog from '@/components/shared/ui/ConfirmDialog';
+import dynamic from 'next/dynamic';
 import InformationLoading from '@/components/gatherings/detail/loading/InformationLoading';
 import ThumbnailLoading from '@/components/gatherings/detail/loading/ThumbnailLoading';
 import ReviewLoading from '@/components/gatherings/detail/loading/ReviewLoading';
@@ -19,6 +20,8 @@ import Information from '@/components/gatherings/detail/Information';
 import Review from '@/components/gatherings/detail/Review';
 import PageConverter from '@/components/gatherings/detail/PageConverter';
 import Footer from '@/components/gatherings/detail/Footer';
+
+const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 export interface Participant {
     teamId: number;
@@ -42,13 +45,11 @@ const handleCopyUrl = () => {
 const LIMIT = 4;
 
 export default function GatheringsDetailUI({ id, detailReviews }: { id: string, detailReviews: Reviews }) {
-    const { token, userId, loginModalOpen, setLoginModalOpen } = useContext(AuthContext);
+    const { token, userId, loginDialogOpen, setLoginDialogOpen } = useContext(AuthContext);
 
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [errorModalOpen, setErrorModalOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const [page, setPage] = useState(detailReviews?.currentPage ?? 1);
     const [reviews, setReviews] = useState<ReviewItem[]>(detailReviews.data);
+    const [dialog, setDialog] = useState<ConfirmDialogState>({ open: false, text: '' });
 
     const router = useRouter();
 
@@ -65,28 +66,17 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
 
     const { joinGathering } = useJoinGathering({
         token,
-        onErrorCallback: (message) => {
-            setErrorMessage(message);
-            setErrorModalOpen(true);
-        }
+        onCallback: (message) => openConfirmDialog(setDialog, message)
     });
-    const { leaveGathering } = useLeaveGathering(
-        {
-            token,
-            onErrorCallback: (message) => {
-                setErrorMessage(message);
-                setErrorModalOpen(true);
-            }
-        });
+    const { leaveGathering } = useLeaveGathering({
+        token,
+        onCallback: (message) => openConfirmDialog(setDialog, message)
+    });
     const { cancelGathering } = useCancelGathering({
         token,
-        onErrorCallback: (message) => {
-            setErrorMessage(message);
-            setErrorModalOpen(true);
-        }
+        onCallback: (message, onConfirm) => openConfirmDialog(setDialog, message, onConfirm)
     });
 
-    // 1페이지는 SSR 데이터만, 2페이지부터 useFetchDetailReview로 데이터 추가
     useEffect(() => {
         if (page === 1) return;
         if (nextPageData) setReviews(detailReviews.data.concat(nextPageData.data));
@@ -94,8 +84,7 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
 
     const handleDeleteConfirm = () => {
         cancelGathering(Number(id));
-        router.replace('/gatherings');
-        setDeleteModalOpen(false);
+        setDialog((prev) => ({ ...prev, open: false }));
     };
 
     return (
@@ -130,18 +119,31 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                 </section>
             </main >
             {/* 모임 참가 Footer */}
-            <Footer userId={userId} detail={detail} isParticipated={isParticipated} leaveGathering={leaveGathering} joinGathering={joinGathering} token={token!} setDeleteModalOpen={setDeleteModalOpen} handleCopyUrl={handleCopyUrl} id={id} setLoginModalOpen={setLoginModalOpen} />
-            <ConfirmDialog open={loginModalOpen} onClose={() => setLoginModalOpen(false)} text='로그인이 필요합니다.' needLogin={true} />
-            <ConfirmDialog
-                open={deleteModalOpen}
-                text="모임을 삭제 하시겠습니까?"
-                onClose={() => setDeleteModalOpen(false)}
-                onConfirm={handleDeleteConfirm}
+            <Footer
+                token={token!}
+                userId={userId}
+                id={id}
+                detail={detail}
+                isParticipated={isParticipated}
+                handleCopyUrl={handleCopyUrl}
+                leaveGathering={leaveGathering}
+                joinGathering={joinGathering}
+                setLoginDialogOpen={setLoginDialogOpen}
+                setDialogOpen={(open: boolean) => {
+                    if (open) openConfirmDialog(setDialog, '모임을 삭제 하시겠습니까?', handleDeleteConfirm);
+                    else setDialog((prev) => ({ ...prev, open: false }));
+                }}
             />
             <ConfirmDialog
-                open={errorModalOpen}
-                text={errorMessage}
-                onClose={() => setErrorModalOpen(false)}
+                open={loginDialogOpen}
+                text='로그인이 필요합니다'
+                onClose={() => setLoginDialogOpen(false)}
+                onCallback={() => router.push('/login')} />
+            <ConfirmDialog
+                open={dialog.open}
+                text={dialog.text}
+                onClose={() => setDialog((prev) => ({ ...prev, open: false }))}
+                onConfirm={dialog.onConfirm}
             />
         </>
     );

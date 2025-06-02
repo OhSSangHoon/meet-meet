@@ -18,4 +18,4 @@ export const gatheringKeys = {
 
 // ["joinedGatherings", token] 마이페이지 '참여중인 모임'
 // ["createdGatherings", token] - 마이페이지 '내가 만든 모임'
-// ["myGatheringReviews", token] 마이페이지 '나의 리뷰'
+// ["myReviews", token] 마이페이지 '나의 리뷰'
