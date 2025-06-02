@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
 
 interface CheckingModalProps {
@@ -6,27 +5,25 @@ interface CheckingModalProps {
     text: string;
     onClose: () => void;
     onConfirm?: () => void;
-    needLogin?: boolean;
+    onCallback?: () => void;
 }
 
 /**
- * 프로젝트 공용 팝업 모달
+ * 프로젝트 공통 모달
  * @param open 모달 열기 여부
  * @param text 모달에 표시할 텍스트
  * @param onClose 닫기 함수
  * @param onConfirm 확인 함수
- * @param needLogin 로그인 필요 여부 (로그인 페이지로 리다이렉트)
+ * @param onCallback 전달받을 콜백 함수
  * @returns 모달 팝업
  */
-export default function ConfirmDialog({ open, text, onClose, onConfirm, needLogin }: CheckingModalProps) {
-    const router = useRouter();
-
+export default function ConfirmDialog({ open, text, onClose, onConfirm, onCallback }: CheckingModalProps) {
     if (!open) return null;
 
     const handleConfirm = () => {
         onClose();
         if (onConfirm) onConfirm();
-        else if (needLogin) router.push('/login');
+        if (onCallback) onCallback();
     };
 
     return (

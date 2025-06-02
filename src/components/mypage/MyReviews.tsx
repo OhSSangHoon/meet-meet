@@ -1,162 +1,168 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState, useContext } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import Image from 'next/image';
 import { AuthContext } from '@/providers/AuthProvider';
-import ReviewDialog from './ReviewDialog';
+import { formatDate, formatTime } from '../shared/utils/format';
+import { useFetchMyCreatedReviews } from '@/hooks/api/useFetchMyCreatedReviews';
+import { JoinedGathering } from '@/types/gatherings';
+import { ReviewItem } from '@/types/reviews';
+import { Heart, UserRoundCheck } from 'lucide-react';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 
-interface Gathering {
-  id: string;
-  name: string;
-  image: string;
-  location: string;
-  type: string;
-  participantCount: number;
-  capacity: number;
-  dateTime: string;
-  isCompleted?: boolean;
-  isReviewed?: boolean;
-}
+const CreateReviewDialog = dynamic(() => import('./CreateReviewDialog'), { ssr: false });
 
-export default function MyReviews() {
-  const [reviews, setReviews] = useState(0);
-
-  const teamId = process.env.TEAM_ID_DEV!;
+export default function MyReviews({ teamId }: { teamId: string }) {
   const { token, userId } = useContext(AuthContext);
-  const router = useRouter();
-  const [selectedReviewData, setSelectedReviewData] = useState<{
+
+  const [tab, setTab] = useState(0);
+  const [reviewableGathering, setReviewableGathering] = useState<{
     teamId: string;
     userId: number;
-    gatheringId: number;
+    gatheringId: number
   } | null>(null);
 
-  const fetchGatherings = (token: string): Promise<Gathering[]> => {
-    return axios
-      .get('/api/gatherings/joined?&limit=1000', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(res => res.data);
-  };
+  const queryClient = useQueryClient();
+  const gatherings = queryClient.getQueryData<JoinedGathering[]>(["joinedGatherings", token]) ?? [];
 
-  const {
-    data: gatherings = [],
-    isLoading,
-    error,
-  } = useQuery<Gathering[], Error>({
-    queryKey: ['myGatheringReviews', token],
-    queryFn: () => fetchGatherings(token!),
-    enabled: !!token && !!userId,
-  });
+  // 작성 가능한 리뷰: 마감 완료 && 개설 확정 (5명 이상) && 작성하지 않은 모임들
+  const reviewableGatherings = gatherings.filter((gathering: JoinedGathering) => !gathering.isReviewed && gathering.isCompleted && gathering.participantCount >= 5);
 
-  {
-    /*isReviewed 여부로 작성/미작성 모임 분리*/
-  }
-  const reviewedGatherings = gatherings.filter(g => g.isReviewed);
-  const writableGatherings = gatherings.filter(g => !g.isReviewed);
-  const list = reviews === 0 ? writableGatherings : reviewedGatherings;
-
-  const isSuccess = !isLoading && !error;
-  const isEmpty = isSuccess && list.length === 0;
+  // 작성한 리뷰
+  const reviewedGatherings = gatherings.filter((gathering: JoinedGathering) => gathering.isReviewed);
+  const { data: createdReviews } = useFetchMyCreatedReviews(token!, reviewedGatherings.map(gathering => gathering.id), userId);
 
   return (
-    <div className="flex w-full flex-col justify-start gap-5">
-      {/* 탭 버튼 */}
-      <div className="mx-5 flex items-center gap-2">
+    <div className="px-4 flex w-full flex-col justify-start gap-5">
+      <div className="flex items-center gap-2">
+        {/* 작성 가능한 리뷰, 작성한 리뷰 버튼 */}
         <button
-          onClick={() => setReviews(0)}
-          className={`rounded-lg px-4 py-2 text-sm transition-colors ${reviews === 0 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'}`}
+          type="button"
+          onClick={() => setTab(0)}
+          className={`rounded-lg px-4 py-2 text-sm transition-colors ${tab === 0 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} cursor-pointer`}
         >
           작성 가능한 리뷰
         </button>
         <button
-          onClick={() => setReviews(1)}
-          className={`rounded-lg px-4 py-2 text-sm transition-colors ${reviews === 1 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'}`}
+          type="button"
+          onClick={() => setTab(1)}
+          className={`rounded-lg px-4 py-2 text-sm transition-colors ${tab === 1 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} cursor-pointer`}
         >
           작성한 리뷰
         </button>
       </div>
 
-      {/* 상태 처리 */}
-      {isLoading && (
-        <div className="flex h-[100px] w-full items-center justify-center text-gray-500">
-          로딩 중...
-        </div>
-      )}
-      {error && (
-        <div className="flex h-[100px] w-full items-center justify-center text-red-500">
-          에러 발생: {(error as Error).message}
-        </div>
-      )}
+      {/* 리뷰 */}
 
-      {/* 리뷰 없음 안내 */}
-      {!isLoading && !error && isEmpty ? (
-        <div className="flex h-[100px] w-full items-center justify-center text-gray-700">
-          <h1>
-            {reviews === 0
-              ? '작성 가능한 리뷰가 없어요'
-              : '아직 작성한 리뷰가 없어요'}
-          </h1>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          {list.map(g => (
-            <div
-              key={g.id}
-              className="flex min-h-[100px] w-full flex-col rounded-lg border-2 border-blue-500 p-4 text-left transition hover:opacity-90"
-            >
+      {tab === 0 ? (
+        reviewableGatherings.length === 0 ?
+          <span className="flex h-[100px] w-full items-center justify-center text-gray-700">작성 가능한 리뷰가 없어요</span>
+          :
+          <div className="flex flex-col gap-4">
+            {reviewableGatherings.map((gathering: JoinedGathering) => (
               <div
-                className="cursor-pointer"
-                onClick={() => router.push(`/gatherings/detail/${g.id}`)}
+                key={gathering.id}
+                className="relative min-h-[100px] w-full p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
               >
-                <h1 className="text-lg font-semibold">{g.name}</h1>
-                <Image
-                  src={g.image}
-                  alt="모임 이미지"
-                  className="my-2 rounded-lg"
-                  width={100}
-                  height={100}
-                />
-                <p className="text-gray-600">위치: {g.location}</p>
-                <p className="text-gray-600">종류: {g.type}</p>
-                <p className="text-gray-600">
-                  참여자: {g.participantCount}/{g.capacity}명
-                </p>
-                {g.dateTime && (
-                  <p className="text-gray-600">
-                    날짜: {new Date(g.dateTime).toLocaleDateString()}
-                  </p>
-                )}
-              </div>
-
-              {reviews === 0 && (
-                <div className="mt-4 self-end">
-                  <button
-                    className="bg-main-500 hover:bg-main-600 rounded-md px-4 py-2 text-sm text-white transition-colors"
-                    onClick={() =>
-                      setSelectedReviewData({
-                        teamId: teamId,
-                        userId: userId,
-                        gatheringId: Number(g.id),
-                      })
-                    }
-                  >
-                    리뷰 작성하기
-                  </button>
+                {/* 이미지 */}
+                <div className="flex-shrink-0">
+                  <Image
+                    src={gathering.image ?? ''}
+                    alt="모임 이미지"
+                    width={1000}
+                    height={1000}
+                    className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
+                  />
                 </div>
-              )}
+                {/* 정보 + 버튼 */}
+                <div className="flex flex-col justify-between">
+                  {/* 정보 */}
+                  <div className='flex flex-col gap-1'>
+                    <h1 className="text-xl font-semibold">{gathering.name}</h1>
+                    <p className="text-gray-600">{gathering?.location}</p>
+                    <div className='flex items-center gap-4 text-sm font-medium'>
+                      <div className='flex items-center gap-1'>
+                        <UserRoundCheck className="w-4 h-4 text-main-500" />
+                        <span>{gathering.participantCount ?? '-'}/{gathering.capacity ?? '-'}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <span className={`inline-flex items-center rounded-md`}>
+                          {formatDate(gathering?.dateTime ?? '')}
+                        </span>
+                        <span className={`inline-flex items-center rounded-md`}>
+                          {formatTime(gathering?.dateTime ?? '')}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* 버튼 */}
+                  {tab === 0 && (
+                    <button
+                      type="button"
+                      className="max-w-36 padding-button rounded-lg bg-main-500 text-sm text-white cursor-pointer hover:opacity-70"
+                      onClick={() => setReviewableGathering({ teamId, userId: userId, gatheringId: Number(gathering.id) })}
+                    >
+                      리뷰 작성하기
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+      ) :
+        (
+          createdReviews?.length === 0 ?
+            <span className="flex h-[100px] w-full items-center justify-center text-gray-700">아직 작성한 리뷰가 없어요</span>
+            :
+            <div
+              className="relative min-h-[100px] w-full p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
+            >
+              {createdReviews?.map((review: ReviewItem) => (
+                <div key={`${review?.Gathering?.id}-${review?.id}`} className='flex gap-4'>
+                  {/* 이미지 */}
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={review?.Gathering?.image ?? ''}
+                      alt="모임 이미지"
+                      width={1000}
+                      height={1000}
+                      className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <div className='flex items-center gap-1'>
+                      {Array.from({ length: review?.score }).map((_, index) => (
+                        <Heart key={index} className="w-4 h-4 text-main-500 fill-main-500" />
+                      ))}
+                    </div>
+                    <p>{review?.comment}</p>
+                    <div className='flex gap-1 items-center'>
+                      <h1 className="text-xl font-semibold">{review?.Gathering?.name}</h1>
+                      <p className="text-gray-600">{review?.Gathering?.location}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <span className={`inline-flex items-center rounded-md`}>
+                        {formatDate(review?.Gathering?.dateTime ?? '')}
+                      </span>
+                      <span className={`inline-flex items-center rounded-md`}>
+                        {formatTime(review?.Gathering?.dateTime ?? '')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
-      {selectedReviewData && (
-        <ReviewDialog
-          reviewData={selectedReviewData}
-          onClose={() => setSelectedReviewData(null)}
+        )
+      }
+
+      {/* 리뷰 작성 모달 */}
+      {reviewableGathering && (
+        <CreateReviewDialog
+          reviewFormData={reviewableGathering}
+          onClose={() => setReviewableGathering(null)}
         />
       )}
-    </div>
+    </div >
   );
 }

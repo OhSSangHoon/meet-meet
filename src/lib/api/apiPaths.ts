@@ -21,15 +21,15 @@ export const EXTERNAL_PATHS = {
  * @function createReview -> 리뷰 생성
  */
 export const INTERNAL_PATHS = {
-    createGathering: () => `/api/gatherings`,
+    createGathering: `/api/gatherings`,
     cancelGathering: (id: number) => `/api/gatherings/cancel?id=${id}`,
     fetchJoinedCheck: (queries: string) => `/api/gatherings/joined?${queries}`,
     fetchGatheringReviews: (gatheringId: number, limit?: number, offset?: number) => `/api/gatherings/detail/reviews?gatheringId=${gatheringId}&limit=${limit}&offset=${offset}`,
     fetchGatheringDetail: (id: number) => `/api/gatherings/detail?id=${id}`,
     fetchGatheringParticipants: (id: number) => `/api/gatherings/participants?id=${id}`,
-    fetchGatherings: () => `/api/gatherings`,
+    fetchGatherings: `/api/gatherings`,
     fetchPaginatedGatherings: (page: number, limit: number) => `/api/gatherings?offset=${(page - 1) * limit}&limit=${limit}`,
     joinGathering: (id: number) => `/api/gatherings/join?id=${id}`,
     leaveGathering: (id: number) => `/api/gatherings/leave?id=${id}`,
-    createReview: () => `/api/reviews`
-};
+    createReview: `/api/reviews`
+} as const;

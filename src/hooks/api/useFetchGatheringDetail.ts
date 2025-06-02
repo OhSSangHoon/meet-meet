@@ -45,9 +45,6 @@ export const useFetchGatheringDetail = (
             const participants = await fetchGatheringParticipants(id)
             return { detail, participants }
         },
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
     })
 
     const retchIsSaved = useMutation({

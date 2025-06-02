@@ -1,10 +1,3 @@
-// 쿼리키 팩토리 (리팩토링 예정)
-export const gatheringKeys = {
-    all: ['gatherings', 'infinite'],
-    created: (token: string | null) => ['createdGatherings', token],
-    detail: (id: number) => ['gatheringDetail', id],
-};
-
 /** 프로젝트 전체 쿼리키 목록 */
 // ['gatherings', 'infinite'] - 모임 목록
 
@@ -18,4 +11,4 @@ export const gatheringKeys = {
 
 // ["joinedGatherings", token] 마이페이지 '참여중인 모임'
 // ["createdGatherings", token] - 마이페이지 '내가 만든 모임'
-// ["myGatheringReviews", token] 마이페이지 '나의 리뷰'
+// ["myReviews"] 마이페이지 '나의 리뷰'

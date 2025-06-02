@@ -34,9 +34,6 @@ export const useCheckJoined = (
         enabled: !!id && !!token,
         queryKey: ['checkGatheringJoined', id],
         queryFn: () => fetchJoinedCheck(),
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
     })
 
     return { data, isLoading, isError }

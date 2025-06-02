@@ -1,92 +1,84 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useFetchCreatedGatherings } from '@/hooks/api/useFetchCreatedGatherings';
 import { useContext } from 'react';
-import axios from 'axios';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/providers/AuthProvider';
-
-interface Gathering {
-  id: number;
-  name: string;
-  image: string;
-  location: string;
-  type: string;
-  participantCount: number;
-  capacity: number;
-  dateTime: string;
-  createdBy: number;
-}
+import { formatDate, formatTime, getTimeRemaining } from '../shared/utils/format';
+import { UserRoundCheck, Hand } from "lucide-react"
+import Image from 'next/image';
 
 export default function CreatedGatherings() {
   const { token, userId } = useContext(AuthContext);
-  const router = useRouter();
 
-  const fetchCreatedGatherings = async (
-    token: string,
-  ): Promise<Gathering[]> => {
-    const { data } = await axios.get(
-      `/api/gatherings?createdBy=${userId}&limit=1000`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-    return data;
-  };
+  const { data: gatherings = [], isLoading, error } = useFetchCreatedGatherings(token!, userId);
 
-  const {
-    data: gatherings = [],
-    isLoading,
-    error,
-  } = useQuery<Gathering[], Error>({
-    queryKey: ['createdGatherings', token],
-    queryFn: () => fetchCreatedGatherings(token!),
-    enabled: !!token,
-  });
-
-  const isEmpty = !isLoading && !error && gatherings.length === 0;
+  if (isLoading) return <div className="text-center text-gray-500">로딩 중...</div>;
+  if (error) return <p className="text-center text-red-500">에러 발생: {(error as Error).message}</p>;
+  if (!isLoading && !error && gatherings.length === 0) return <p className="text-center text-gray-700">내가 만든 모임이 없어요</p>;
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      {isLoading && <div className="text-center text-gray-500">로딩 중...</div>}
-      {error && (
-        <div className="text-center text-red-500">
-          에러 발생: {(error as Error).message}
-        </div>
-      )}
-      {isEmpty && (
-        <div className="text-center text-gray-700">
-          내가 만든 모임이 없어요.
-        </div>
-      )}
+    <div className='px-4 flex flex-col gap-2'>
+      <div className="flex w-full flex-col gap-4">
 
-      {!isLoading &&
-        !error &&
-        gatherings.map(g => (
-          <button
-            key={g.id}
-            className="w-full rounded-lg border-2 p-4 text-left hover:opacity-80"
-            onClick={() => router.push(`/gatherings/detail/${g.id}`)}
-          >
-            <h3 className="text-lg font-semibold">{g.name}</h3>
-            <Image
-              src={g.image}
-              alt="모임 이미지"
-              className="my-2 rounded-lg"
-              width={100}
-              height={100}
-            />
-            <p className="text-gray-600">위치: {g.location}</p>
-            <p className="text-gray-600">유형: {g.type}</p>
-            <p className="text-gray-600">
-              참여자 수: {g.participantCount}/{g.capacity}
-            </p>
-            <p className="text-gray-600">
-              일시: {new Date(g.dateTime).toLocaleString()}
-            </p>
-          </button>
-        ))}
+        {!isLoading && !error && gatherings.map(gathering => {
+          return (
+            <div
+              key={gathering.id}
+              className="relative min-h-[100px] w-full p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
+            >
+              {/* 마감된 모임 오버레이 */}
+              {new Date(gathering.registrationEnd) < new Date() && (
+                <div className="absolute bg-black/90 inset-0 z-10 flex items-center justify-center text-center rounded-xl">
+                  <div className="px-4 py-2 rounded-lg flex gap-1 text-sm text-white">
+                    <Hand className="w-4 h-4 text-main-400" />
+                    <span>마감되었습니다</span>
+                  </div>
+                </div>
+              )}
+
+              {/* 좌측 */}
+              <article className='relative'>
+                <div className="relative px-3 bg-white/80 rounded-full flex items-center text-xs">
+                  <div className="absolute top-3 left-3 bg-main-600 rounded-full px-3 py-1 flex justify-center items-center gap-2 z-10">
+                    <Image src={"/icons/Alarm.svg"} alt="시간" width={24} height={24} />
+                    <span className="font-medium text-white">{getTimeRemaining(gathering?.registrationEnd || '')}</span>
+                  </div>
+                </div>
+                <Image src={gathering?.image}
+                  alt='모임 이미지'
+                  width={1000}
+                  height={1000}
+                  className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
+                />
+              </article>
+
+              {/* 우측 정보 */}
+              <div className='flex flex-col justify-between'>
+                <div className='flex flex-col gap-1'>
+                  <h3 className="text-xl font-semibold text-gray-800">{gathering.name}</h3>
+                  <p className="text-gray-600">{gathering.location}</p>
+                  <div className='flex items-center gap-4 text-sm font-medium'>
+                    {/* 참여자 수 */}
+                    <div className='flex items-center gap-1'>
+                      <UserRoundCheck className={`w-4 h-4 text-main-500`} />
+                      <span>{gathering.participantCount}/{gathering.capacity}</span>
+                    </div>
+                    {/* 날짜/시간 */}
+                    <div className="flex flex-wrap gap-2">
+                      <span className={`inline-flex items-center rounded-md`}>
+                        {formatDate(gathering.dateTime)}
+                      </span>
+                      <span className={`inline-flex items-center rounded-md`}>
+                        {formatTime(gathering.dateTime)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

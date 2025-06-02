@@ -20,9 +20,10 @@ const signinFormSchema = z.object({
 type SigninFormSchemaType = z.infer<typeof signinFormSchema>;
 
 export default function LoginForm() {
+    const { signin } = useContext(AuthContext);
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [errorResponseMessage, setErrorResponseMessage] = useState<string | null>(null);
-    const { signin } = useContext(AuthContext);
 
     const {
         register,
@@ -57,30 +58,28 @@ export default function LoginForm() {
     };
 
     return (
-        <div className='w-[24rem] md:w-[31rem] h-[26.5rem] py-4 bg-white rounded-lg shadow-md flex flex-col items-center justify-center'>
+        <section className='w-[24rem] md:w-[31rem] h-[26.5rem] py-4 bg-white rounded-lg shadow-md flex flex-col items-center justify-center'>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className='w-4/5 flex flex-col gap-8'
             >
                 <h1 className='text-2xl font-bold text-center'>로그인</h1>
-                {/* 이메일 */}
                 <InputField
                     label="아이디"
                     id="email"
                     type="email"
                     placeholder="이메일을 입력해 주세요"
                     {...register('email')}
-                    isSubmitted={isSubmitted}
+                    disabled={isSubmitted}
                     error={errors.email?.message}
                 />
-                {/* 비밀번호 */}
                 <InputField
                     label='비밀번호'
                     id='password'
                     type='password'
                     placeholder='비밀번호를 입력해 주세요'
                     {...register('password')}
-                    isSubmitted={isSubmitted}
+                    disabled={isSubmitted}
                     handlePasswordVisibility={() => setIsPasswordVisible((v) => !v)}
                     isPasswordVisible={isPasswordVisible}
                     error={errors.password?.message}
@@ -98,7 +97,7 @@ export default function LoginForm() {
                     text="회원가입"
                 />
             </form>
-        </div>
+        </section>
     );
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import ProfileCard from "@/components/mypage/ProfileCard";
 import JoinedGatherings from "@/components/mypage/JoinedGatherings";
 import MyReviews from "@/components/mypage/MyReviews";
@@ -12,7 +12,7 @@ enum MypageTab {
   CreatedGatherings = 2,
 }
 
-export default function MyPageUI() {
+export default function MyPageUI({ teamId }: { teamId: string }) {
   const [selectedTab, setSelectedTab] = useState<MypageTab>(MypageTab.JoinedGatherings);
 
   return (
@@ -26,8 +26,8 @@ export default function MyPageUI() {
         </div>
 
         {/* 탭 네비게이션 */}
-        <div className="bg-white border-t-[3px] border-gray-800">
-          <div className="pt-8 flex gap-4 text-lg font-bold p-5">
+        <div className=" border-t-[3px] border-gray-800">
+          <div className="px-4 py-4 flex gap-4 text-lg font-bold">
             {[
               { label: "참여중인 모임", value: MypageTab.JoinedGatherings },
               { label: "나의 리뷰", value: MypageTab.MyReviews },
@@ -35,8 +35,9 @@ export default function MyPageUI() {
             ].map(({ label, value }) => (
               <button
                 key={value}
+                type="button"
                 onClick={() => setSelectedTab(value)}
-                className={`relative pb-2 transition-colors duration-150
+                className={`relative pb-2 cursor-pointer transition-colors duration-150
                   ${selectedTab === value
                     ? "text-gray-800 after:absolute after:-bottom-0.5 after:left-0 after:right-0 after:h-[2px] after:bg-gray-800"
                     : "text-gray-400"
@@ -48,10 +49,8 @@ export default function MyPageUI() {
           </div>
 
           {/* 탭에 따른 내용 */}
-          <Suspense fallback={<div>로딩 중...</div>}>
-            <JoinedGatherings />
-          </Suspense>
-          {selectedTab === MypageTab.MyReviews && <MyReviews />}
+          {selectedTab === MypageTab.JoinedGatherings && <JoinedGatherings />}
+          {selectedTab === MypageTab.MyReviews && <MyReviews teamId={teamId} />}
           {selectedTab === MypageTab.CreatedGatherings && <CreatedGatherings />}
         </div>
       </div>

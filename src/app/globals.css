@@ -288,17 +288,17 @@ html {
 
 .custom-datepicker .react-datepicker__day:hover {
   background-color: #fef3f0;
-  color: #ff6b35;
+  color: var(--color-main-400);
 }
 
 .custom-datepicker .react-datepicker__day--selected {
-  background-color: #ff6b35 !important;
+  background-color: var(--color-main-400) !important;
   color: white !important;
   font-weight: bold;
 }
 
 .custom-datepicker .react-datepicker__day--today {
-  color: #ff6b35;
+  color: var(--color-main-400);
   font-weight: bold;
   background-color: transparent;
 }
@@ -341,9 +341,22 @@ html {
 }
 
 
+/* 공통 적용 */
 @layer components {
+
+  /* 페이지의 컨텐츠 컨테이너 */
   .contents-container {
     @apply max-w-screen-lg min-h-screen h-full mx-auto px-4 md:px-20 pt-8 pb-10 flex flex-col gap-4 bg-neutral-50;
+  }
+
+  /* 버튼 padding */
+  .padding-button {
+    @apply px-4 py-2;
+  }
+
+  /* 모임 아이템 transition */
+  .transition-gathering-item {
+    @apply transition duration-150 ease-in;
   }
 }
 

@@ -7,5 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function MyPage() {
-  return <MyPageUI />;
+  const teamId = process.env.TEAM_ID_DEV!;
+  return <MyPageUI teamId={teamId} />;
 }

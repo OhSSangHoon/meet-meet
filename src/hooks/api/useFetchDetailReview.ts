@@ -19,9 +19,7 @@ export const useFetchDetailReview = (
 ) => {
     const fetchGatheringReviews = async () => {
         try {
-            const response = await axios.get(`/api/gatherings/detail/reviews`, {
-                params: { gatheringId, limit, offset }
-            });
+            const response = await axios.get(`/api/reviews`, { params: { gatheringId, limit, offset } });
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -35,9 +33,6 @@ export const useFetchDetailReview = (
         enabled: !!gatheringId && enabled,
         queryKey: ['gatheringReviews', gatheringId],
         queryFn: fetchGatheringReviews,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
     })
 
     return { data, isLoading, isError }

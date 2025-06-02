@@ -9,20 +9,20 @@ export default function ProfileCard() {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    const storedName = localStorage.getItem('user_name') || '';
-    const storedCompany = localStorage.getItem('user_company_name') || '';
-    const storedEmail = localStorage.getItem('user_email') || '';
+    const NAME = localStorage.getItem('user_name') || '';
+    const COMPANY_NAME = localStorage.getItem('user_company_name') || '';
+    const EMAIL = localStorage.getItem('user_email') || '';
 
-    setName(storedName);
-    setCompany(storedCompany);
-    setEmail(storedEmail);
+    setName(NAME);
+    setCompany(COMPANY_NAME);
+    setEmail(EMAIL);
   }, []);
 
   return (
     <div className="overflow-hidden rounded-lg border">
       {/* Card Header with Orange Background */}
       <div className="bg-main-350 pd-4 relative p-4">
-        <div className="mb-1 text-lg font-bold text-gray-800">내 프로필</div>
+        <div className="mb-1 text-lg font-bold text-white">내 프로필</div>
         <div className="absolute top-4 right-4">
           <button>
             <Image
@@ -42,7 +42,7 @@ export default function ProfileCard() {
               alt="배경"
               width={120}
               height={120}
-              className="pointer-events-none"
+              className="w-auto h-auto pointer-events-none"
             />
           </div>
         </div>
@@ -64,11 +64,11 @@ export default function ProfileCard() {
         <div>
           <div className="text-md font-bold text-gray-800">{name}</div>
           <div className="flex gap-2 text-sm text-gray-800">
-            <div className="font-bold">company.</div>
+            <div className="font-bold">COMPANY</div>
             <div>{company}</div>
           </div>
           <div className="flex gap-2 text-sm text-gray-800">
-            <div className="font-bold">E-mail.</div>
+            <div className="font-bold">E-MAIL</div>
             <div>{email}</div>
           </div>
         </div>
