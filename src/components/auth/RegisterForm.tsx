@@ -23,12 +23,13 @@ const signupFormSchema = z.object({
 type SignupFormSchemaType = z.infer<typeof signupFormSchema>;
 
 export default function RegisterForm() {
+    const { signup } = useContext(AuthContext)
+
     const [passwordCheck, setPasswordCheck] = useState('');
     const [isPasswordMatch, setIsPasswordMatch] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isPasswordCheckVisible, setIsPasswordCheckVisible] = useState(false);
     const [errorResponseMessage, setErrorResponseMessage] = useState<string | null>(null);
-    const { signup } = useContext(AuthContext)
 
     const {
         register,
@@ -65,50 +66,45 @@ export default function RegisterForm() {
                 onSubmit={handleSubmit(onSubmit)}
                 className='w-4/5 flex flex-col gap-4'>
                 <h1 className='text-2xl font-bold text-center'>회원가입</h1>
-                {/* 이름 */}
                 <InputField
                     label="이름"
                     id="user-name"
                     type="text"
                     placeholder="이름을 입력해 주세요"
                     {...register('name')}
-                    isSubmitted={isSubmitted}
+                    disabled={isSubmitted}
                     error={errors.name?.message}
                 />
-                {/* 이메일 */}
                 <InputField
                     label="아이디"
                     id="email"
                     type="email"
                     placeholder="이메일을 입력해 주세요"
                     {...register('email')}
-                    isSubmitted={isSubmitted}
+                    disabled={isSubmitted}
                     error={errors.email?.message}
                     errorResponseMessage={errorResponseMessage}
                 />
-                {/* 회사명 */}
                 <InputField
                     label='회사명'
                     id='company-name'
                     type='text'
                     placeholder='회사명을 입력해 주세요'
                     {...register('companyName')}
-                    isSubmitted={isSubmitted}
+                    disabled={isSubmitted}
                     error={errors.companyName?.message}
                 />
-                {/* 비밀번호 */}
                 <InputField
                     label='비밀번호'
                     id='password'
                     type='password'
                     placeholder='비밀번호를 입력해 주세요'
                     {...register('password')}
-                    isSubmitted={isSubmitted}
+                    disabled={isSubmitted}
                     handlePasswordVisibility={() => setIsPasswordVisible((v) => !v)}
                     isPasswordVisible={isPasswordVisible}
                     error={errors.password?.message}
                 />
-                {/* 비밀번호 확인 */}
                 <div className='w-full flex flex-col gap-2'>
                     <label
                         htmlFor="password-check"

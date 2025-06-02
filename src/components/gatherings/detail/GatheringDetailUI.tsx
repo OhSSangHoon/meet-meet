@@ -11,14 +11,14 @@ import { useLeaveGathering } from '@/hooks/api/useLeaveGathering';
 import { AuthContext } from '@/providers/AuthProvider';
 import { ReviewItem, Reviews } from '@/types/reviews';
 import ConfirmDialog from '@/components/shared/ui/ConfirmDialog';
-import InformationLoading from '@/components/gatherings/gatheringDetail/loading/InformationLoading';
-import ThumbnailLoading from '@/components/gatherings/gatheringDetail/loading/ThumbnailLoading';
-import ReviewLoading from '@/components/gatherings/gatheringDetail/loading/ReviewLoading';
-import Thumbnail from '@/components/gatherings/gatheringDetail/Thumbnail';
-import Information from '@/components/gatherings/gatheringDetail/Information';
-import Review from '@/components/gatherings/gatheringDetail/Review';
-import PageConverter from '@/components/gatherings/gatheringDetail/PageConverter';
-import Footer from '@/components/gatherings/gatheringDetail/Footer';
+import InformationLoading from '@/components/gatherings/detail/loading/InformationLoading';
+import ThumbnailLoading from '@/components/gatherings/detail/loading/ThumbnailLoading';
+import ReviewLoading from '@/components/gatherings/detail/loading/ReviewLoading';
+import Thumbnail from '@/components/gatherings/detail/Thumbnail';
+import Information from '@/components/gatherings/detail/Information';
+import Review from '@/components/gatherings/detail/Review';
+import PageConverter from '@/components/gatherings/detail/PageConverter';
+import Footer from '@/components/gatherings/detail/Footer';
 
 export interface Participant {
     teamId: number;

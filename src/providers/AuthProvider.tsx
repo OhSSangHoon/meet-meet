@@ -59,7 +59,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         try {
             const result = await axios.post('/api/auth/signin', { email, password });
             if (result.status === 200) {
-                alert('로그인에 성공했습니다.')
                 localStorage.setItem('token', result.data.token);
                 setToken(result.data.token);
                 await fetchUser(result.data.token);
