@@ -62,7 +62,7 @@ export default function Reviews({ initialReviews = [] }: PageProps) {
             }
             return newFilters;
         });
-    }, [filters]);
+    }, []);
 
     return (
         <div className="w-full flex flex-col">
