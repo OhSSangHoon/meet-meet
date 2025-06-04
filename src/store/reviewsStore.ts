@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Reviews } from '@/types/reviews';
+import { Reviews, ReviewItem } from '@/types/reviews';
 
 /**
  * SSR 모임 상세 리뷰 목록
@@ -27,4 +27,23 @@ export const useDetailReviewsStore = create<DetailReviewsState>((set) => ({
                 totalPages: detailReviews.totalPages,
             },
         })),
+}));
+
+
+/**
+ * SSR 리뷰 페이지 목록
+ * @type {ReviewItem[]} reviews 리뷰 페이지 목록
+ * @type {function} setReviews 리뷰 페이지 목록 설정 함수
+ * @type {function} clearReviews 리뷰 페이지 목록 초기화 함수
+ */
+interface ReviewsStore {
+    reviews: ReviewItem[];
+    setReviews: (reviews: ReviewItem[]) => void;
+    clearReviews: () => void;
+}
+
+export const useReviewsStore = create<ReviewsStore>((set) => ({
+    reviews: [],
+    setReviews: (reviews) => set({ reviews }),
+    clearReviews: () => set({ reviews: [] }),
 }));
