@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios, { AxiosError } from 'axios';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { AxiosError } from 'axios';
+import { apiServer } from '@/lib/api/axios';
 
 /**
  * 로그인
@@ -12,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!email || !password) return new NextResponse(JSON.stringify({ error: '이메일과 비밀번호는 필수입니다' }), { status: 400 });
 
     try {
-        const response = await axios.post(`${process.env.API_URI_DEV}/auths/signin`, { email, password })
+        const response = await apiServer.post(EXTERNAL_PATHS.signin, { email, password })
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

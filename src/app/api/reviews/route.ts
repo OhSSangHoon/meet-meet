@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import axios, { AxiosError } from 'axios';
+import { apiServer } from '@/lib/api/axios';
 
 /**
  * 리뷰 목록 조회
@@ -13,7 +15,7 @@ export async function GET(request: NextRequest) {
   const token = request.headers.get('Authorization');
 
   try {
-    const response = await axios.get(`${process.env.API_URI_DEV}/reviews`, {
+    const response = await apiServer.get(EXTERNAL_PATHS.fetchReviews, {
       params: Object.fromEntries(searchParams),
       headers: {
         Authorization: token!,
@@ -37,8 +39,8 @@ export async function POST(request: NextRequest) {
   try {
     const { gatheringId, score, comment } = await request.json();
 
-    const response = await axios.post(
-      `${process.env.API_URI_DEV}/reviews`,
+    const response = await apiServer.post(
+      EXTERNAL_PATHS.createReview,
       { gatheringId, score, comment },
       { headers: { Authorization: request.headers.get('Authorization') } }
     );

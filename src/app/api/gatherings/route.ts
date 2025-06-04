@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios, { AxiosError } from 'axios';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { AxiosError } from 'axios';
+import { apiServer } from '@/lib/api/axios';
 
 /**
  * 모임 생성 API
@@ -10,12 +12,13 @@ import axios, { AxiosError } from 'axios';
  */
 export async function POST(request: NextRequest) {
     const token = request.headers.get('Authorization');
+
     try {
         const formData = await request.formData();
 
         if (!token) return new NextResponse(JSON.stringify({ error: '토큰이 필요합니다' }), { status: 401 });
 
-        const response = await axios.post(`${process.env.API_URI_DEV}/gatherings`, formData, {
+        const response = await apiServer.post(EXTERNAL_PATHS.createGathering, formData, {
             headers: {
                 'Authorization': token!,
                 'Content-Type': 'multipart/form-data',
@@ -40,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     try {
         const searchParams = request.nextUrl.searchParams;
-        const response = await axios.get(`${process.env.API_URI_DEV}/gatherings`, {
+        const response = await apiServer.get(EXTERNAL_PATHS.fetchGatherings, {
             params: Object.fromEntries(searchParams),
             headers: {
                 'Authorization': token!,

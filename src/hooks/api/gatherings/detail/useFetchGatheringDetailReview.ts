@@ -19,7 +19,7 @@ export const useFetchGatheringDetailReview = (
     offset: number,
     enabled: boolean
 ) => {
-    const fetchGatheringReviews = async () => {
+    const fetchGatheringDetailReviews = async () => {
         try {
             const response = await apiClient.get(INTERNAL_PATHS.fetchReviews, { params: { gatheringId, limit, offset } });
             return response.data;
@@ -34,7 +34,7 @@ export const useFetchGatheringDetailReview = (
     const { data, isLoading, isError } = useQuery({
         enabled: !!gatheringId && enabled,
         queryKey: ['gatheringReviews', gatheringId],
-        queryFn: fetchGatheringReviews,
+        queryFn: fetchGatheringDetailReviews,
     })
 
     return { data, isLoading, isError }

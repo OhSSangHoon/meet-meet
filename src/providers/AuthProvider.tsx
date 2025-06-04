@@ -4,6 +4,7 @@ import { createContext, useState, Dispatch, SetStateAction, useEffect } from "re
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { apiClient } from '@/lib/api/axios';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 
@@ -62,7 +63,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const signup = async (email: string, password: string, name: string, companyName: string) => {
         try {
-            const result = await axios.post(INTERNAL_PATHS.signup, { email, password, name, companyName })
+            const result = await apiClient.post(INTERNAL_PATHS.signup, { email, password, name, companyName })
             if (result.status === 200) {
                 setSignupDialogOpen(true);
                 router.replace('/login')
@@ -74,11 +75,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const signin = async (email: string, password: string) => {
         try {
-            const result = await axios.post(INTERNAL_PATHS.signin, { email, password });
+            const result = await apiClient.post(INTERNAL_PATHS.signin, { email, password });
             if (result.status === 200) {
                 localStorage.setItem('token', result.data.token);
                 setToken(result.data.token);
-                await fetchUser(result.data.token);
+                await fetchUser();
                 router.replace(previousPath);
             }
         } catch (error) {
@@ -86,9 +87,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }
     }
 
-    const fetchUser = async (token: string) => {
+    const fetchUser = async () => {
         try {
-            const result = await axios.get(INTERNAL_PATHS.user, { headers: { Authorization: `Bearer ${token}` } });
+            const result = await apiClient.get(INTERNAL_PATHS.user);
             if (result.status === 200) {
                 setUserName(result.data.name);
                 setUserId(result.data.id);

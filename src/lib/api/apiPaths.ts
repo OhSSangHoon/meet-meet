@@ -1,23 +1,34 @@
-/** 외부 경로
- * @description API 라우트, 클라이언트 -> 백엔드 서버
-
+/** 외부 경로: 클라이언트, API 라우트 -> 백엔드 서버
+ * @string signin -> 로그인
+ * @string signout -> 로그아웃
+ * @string signup -> 회원가입
+ * @string user -> 유저 정보 조회
+ * @string fetchGatherings -> 모임 목록 조회
+ * @string createGathering -> 모임 생성
+ * @function joinGathering -> 모임 참여
+ * @function leaveGathering -> 모임 참여 취소
  */
 export const EXTERNAL_PATHS = {
+    signin: '/auths/signin',
+    signout: '/auths/signout',
+    signup: '/auths/signup',
+    user: '/auths/user',
+
     fetchGatherings: '/gatherings',
     createGathering: '/gatherings',
     fetchGatheringDetail: (id: number) => `/gatherings/${id}`,
     joinGathering: (id: number) => `/gatherings/${id}/join`,
     cancelGathering: (id: number) => `/gatherings/${id}/cancel`,
     leaveGathering: (id: number) => `/gatherings/${id}/leave`,
-    fetchJoinedCheck: (queries: string) => `/gatherings/joined?${queries}`,
+
+    checkJoined: '/gatherings/joined',
     fetchGatheringParticipants: (id: number) => `/gatherings/${id}/participants`,
     fetchGatheringReviews: (queries: string) => `/reviews?${queries}`,
     createReview: '/reviews',
+    fetchReviews: '/reviews',
 } as const;
 
-/** 내부 경로
- * @description 클라이언트 -> API 라우트
- * @example INTERNAL_PATHS.createGathering() -> /api/gatherings
+/** 내부 경로: 클라이언트 -> API 라우트
  * @string signin -> 로그인
  * @string signout -> 로그아웃
  * @string signup -> 회원가입
@@ -35,23 +46,24 @@ export const EXTERNAL_PATHS = {
  * @function fetchGatheringReviews -> 모임 상세 리뷰 조회
  */
 export const INTERNAL_PATHS = {
-    signin: '/auths/signin',
-    signout: '/auths/signout',
-    signup: '/auths/signup',
-    user: '/auths/user',
+    signin: '/api/auths/signin',
+    signout: '/api/auths/signout',
+    signup: '/api/auths/signup',
+    user: '/api/auths/user',
 
     fetchGatherings: '/api/gatherings',
     createGathering: '/api/gatherings',
+    fetchGatheringDetail: (id: number) => `/api/gatherings/detail?id=${id}`,
     joinGathering: (id: number) => `/api/gatherings/join?id=${id}`,
     cancelGathering: (id: number) => `/api/gatherings/cancel?id=${id}`,
     leaveGathering: (id: number) => `/api/gatherings/leave?id=${id}`,
+
     fetchPaginatedGatherings: (page: number, limit: number) => `/api/gatherings?offset=${(page - 1) * limit}&limit=${limit}`,
-    fetchGatheringDetail: (id: number) => `/api/gatherings/detail?id=${id}`,
-    checkJoined: (queries: string) => `/api/gatherings/joined?${queries}`,
     fetchGatheringParticipants: (id: number) => `/api/gatherings/participants?id=${id}`,
-    fetchCreatedGatherings: (userId: number) => `/api/gatherings?createdBy=${userId}&limit=1000`,
-    fetchJoinedGatherings: `/api/gatherings/joined?&limit=1000`,
     fetchGatheringReviews: (gatheringId: number, limit?: number, offset?: number) => `/api/gatherings/detail/reviews?gatheringId=${gatheringId}&limit=${limit}&offset=${offset}`,
+    fetchCreatedGatherings: (userId: number) => `/api/gatherings?createdBy=${userId}&limit=1000`,
+    checkJoined: (queries: string) => `/api/gatherings/joined?${queries}`,
+    fetchJoinedGatherings: `/api/gatherings/joined?&limit=1000`,
     createReview: `/api/reviews`,
     fetchReviews: `/api/reviews`,
 } as const;
