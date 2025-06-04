@@ -113,7 +113,7 @@ export default function LocationDateFilter({
     };
 
     return (
-        <div className="w-full flex flex-row gap-4 py-4 border-b border-gray-200">
+        <div className="w-full flex flex-row gap-4 py-4">
             <div className="flex flex-wrap gap-3">
                 {/* 위치 선택 */}
                 <div className="flex items-center gap-2">
