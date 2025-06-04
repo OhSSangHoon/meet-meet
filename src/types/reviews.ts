@@ -9,13 +9,24 @@
  * @type User: 유저 정보
  */
 export interface ReviewItem {
-    teamId: number;
-    id: number;
+    id: string;
     score: number;
     comment: string;
     createdAt: string;
-    Gathering: GatheringInfo;
-    User: UserInfo;
+    User: {
+        id: string;
+        name: string;
+        image: string;
+    };
+    Gathering: {
+        id: string;
+        name: string;
+        type: string;
+        location: string;
+        dateTime: string;
+        image?: string;
+        participantCount?: number;
+    };
 }
 
 /**
@@ -27,6 +38,8 @@ export interface ReviewItem {
  * @type dateTime: 모임 날짜
  * @type location: 모임 장소
  * @type image: 모임 이미지
+ * @type participantCount: 참여인원 수 (추가)
+ * @type capacity: 최대 정원 (추가)
  */
 export interface GatheringInfo {
     teamId: number;
@@ -36,6 +49,8 @@ export interface GatheringInfo {
     dateTime: string;
     location: string;
     image: string;
+    participantCount: number;
+    capacity: number;
 }
 
 /**
@@ -53,7 +68,7 @@ export interface UserInfo {
 }
 
 /**
- * 리뷰 목록 조회
+ * 리뷰 목록 조회 (기존 DetailReviews용)
  * @type data: 리뷰 아이템
  * @type totalItemCount: 총 리뷰 개수
  * @type currentPage: 현재 페이지
@@ -64,4 +79,31 @@ export interface Reviews {
     totalItemCount: number;
     currentPage: number;
     totalPages: number;
+}
+
+// 새로운 리뷰 페이지용 타입 추가
+export interface ReviewsResponse {
+    data: ReviewItem[];
+    total: number;
+}
+
+// 필터 관련 공통 타입들
+export interface ReviewFilters {
+    location: string;
+    date: string;
+    sortBy: string;
+    sortOrder: 'asc' | 'desc';
+}
+
+export interface ReviewType {
+    mainType: string;
+    subType: string;
+}
+
+export interface ReviewStats {
+    average: number;
+    ratingCounts: {
+        [key: number]: number;
+    };
+    totalReviews: number;
 }
