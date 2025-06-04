@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import HeartRating from '@/components/reviews/HeartRating';
 import { ReviewItem } from '@/types/reviews';
-import { useFetchInfiniteReviews } from '@/hooks/api/useFetchInfiniteReviews';
+import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteReviews';
 import { useReviewsStore } from '@/store/reviewsStore';
 import { filterReviews } from '@/components/reviews/shared/utils/fetch';
 import ReviewStats from './ReviewStats';
@@ -75,10 +75,10 @@ export default function ReviewsList({
                 <h3 className="text-lg font-semibold text-gray-900">
                     모든 리뷰 ({mergedReviews.length}개)
                 </h3>
-                
+
                 {!isInitialLoading && mergedReviews.map((review, index) => {
                     const isLastItem = index === mergedReviews.length - 1;
-                    
+
                     return (
                         <section
                             key={`${review.id}-${index}`}
@@ -96,7 +96,7 @@ export default function ReviewsList({
                                     sizes="(max-width: 768px) 100vw, 320px"
                                 />
                             </div>
-                            
+
                             {/* 콘텐츠 영역 */}
                             <div className="flex-1 flex flex-col justify-between p-4 md:p-6 min-h-0">
                                 <div className="flex-1 w-full">
@@ -121,7 +121,7 @@ export default function ReviewsList({
                         </section>
                     );
                 })}
-                
+
                 {/* 무한스크롤 로딩 */}
                 {infiniteScrollEnabled && isFetchingNextPage && (
                     <div className="w-full h-[80px] flex justify-center items-center">
@@ -131,7 +131,7 @@ export default function ReviewsList({
                         </div>
                     </div>
                 )}
-                
+
                 {/* 빈 목록 메시지 */}
                 {!isInitialLoading && mergedReviews.length === 0 && (
                     <div className="w-full h-[100px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">

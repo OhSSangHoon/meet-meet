@@ -1,33 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 /**
  * 리뷰 목록 조회
- * @param 옵션
+ * @header Authorization - 토큰
+ * @param request - 쿼리 (모임 ID, 유저 ID, ...)
  * @method GET
  * @returns 모임 리뷰 목록
  */
 export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams;
+  const searchParams = request.nextUrl.searchParams;
+  const token = request.headers.get('Authorization');
 
+  try {
     const response = await axios.get(`${process.env.API_URI_DEV}/reviews`, {
       params: Object.fromEntries(searchParams),
       headers: {
-        Authorization: request.headers.get('Authorization') || '',
+        Authorization: token!,
       },
     });
 
     return NextResponse.json(response.data);
   } catch (error) {
-    console.error('리뷰 목록 조회 중 오류:', error);
-
-    if (axios.isAxiosError(error) && error.response) return NextResponse.json(error.response.data, { status: error.response.status });
-
-    return NextResponse.json(
-      { code: 'SERVER_ERROR', message: '리뷰 목록 조회에 실패했습니다.' },
-      { status: 500 }
-    );
+    const err = error as AxiosError;
+    return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
   }
 }
 

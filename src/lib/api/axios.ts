@@ -1,21 +1,26 @@
 import axios from 'axios';
 
+/**
+ * axios 인스턴스 API 클라이언트
+ * @param baseURL - API 기본 URL
+ * @param withCredentials - 쿠키 포함 여부
+ * @warning 외부경로에는 사용하지 말 것
+ */
+export const apiClient = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_BASE_URI,
+    withCredentials: true,
+});
+
 const parseAxiosError = (error: unknown, message = '요청 중 에러가 발생했습니다.') => {
     if (axios.isAxiosError(error)) {
         const serverError = error?.response?.data?.error;
         if (serverError && typeof serverError === 'object' && 'message' in serverError) return serverError.message;
         if (error?.response?.data?.message) return error.response.data.message;
-        return '요청 중 에러가 발생했습니다.';
     }
     return message;
 }
 
-const apiClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URI,
-    withCredentials: true,
-});
-
-// 요청 인터셉터
+// 요청 인터셉터: headers에 토큰 추가
 apiClient.interceptors.request.use(
     (config) => {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -25,14 +30,13 @@ apiClient.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// 응답 인터셉터
+// 응답 인터셉터: 에러 메세지, 에러 코드 parsing 후 반환
 apiClient.interceptors.response.use(
     response => response,
     error => {
         const message = parseAxiosError(error);
         error.parsedMessage = message;
+        error.parsedStatus = error?.response?.status ?? null;
         return Promise.reject(error);
     }
 );
-
-export default apiClient;

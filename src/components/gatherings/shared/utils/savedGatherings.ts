@@ -4,7 +4,7 @@
  */
 export const getSavedGatherings = (): string[] => {
     if (typeof window === 'undefined') return [];
-    return JSON.parse(localStorage.getItem('savedGatherings') || '[]');
+    return JSON.parse(localStorage.getItem("savedGatherings") || "[]");
 };
 
 /**
@@ -13,5 +13,5 @@ export const getSavedGatherings = (): string[] => {
  * @returns {void}
  */
 export const setSavedGatherings = (ids: string[]): void => {
-    localStorage.setItem('savedGatherings', JSON.stringify(ids));
+    localStorage.setItem("savedGatherings", JSON.stringify(ids));
 };

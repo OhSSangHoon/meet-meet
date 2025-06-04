@@ -2,7 +2,7 @@
 
 import { useState, useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { useCreateReview } from '@/hooks/api/useCreateReview';
+import { useCreateReview } from '@/hooks/api/mypage/useCreateReview';
 import dynamic from 'next/dynamic';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });

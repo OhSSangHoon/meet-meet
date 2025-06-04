@@ -2,12 +2,12 @@
 
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFetchGatheringDetail } from '@/hooks/api/useFetchGatheringDetail';
-import { useFetchDetailReview } from '@/hooks/api/useFetchDetailReview';
-import { useCheckJoined } from '@/hooks/api/useCheckJoined';
-import { useJoinGathering } from '@/hooks/api/useJoinGathering';
-import { useCancelGathering } from '@/hooks/api/useCancelGathering';
-import { useLeaveGathering } from '@/hooks/api/useLeaveGathering';
+import { useFetchGatheringDetail } from '@/hooks/api/gatherings/detail/useFetchGatheringDetail';
+import { useFetchGatheringDetailReview } from '@/hooks/api/gatherings/detail/useFetchGatheringDetailReview';
+import { useCheckJoined } from '@/hooks/api/gatherings/detail/useCheckJoined';
+import { useJoinGathering } from '@/hooks/api/gatherings/detail/useJoinGathering';
+import { useCancelGathering } from '@/hooks/api/gatherings/detail/useCancelGathering';
+import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGathering';
 import { AuthContext } from '@/providers/AuthProvider';
 import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
 import { ReviewItem, Reviews } from '@/types/reviews';
@@ -57,7 +57,7 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
 
     const { detail, participants, isLoading: detailLoading } = useFetchGatheringDetail(Number(id));
     const { data: isParticipated, } = useCheckJoined(Number(id), token);
-    const { data: nextPageData, isLoading: reviewsLoading } = useFetchDetailReview(
+    const { data: nextPageData, isLoading: reviewsLoading } = useFetchGatheringDetailReview(
         Number(id),
         LIMIT,
         offset,

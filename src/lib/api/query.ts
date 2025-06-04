@@ -1,7 +1,6 @@
-/** 프로젝트 전체 쿼리키 목록 */
 // ['gatherings', 'infinite'] - 모임 목록
 
-// ['savedGatherings'] - 찜한 모임 목록
+// ["savedGatherings"] - 찜한 모임 목록
 
 // ['allReviews', filter, selectedLocation, selectedDate, sortBy] - 모든 리뷰
 

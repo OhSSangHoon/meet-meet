@@ -1,4 +1,6 @@
-import apiClient from "@/lib/api/axios";
+
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { apiClient } from '@/lib/api/axios';
 import { Gathering } from "@/types/gatherings";
 
 /**
@@ -59,24 +61,24 @@ export async function fetchGatheringsPaginated(
             params.sortOrder = sortOrder;
         }
 
-        const response = await apiClient.get('/api/gatherings', {
+        const response = await apiClient.get(INTERNAL_PATHS.fetchGatherings, {
             params,
             headers: token ? { Authorization: `Bearer ${token}` } : undefined
         });
 
         let gatherings = response.data || [];
-        
+
         // DALLAEMFIT의 경우 클라이언트에서 필터링
         if (mainType === 'DALLAEMFIT') {
-            gatherings = gatherings.filter((gathering: Gathering) => 
-                gathering.type === 'OFFICE_STRETCHING' || 
+            gatherings = gatherings.filter((gathering: Gathering) =>
+                gathering.type === 'OFFICE_STRETCHING' ||
                 gathering.type === 'MINDFULNESS'
             );
         }
-        
+
         // 찜한 모임 ID 목록이 있는 경우 필터링
         if (filterSavedIds && filterSavedIds.length > 0) {
-            gatherings = gatherings.filter((gathering: Gathering) => 
+            gatherings = gatherings.filter((gathering: Gathering) =>
                 filterSavedIds.includes(gathering.id.toString())
             );
         }
@@ -90,14 +92,11 @@ export async function fetchGatheringsPaginated(
 
 /**
  * 전체 모임 목록을 조회합니다.
- * @param {string} token - 토큰
  * @returns {Promise<Gathering[]>} 모임 목록 배열
  */
-export const fetchGatherings = async (token: string): Promise<Gathering[]> => {
+export const fetchGatherings = async (): Promise<Gathering[]> => {
     try {
-        const response = await apiClient.get('/api/gatherings', {
-            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-        });
+        const response = await apiClient.get(INTERNAL_PATHS.fetchGatherings);
         return response.data || [];
     } catch (error) {
         console.error('전체 모임 목록 조회 에러:', error);
@@ -105,34 +104,14 @@ export const fetchGatherings = async (token: string): Promise<Gathering[]> => {
     }
 };
 
-/**
- * 특정 모임의 상세 정보를 조회합니다.
- * @param {number} id - 모임 ID
- * @param {string} token - 토큰
- * @returns {Promise<Gathering>} 모임 상세 정보
- */
-export const fetchGatheringDetail = async (id: number, token: string): Promise<Gathering | null> => {
-    try {
-        const response = await apiClient.get(`/api/gatherings/${id}`, {
-            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-        });
-        return response.data;
-    } catch (error) {
-        console.error('모임 상세 조회 에러:', error);
-        return null;
-    }
-};
 
 /**
  * 찜한 모임 목록을 조회합니다.
- * @param {string} token - 토큰
  * @returns {Promise<Gathering[]>} 찜한 모임 목록
  */
-export const fetchSavedGatherings = async (token: string): Promise<Gathering[]> => {
+export const fetchSavedGatherings = async (): Promise<Gathering[]> => {
     try {
-        const response = await apiClient.get('/api/gatherings/saved', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const response = await apiClient.get('/api/gatherings/saved');
         return response.data || [];
     } catch (error) {
         console.error('찜한 모임 목록 조회 에러:', error);
@@ -140,18 +119,16 @@ export const fetchSavedGatherings = async (token: string): Promise<Gathering[]> 
     }
 };
 
-
-
 /**
  * 모임 목록을 필터링하는 유틸 함수
  */
 export const filterGatherings = (
-    gatheringsList: Gathering[], 
-    selectedMainType: string, 
+    gatheringsList: Gathering[],
+    selectedMainType: string,
     selectedSubType: string
 ): Gathering[] => {
     let filtered: Gathering[];
-    
+
     if (selectedMainType === 'DORANDORAN') {
         // 도란도란 = WORKATION만
         filtered = gatheringsList.filter(gathering => gathering.type === 'WORKATION');
@@ -159,8 +136,8 @@ export const filterGatherings = (
         // 북적북적 (DALLAEMFIT)
         if (selectedSubType === 'ALL') {
             // 전체 = OFFICE_STRETCHING + MINDFULNESS
-            filtered = gatheringsList.filter(gathering => 
-                gathering.type === 'OFFICE_STRETCHING' || 
+            filtered = gatheringsList.filter(gathering =>
+                gathering.type === 'OFFICE_STRETCHING' ||
                 gathering.type === 'MINDFULNESS'
             );
         } else {
@@ -168,12 +145,14 @@ export const filterGatherings = (
             filtered = gatheringsList.filter(gathering => gathering.type === selectedSubType);
         }
     }
-    
+
     return filtered;
 };
 
 /**
  * 필터 상태에 따른 타입별 개수를 계산하는 함수
+ * @param gatherings - 모임 목록
+ * @returns {Record<string, number>} 타입별 개수
  */
 export const getTypeDistribution = (gatherings: Gathering[]): Record<string, number> => {
     return gatherings.reduce((acc, g) => {

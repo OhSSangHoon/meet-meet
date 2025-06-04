@@ -4,7 +4,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { GatheringApiParams } from '@/types/gatheringApi';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { apiClient } from '@/lib/api/axios';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { handleApiError } from '@/lib/api/handleApiResponse';
 
 /** 모임 삭제 훅
 * @param token 토큰
@@ -21,7 +23,7 @@ export const useCancelGathering = ({ token, onCallback }: GatheringApiParams) =>
     const cancelGathering = useMutation({
         mutationFn: async (id: number) => {
             if (!token) throw new Error('로그인이 필요합니다.');
-            await axios.put(`/api/gatherings/cancel?id=${id}`, {}, { headers: { Authorization: `Bearer ${token}` } });
+            await apiClient.put(INTERNAL_PATHS.cancelGathering(id));
             return id;
         },
         onSuccess: (id) => {
@@ -31,12 +33,8 @@ export const useCancelGathering = ({ token, onCallback }: GatheringApiParams) =>
             onCallback?.('모임을 삭제했습니다', () => router.replace('/gatherings'));
         },
         onError: (error) => {
-            if (axios.isAxiosError(error)) {
-                const serverError = error?.response?.data?.error;
-                onCallback?.(serverError?.message || '에러가 발생했습니다');
-            } else {
-                onCallback?.(error.message);
-            }
+            const response = handleApiError(error);
+            response.text().then(message => onCallback?.(message));
         }
     });
 

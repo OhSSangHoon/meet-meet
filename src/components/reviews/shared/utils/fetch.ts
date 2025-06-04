@@ -1,4 +1,4 @@
-import apiClient from "@/lib/api/axios";
+import { apiClient } from "@/lib/api/axios";
 import { ReviewItem } from "@/types/reviews";
 
 /**
@@ -44,7 +44,7 @@ export async function fetchReviewsPaginated(
         });
 
         let allReviews: ReviewItem[] = [];
-        
+
         // API 응답 구조에 따른 안전한 데이터 추출
         if (Array.isArray(response.data)) {
             allReviews = response.data;
@@ -65,9 +65,9 @@ export async function fetchReviewsPaginated(
         // 타입 필터링
         let filteredReviews = allReviews;
         if (mainType === 'DALLAEMFIT') {
-            filteredReviews = allReviews.filter((review: ReviewItem) => 
+            filteredReviews = allReviews.filter((review: ReviewItem) =>
                 review.Gathering && (
-                    review.Gathering.type === 'OFFICE_STRETCHING' || 
+                    review.Gathering.type === 'OFFICE_STRETCHING' ||
                     review.Gathering.type === 'MINDFULNESS'
                 )
             );
@@ -126,15 +126,15 @@ export async function fetchReviewsPaginated(
  * @returns 필터링된 리뷰 목록
  */
 export const filterReviews = (
-    reviewsList: ReviewItem[], 
-    selectedMainType: string, 
+    reviewsList: ReviewItem[],
+    selectedMainType: string,
     selectedSubType: string
 ): ReviewItem[] => {
     let filtered: ReviewItem[];
-    
+
     if (selectedMainType === 'DORANDORAN') {
         // 도란도란 = WORKATION만
-        filtered = reviewsList.filter(review => 
+        filtered = reviewsList.filter(review =>
             review.Gathering && review.Gathering.type === 'WORKATION'
         );
     } else {
@@ -144,11 +144,11 @@ export const filterReviews = (
             filtered = reviewsList;
         } else {
             // 특정 서브타입만
-            filtered = reviewsList.filter(review => 
+            filtered = reviewsList.filter(review =>
                 review.Gathering && review.Gathering.type === selectedSubType
             );
         }
     }
-    
+
     return filtered;
 };

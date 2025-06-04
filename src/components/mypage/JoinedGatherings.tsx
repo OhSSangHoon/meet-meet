@@ -1,7 +1,7 @@
 'use client';
 
-import { useFetchJoinedGatherings } from '@/hooks/api/useFetchJoinedGatherings';
-import { useLeaveGathering } from '@/hooks/api/useLeaveGathering';
+import { useFetchJoinedGatherings } from '@/hooks/api/mypage/useFetchJoinedGatherings';
+import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGathering';
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { formatDate, formatTime, getTimeRemaining } from '../shared/utils/format';
