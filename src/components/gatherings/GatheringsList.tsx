@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import { useFetchInfiniteGatherings } from "@/hooks/api/useFetchInfiniteGatherings";
+import { useFetchInfiniteGatherings } from "@/hooks/api/gatherings/useFetchInfiniteGatherings";
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering, GatheringsListProps } from "@/types/gatherings";
 import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/format';
@@ -56,7 +56,7 @@ export default function GatheringsList({
         }
 
         const serverSortedData = infiniteGatherings.length > 0 ? infiniteGatherings : ssrGatherings;
-        
+
         return filterGatherings(serverSortedData, selectedMainType, selectedSubType);
     })();
 
@@ -104,8 +104,8 @@ export default function GatheringsList({
                             />
                             {/* 마감 시간 배지 */}
                             <div className={`absolute top-3 left-3 rounded-lg px-3 py-1.5 flex items-center gap-1.5 shadow-sm ${expired
-                                    ? 'bg-gray-600'
-                                    : 'bg-main-600'
+                                ? 'bg-gray-600'
+                                : 'bg-main-600'
                                 }`}>
                                 <Image src={"/icons/Alarm.svg"} alt="시간" width={16} height={16} />
                                 <span className="text-sm font-medium text-white">
@@ -141,14 +141,14 @@ export default function GatheringsList({
                                 {gathering.dateTime && (
                                     <div className="flex flex-wrap gap-2 mb-3 -mt-3">
                                         <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-md ${expired
-                                                ? 'bg-gray-400 text-white'
-                                                : 'bg-main-500 text-white'
+                                            ? 'bg-gray-400 text-white'
+                                            : 'bg-main-500 text-white'
                                             }`}>
                                             {formatDate(gathering.dateTime)}
                                         </span>
                                         <span className={`inline-flex items-center px-3 py-1 border-2 text-sm font-medium rounded-md ${expired
-                                                ? 'border-gray-400 text-gray-500'
-                                                : 'border-main-500 text-main-600'
+                                            ? 'border-gray-400 text-gray-500'
+                                            : 'border-main-500 text-main-600'
                                             }`}>
                                             {formatTime(gathering.dateTime)}
                                         </span>

@@ -1,58 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { AxiosError } from 'axios';
+import { apiServer } from '@/lib/api/axios';
 
 /**
  * 모임 생성 API
- * @param request 
+ * @header Authorization - 토큰
+ * @param request - 모임 정보 (제목, 내용, 이미지, 위치, 시간, 참여자 수)
+ * @method POST
  * @returns 모임 생성 성공 메세지
  */
 export async function POST(request: NextRequest) {
+    const token = request.headers.get('Authorization');
+
     try {
         const formData = await request.formData();
 
-        if (request.headers.get('Authorization') === null) {
-            return NextResponse.json(
-                { code: 'UNAUTHORIZED', message: '토큰이 없습니다.' },
-                { status: 401 }
-            );
-        }
+        if (!token) return new NextResponse(JSON.stringify({ error: '토큰이 필요합니다' }), { status: 401 });
 
-        const response = await axios.post(`${process.env.API_URI_DEV}/gatherings`, formData, {
+        const response = await apiServer.post(EXTERNAL_PATHS.createGathering, formData, {
             headers: {
-                'Authorization': request.headers.get('Authorization') || '',
+                'Authorization': token!,
                 'Content-Type': 'multipart/form-data',
             },
-        }
-        );
+        });
 
-        console.log('API 응답 성공:', response.status);
         return NextResponse.json(response.data, { status: 201 });
-
     } catch (error) {
-        console.error('API 요청 중 오류 발생:', error);
-
-        if (axios.isAxiosError(error)) {
-            if (error.response) {
-                console.error('서버 응답 상태:', error.response.status);
-                console.error('서버 응답 데이터:', error.response.data);
-                return NextResponse.json(
-                    error.response.data,
-                    { status: error.response.status || 500 }
-                );
-            } else if (error.request) {
-                console.error('요청만 됨, 응답 없음');
-                return NextResponse.json(
-                    { code: 'SERVER_ERROR', message: '서버에서 응답이 없습니다.' },
-                    { status: 500 }
-                );
-            } else {
-                console.error('요청 설정 중 오류:', error.message);
-                return NextResponse.json(
-                    { code: 'REQUEST_ERROR', message: error.message || '요청 중 오류가 발생했습니다.' },
-                    { status: 500 }
-                );
-            }
-        }
+        const err = error as AxiosError;
+        return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
     }
 }
 
@@ -63,44 +39,20 @@ export async function POST(request: NextRequest) {
  * @returns 전체 모임 목록
  */
 export async function GET(request: NextRequest) {
+    const token = request.headers.get('Authorization');
+
     try {
         const searchParams = request.nextUrl.searchParams;
-        const response = await axios.get(`${process.env.API_URI_DEV}/gatherings`, {
+        const response = await apiServer.get(EXTERNAL_PATHS.fetchGatherings, {
             params: Object.fromEntries(searchParams),
             headers: {
-                'Authorization': request.headers.get('Authorization') || '',
+                'Authorization': token!,
             },
         });
 
         return NextResponse.json(response.data);
     } catch (error) {
-        console.error('API 요청 중 오류 발생:', error);
-
-        if (axios.isAxiosError(error)) {
-            if (error.response) {
-                console.error('서버 응답 상태:', error.response.status);
-                console.error('서버 응답 데이터:', error.response.data);
-                return NextResponse.json(
-                    error.response.data,
-                    { status: error.response.status || 500 }
-                );
-            } else if (error.request) {
-                console.error('요청만 됨, 응답 없음');
-                return NextResponse.json(
-                    { code: 'SERVER_ERROR', message: '서버에서 응답이 없습니다.' },
-                    { status: 500 }
-                );
-            } else {
-                console.error('요청 설정 중 오류:', error.message);
-                return NextResponse.json(
-                    { code: 'REQUEST_ERROR', message: error.message || '요청 중 오류가 발생했습니다.' },
-                    { status: 500 }
-                );
-            }
-        }
-        return NextResponse.json(
-            { code: 'SERVER_ERROR', message: '서버에서 응답이 없습니다.' },
-            { status: 500 }
-        );
+        const err = error as AxiosError;
+        return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
     }
 }

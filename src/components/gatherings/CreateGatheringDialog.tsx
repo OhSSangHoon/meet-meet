@@ -2,7 +2,7 @@
 
 import { AuthContext } from '@/providers/AuthProvider';
 import { useState, useRef, useEffect, useContext } from "react";
-import { useCreateGathering } from '@/hooks/api/useCreateGathering';
+import { useCreateGathering } from '@/hooks/api/gatherings/useCreateGathering';
 import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
 import { XIcon } from "lucide-react";
 import axios from 'axios';

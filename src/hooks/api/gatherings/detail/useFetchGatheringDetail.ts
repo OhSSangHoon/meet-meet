@@ -1,10 +1,12 @@
 'use client';
 
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { apiClient } from '@/lib/api/axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 /** 
- * 모임 상세 조회 훅
+ * 모임 상세 페이지 상세 정보 조회 훅
  * @param id
  * @returns {data, isLoading, isError}
  */
@@ -15,7 +17,7 @@ export const useFetchGatheringDetail = (
 
     const fetchGatheringDetail = async (id: number) => {
         try {
-            const response = await axios.get(`/api/gatherings/detail?id=${id}`);
+            const response = await apiClient.get(INTERNAL_PATHS.fetchGatheringDetail(id));
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -27,7 +29,7 @@ export const useFetchGatheringDetail = (
 
     const fetchGatheringParticipants = async (id: number) => {
         try {
-            const response = await axios.get(`/api/gatherings/participants?id=${id}`);
+            const response = await apiClient.get(INTERNAL_PATHS.fetchGatheringParticipants(id));
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -48,9 +50,7 @@ export const useFetchGatheringDetail = (
     })
 
     const retchIsSaved = useMutation({
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['gatheringDetail', id] });
-        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['gatheringDetail', id] })
     });
 
     return { detail: data?.detail, participants: data?.participants, isLoading, isError, retchIsSaved }

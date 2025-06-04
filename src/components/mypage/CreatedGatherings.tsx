@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchCreatedGatherings } from '@/hooks/api/useFetchCreatedGatherings';
+import { useFetchCreatedGatherings } from '@/hooks/api/mypage/useFetchCreatedGatherings';
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { formatDate, formatTime, getTimeRemaining } from '../shared/utils/format';

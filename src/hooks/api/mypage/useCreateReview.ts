@@ -1,8 +1,10 @@
 'use client';
 
-import { GatheringApiParams } from '@/types/gatheringApi';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { apiClient } from '@/lib/api/axios';
+import { GatheringApiParams } from '@/types/gatheringApi';
+import { handleApiError } from '@/lib/api/handleApiResponse';
 
 interface CreateReviewParams {
     gatheringId: number;
@@ -21,7 +23,7 @@ export const useCreateReview = ({ token, onCallback }: GatheringApiParams) => {
     const createReview = useMutation({
         mutationFn: async ({ gatheringId, score, comment }: CreateReviewParams) => {
             if (!token) throw new Error('로그인이 필요합니다.');
-            const response = await axios.post(`/api/reviews`, { gatheringId, score, comment }, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await apiClient.post(INTERNAL_PATHS.createReview, { gatheringId, score, comment });
             return response.data;
         },
         onSuccess: () => {
@@ -30,12 +32,8 @@ export const useCreateReview = ({ token, onCallback }: GatheringApiParams) => {
             onCallback?.('리뷰가 성공적으로 등록되었습니다');
         },
         onError: (error) => {
-            if (axios.isAxiosError(error)) {
-                const serverError = error?.response?.data?.error;
-                onCallback?.(serverError?.message || '리뷰 등록에 실패했습니다');
-            } else {
-                onCallback?.(error.message);
-            }
+            const response = handleApiError(error);
+            response.text().then(message => onCallback?.(message));
         }
     });
 

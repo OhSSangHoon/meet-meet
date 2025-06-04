@@ -1,25 +1,27 @@
 'use client';
 
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { apiClient } from '@/lib/api/axios';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 /** 
- * 모임 리뷰 목록 조회 훅
+ * 모임 상세 페이지 리뷰 목록 조회 훅
  * @param gatheringId
  * @param limit
  * @param offset
  * @method GET
  * @returns {data, isLoading, isError}
  */
-export const useFetchDetailReview = (
+export const useFetchGatheringDetailReview = (
     gatheringId: number,
     limit: number,
     offset: number,
     enabled: boolean
 ) => {
-    const fetchGatheringReviews = async () => {
+    const fetchGatheringDetailReviews = async () => {
         try {
-            const response = await axios.get(`/api/reviews`, { params: { gatheringId, limit, offset } });
+            const response = await apiClient.get(INTERNAL_PATHS.fetchReviews, { params: { gatheringId, limit, offset } });
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -32,7 +34,7 @@ export const useFetchDetailReview = (
     const { data, isLoading, isError } = useQuery({
         enabled: !!gatheringId && enabled,
         queryKey: ['gatheringReviews', gatheringId],
-        queryFn: fetchGatheringReviews,
+        queryFn: fetchGatheringDetailReviews,
     })
 
     return { data, isLoading, isError }

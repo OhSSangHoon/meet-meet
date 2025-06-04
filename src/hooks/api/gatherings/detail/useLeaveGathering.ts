@@ -2,37 +2,35 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GatheringApiParams } from '@/types/gatheringApi';
-import axios from 'axios';
+import { apiClient } from '@/lib/api/axios';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { handleApiError } from '@/lib/api/handleApiResponse';
 
-/** 모임 참여 훅
+/** 모임 참여 취소 훅
 * @param token 토큰
 * @param onCallback 모달에 표시할 메세지를 전달
-* @returns {function} joinGathering - 모임 참가 함수
+* @returns {function} leaveGathering - 모임 참여 취소 함수
 */
-export const useJoinGathering = ({ token, onCallback }: GatheringApiParams) => {
+export const useLeaveGathering = ({ token, onCallback }: GatheringApiParams) => {
     const queryClient = useQueryClient();
 
-    const joinGathering = useMutation({
+    const leaveGathering = useMutation({
         mutationFn: async (id: number) => {
             if (!token) throw new Error('로그인이 필요합니다.');
-            const response = await axios.post(`/api/gatherings/join?id=${id}`, {}, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await apiClient.delete(INTERNAL_PATHS.leaveGathering(id));
             return response.data;
         },
         onSuccess: (_, id) => {
             queryClient.invalidateQueries({ queryKey: ["gatheringDetail", id] });
             queryClient.invalidateQueries({ queryKey: ["checkGatheringJoined"] });
             queryClient.invalidateQueries({ queryKey: ["joinedGatherings", token] });
-            onCallback?.('참여 완료했습니다');
+            onCallback?.('참여 취소했습니다');
         },
         onError: (error) => {
-            if (axios.isAxiosError(error)) {
-                const serverError = error?.response?.data?.error;
-                onCallback?.(serverError?.message || '에러가 발생했습니다');
-            } else {
-                onCallback?.(error.message);
-            }
+            const response = handleApiError(error);
+            response.text().then(message => onCallback?.(message));
         }
     });
 
-    return { joinGathering: joinGathering.mutate }
+    return { leaveGathering: leaveGathering.mutate }
 }

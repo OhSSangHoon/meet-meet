@@ -1,25 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios, { AxiosError } from 'axios';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { AxiosError } from 'axios';
+import { apiServer } from '@/lib/api/axios';
 
 /**
  * 모임 상세 조회
- * @param request 
- * @method DELETE
+ * @param request - 모임 ID
+ * @method GET
  * @returns 성공 메세지
  */
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
-    const id = searchParams.get('id');
+    const id = Number(searchParams.get('id'));
+
+    if (!id) return new NextResponse(JSON.stringify({ error: '모임 id가 필요합니다' }), { status: 400 });
 
     try {
-        if (!id) {
-            return NextResponse.json(
-                { error: '모임 id가 필요합니다.' },
-                { status: 400 }
-            );
-        }
-
-        const response = await axios.get(`${process.env.API_URI_DEV}/gatherings/${id}`, { params: { teamId: process.env.TEAM_ID_DEV, id } });
+        const response = await apiServer.get(EXTERNAL_PATHS.fetchGatheringDetail(id), { params: { teamId: process.env.TEAM_ID_DEV, id } });
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

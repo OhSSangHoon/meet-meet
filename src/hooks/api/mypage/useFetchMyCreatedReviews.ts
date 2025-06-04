@@ -1,5 +1,7 @@
 'use client';
 
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { apiClient } from '@/lib/api/axios';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -16,7 +18,7 @@ export const useFetchMyCreatedReviews = (token: string, gatheringIds: number[], 
             // axios는 배열을 gatheringId=1&gatheringId=2&gatheringId=3 형태로 보냄
             const response = await Promise.all(
                 gatheringIds.map(id =>
-                    axios.get('/api/reviews', { params: { gatheringId: id, userId } })
+                    apiClient.get(INTERNAL_PATHS.fetchReviews, { params: { gatheringId: id, userId } })
                         .then(res => res.data.data)
                         .catch(() => null)
                 )

@@ -1,16 +1,15 @@
 "use client";
 
-
 import { useState } from 'react';
 import GatheringsList from '@/components/gatherings/GatheringsList';
 import { useQuery } from '@tanstack/react-query';
-import apiClient from '@/lib/api/axios';
+import { apiClient } from '@/lib/api/axios';
 import { Gathering } from '@/types/gatherings';
 import GatheringFilters from '@/components/gatherings/shared/ui/GatheringsFilters';
-import { useToggleSavedGatherings } from '@/hooks/api/useToggleSavedGatherings';
+import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import GatheringsHeader from '@/components/gatherings/shared/ui/GatheringsHeader';
 import { getTimeRemaining } from '../shared/utils/format';
-
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 
 export default function SavedGatheringsClient() {
     const [selectedMainType, setSelectedMainType] = useState('DALLAEMFIT');
@@ -21,11 +20,11 @@ export default function SavedGatheringsClient() {
 
     // 찜한 모임의 상세 데이터만 별도로 가져오기
     const { data: allSavedGatherings = [] } = useQuery({
-        queryKey: ['allSavedGatherings', savedIds], // savedIds 자동 갱신
+        queryKey: ["allSavedGatherings", savedIds], // savedIds 자동 갱신
         queryFn: async () => {
             if (savedIds.length === 0) return [];
 
-            const response = await apiClient.get('api/gatherings', {
+            const response = await apiClient.get(INTERNAL_PATHS.fetchGatherings, {
                 params: {
                     limit: 1000
                 }
@@ -35,7 +34,7 @@ export default function SavedGatheringsClient() {
             const gatheringsMap = new Map(
                 response.data.map((gathering: Gathering) => [gathering.id.toString(), gathering])
             );
-            
+
             const orderedGatherings = savedIds
                 // 찜한 ID 목록을 기반으로 모임 데이터 가져오기
                 .map(id => gatheringsMap.get(id))
@@ -43,7 +42,7 @@ export default function SavedGatheringsClient() {
                 .filter((gathering): gathering is Gathering => gathering !== undefined)
                 // 마감된 모임은 제외
                 .filter(gathering => {
-                    if(!gathering.registrationEnd) return true;
+                    if (!gathering.registrationEnd) return true;
                     return getTimeRemaining(gathering.registrationEnd) !== '마감됨';
                 })
 
@@ -60,12 +59,12 @@ export default function SavedGatheringsClient() {
     return (
         <div className="w-full flex flex-col">
             <GatheringsHeader type="saved" />
-            <GatheringFilters 
+            <GatheringFilters
                 onTypeChange={handleTypeChange}
                 initialMainType={selectedMainType}
                 initialSubType={selectedSubType}
             />
-            <GatheringsList 
+            <GatheringsList
                 gatherings={allSavedGatherings}
                 fetchFromApi={false}
                 selectedMainType={selectedMainType}
