@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import MyPageUI from './ui';
+import MyPageUI from '../../components/mypage/MyPageUI';
 
 export const metadata: Metadata = {
   title: `마이페이지 | Meet Meet`,

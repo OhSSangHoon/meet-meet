@@ -28,7 +28,7 @@ export default function CreatedGatherings() {
             >
               {/* 마감된 모임 오버레이 */}
               {new Date(gathering.registrationEnd) < new Date() && (
-                <div className="absolute bg-black/90 inset-0 z-10 flex items-center justify-center text-center rounded-xl">
+                <div className="absolute bg-black/90 inset-0 z-20 flex items-center justify-center text-center rounded-xl">
                   <div className="px-4 py-2 rounded-lg flex gap-1 text-sm text-white">
                     <Hand className="w-4 h-4 text-main-400" />
                     <span>마감되었습니다</span>

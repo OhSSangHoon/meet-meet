@@ -10,32 +10,46 @@ const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog
 
 type AuthContextType = {
     token: string | null;
+    isLoading: boolean;
     loginDialogOpen: boolean;
     setLoginDialogOpen: Dispatch<SetStateAction<boolean>>;
     setToken: Dispatch<SetStateAction<string | null>>;
     signup: (email: string, password: string, name: string, companyName: string) => Promise<void>;
     signin: (email: string, password: string) => Promise<void>;
     signout: () => Promise<void>;
+    updateUserProfile: (data: { name: string, id: number, email: string, companyName: string, image: string }) => void;
     userName: string;
     userId: number;
+    userEmail: string;
+    userCompanyName: string;
+    userImage: string;
 };
 
 export const AuthContext = createContext<AuthContextType>({
     token: null,
+    isLoading: true,
     loginDialogOpen: false,
     setLoginDialogOpen: () => { },
     setToken: () => { },
     signup: async () => { },
     signin: async () => { },
     signout: async () => { },
+    updateUserProfile: () => { },
     userName: '',
-    userId: 0
+    userId: 0,
+    userEmail: '',
+    userCompanyName: '',
+    userImage: '',
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [token, setToken] = useState<string | null>(null);
-    const [userName, setUserName] = useState('');
+    const [userName, setUserName] = useState('이름');
     const [userId, setUserId] = useState(0);
+    const [userEmail, setUserEmail] = useState('이메일');
+    const [userCompanyName, setUserCompanyName] = useState('회사명');
+    const [userImage, setUserImage] = useState('');
+
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [previousPath, setPreviousPath] = useState<string>('/');
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
@@ -73,31 +87,50 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const fetchUser = async (token: string) => {
         try {
-            const result = await axios.post('/api/auth/fetch-user', { token });
+            const result = await axios.get('/api/auth/user', { headers: { Authorization: `Bearer ${token}` } });
             if (result.status === 200) {
+                setUserName(result.data.name);
+                setUserId(result.data.id);
+                setUserEmail(result.data.email);
+                setUserCompanyName(result.data.companyName);
+                setUserImage(result.data.image);
                 localStorage.setItem('user_id', result.data.id);
                 localStorage.setItem('user_email', result.data.email);
                 localStorage.setItem('user_name', result.data.name);
                 localStorage.setItem('user_company_name', result.data.companyName);
                 localStorage.setItem('user_image', result.data.image);
-                setUserName(result.data.name);
-                setUserId(result.data.id);
             }
         } catch (error) {
             throw error;
         }
     }
 
+    const updateUserProfile = (data: { name: string, id: number, email: string, companyName: string, image: string }) => {
+        setUserName(data.name);
+        setUserId(data.id);
+        setUserEmail(data.email);
+        setUserCompanyName(data.companyName);
+        setUserImage(data.image);
+        localStorage.setItem('user_id', data.id.toString());
+        localStorage.setItem('user_email', data.email);
+        localStorage.setItem('user_name', data.name);
+        localStorage.setItem('user_company_name', data.companyName);
+        localStorage.setItem('user_image', data.image);
+    };
+
     const signout = async () => {
+        setToken(null);
+        setUserId(0);
+        setUserName('');
+        setUserEmail('');
+        setUserCompanyName('');
+        setUserImage('');
         localStorage.removeItem('token');
         localStorage.removeItem('user_name');
         localStorage.removeItem('user_id');
         localStorage.removeItem('user_email');
         localStorage.removeItem('user_company_name');
         localStorage.removeItem('user_image');
-        setToken(null);
-        setUserId(0);
-        setUserName('');
         queryClient.invalidateQueries({ queryKey: ['checkGatheringJoined'] });
         await axios.post('/api/auth/signout');
     }
@@ -106,14 +139,22 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     useEffect(() => {
         const checkAuth = () => {
             const storedToken = localStorage.getItem('token');
-            const userName = localStorage.getItem('user_name'), userId = localStorage.getItem('user_id');
+            const userName = localStorage.getItem('user_name');
+            const userId = localStorage.getItem('user_id');
+            const userEmail = localStorage.getItem('user_email');
+            const userCompanyName = localStorage.getItem('user_company_name');
+            const userImage = localStorage.getItem('user_image');
+
+            if (storedToken) setToken(storedToken);
             if (userName) setUserName(userName);
             if (userId) setUserId(Number(userId));
-            if (storedToken) setToken(storedToken);
+            if (userEmail) setUserEmail(userEmail);
+            if (userCompanyName) setUserCompanyName(userCompanyName);
+            if (userImage) setUserImage(userImage);
             setIsLoading(false);
         };
         checkAuth();
-    }, []);
+    }, [userName, userId, userEmail, userCompanyName, userImage]);
 
     useEffect(() => {
         // 마이페이지 접근 시 로그인 확인
@@ -135,7 +176,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     };
 
     return (
-        <AuthContext value={{ token, userName, userId, loginDialogOpen, setLoginDialogOpen, setToken, signup, signin, signout }}>
+        <AuthContext value={{ token, userName, userId, userEmail, userCompanyName, userImage, loginDialogOpen, isLoading, setLoginDialogOpen, setToken, signup, signin, signout, updateUserProfile }}>
             {children}
             <ConfirmDialog
                 open={loginDialogOpen}

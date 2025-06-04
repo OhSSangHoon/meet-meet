@@ -17,13 +17,11 @@ export default function MyPageUI({ teamId }: { teamId: string }) {
 
   return (
     <main className="contents-container">
-      <div className="pt-10 px-6">
-        <h1 className="text-2xl font-bold text-gray-700 mb-4">마이 페이지</h1>
+      <div className="pt-10 px-6 flex flex-col gap-4">
+        <h1 className="text-2xl font-bold text-gray-700">마이 페이지</h1>
 
         {/* 프로필 카드 */}
-        <div className="border-2 rounded-lg overflow-hidden mb-4">
-          <ProfileCard />
-        </div>
+        <ProfileCard />
 
         {/* 탭 네비게이션 */}
         <div className=" border-t-[3px] border-gray-800">

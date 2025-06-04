@@ -207,22 +207,26 @@ html {
 
 /* DatePicker placeholder 색상 */
 .react-datepicker__input-container input::placeholder {
-  color: #374151 !important; /* text-gray-700 */
+  color: #374151 !important;
+  /* text-gray-700 */
   opacity: 1 !important;
 }
 
 .react-datepicker__input-container input::-webkit-input-placeholder {
-  color: #374151 !important; /* text-gray-700 */
+  color: #374151 !important;
+  /* text-gray-700 */
   opacity: 1 !important;
 }
 
 .react-datepicker__input-container input::-moz-placeholder {
-  color: #374151 !important; /* text-gray-700 */
+  color: #374151 !important;
+  /* text-gray-700 */
   opacity: 1 !important;
 }
 
 .react-datepicker__input-container input:-ms-input-placeholder {
-  color: #374151 !important; /* text-gray-700 */
+  color: #374151 !important;
+  /* text-gray-700 */
   opacity: 1 !important;
 }
 
@@ -354,9 +358,19 @@ html {
     @apply px-4 py-2;
   }
 
+  /* 버튼 hover */
+  .hover-button {
+    @apply cursor-pointer hover:bg-button-hover transition duration-150 ease-in;
+  }
+
   /* 모임 아이템 transition */
   .transition-gathering-item {
     @apply transition duration-150 ease-in;
+  }
+
+  /* 모달 배경 */
+  .dialog-background {
+    @apply fixed inset-0 z-50 flex flex-col items-center justify-center gap-2 bg-black/40;
   }
 }
 
