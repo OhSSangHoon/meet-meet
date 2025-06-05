@@ -8,9 +8,12 @@ import { XIcon } from "lucide-react";
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import SelectionService from "./SelectionService";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue} from '@/components/shared/utils/date';
+import { validateCreateGathering, CreateGatheringFormSchemaType } from '@/components/gatherings/schema/createGatheringSchema';
 import { useQueryClient } from '@tanstack/react-query';
+import CustomDateTimePicker from '@/components/gatherings/shared/ui/dateTimePicker';
+
+// 모달 컴포넌트
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 export default function CreateGatheringDialog({ onClose }: { onClose: () => void }) {
@@ -22,33 +25,21 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
         name: '',
         location: '',
         capacity: 5,
-        type: 'OFFICE_STRETCHING' // 기본값 설정
+        type: 'OFFICE_STRETCHING'
     });
 
-    // 파일명 상태
-    const [fileName, setFileName] = useState("");
-
-    // 파일 입력 요소에 접근하기 위한 ref
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    // 이미지 파일
-    const [imageFile, setImageFile] = useState<File | null>(null);
-
-    // 모임 날짜
-    const [meetingDate, setMeetingDate] = useState<Date | null>(null);
-
-    // 마감 날짜
-    const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
-
-    // 에러 상태 관리
-    const [error, setError] = useState<string | null>(null);
-
-    // 제출 상태 관리 (기존 방식 유지)
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [fileName, setFileName] = useState(""); // 이미지 파일 이름
+    const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 요소 참조
+    const [imageFile, setImageFile] = useState<File | null>(null); // 이미지 파일
+    const [meetingDateTime, setMeetingDateTime] = useState<DateTimeValue | null>(null); // 모임 일정
+    const [deadlineDateTime, setDeadlineDateTime] = useState<DateTimeValue | null>(null); // 마감 일정
+    const [showMeetingPicker, setShowMeetingPicker] = useState(false); // 모임 일정 선택 모달 상태
+    const [showDeadlinePicker, setShowDeadlinePicker] = useState(false); // 마감 일정 선택 모달 상태
+    const [error, setError] = useState<string | null>(null); // 에러 메시지
+    const [isSubmitting, setIsSubmitting] = useState(false); // 모임 생성 처리 상태
 
     // 모임 생성 완료/실패 모달
     const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({ open: false, text: '' });
-
     const { createGathering } = useCreateGathering({
         token,
         onCallback: (message) => openConfirmDialog(setConfirmDialog, message),
@@ -57,10 +48,19 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     // 입력 필드 변경 핸들러
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        
+        if (name === 'capacity') {
+            const numValue = parseInt(value);
+            setFormData(prev => ({
+                ...prev,
+                [name]: isNaN(numValue) ? 5 : numValue
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     // 서비스 타입 선택 핸들러
@@ -70,7 +70,6 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
             type
         }));
     };
-
 
     // 모달이 열릴 때 스크롤 방지 및 레이아웃 시프트 방지
     useEffect(() => {
@@ -95,29 +94,15 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
         fileInputRef.current?.click();
     };
 
-    // 파일 선택 핸들러
+    // 파일 선택 핸들러 (실시간 검증 제거 - 제출시에만 검증)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
 
         if (files && files.length > 0) {
             const file = files[0];
-
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (file.size > maxSize) {
-                setError("이미지 파일 크기가 너무 큽니다. 5MB 이하로 첨부해주세요.");
-                return;
-            }
-
-            // 이미지 타입 검증
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/avif', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                setError("이미지 파일 타입이 맞지않습니다. jpg, png, gif, svg, avif, webp 파일만 가능합니다.");
-                return;
-            }
-
             setFileName(file.name);
             setImageFile(file);
-            setError(null);
+            setError(null); // 기존 에러 클리어
         }
     };
 
@@ -125,35 +110,26 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 토큰 체크
-        if (!token) {
-            setError('로그인이 필요한 서비스입니다.');
+        // 폼 데이터 준비
+        const formDataToValidate: CreateGatheringFormSchemaType = {
+            name: formData.name,
+            location: formData.location,
+            capacity: formData.capacity,
+            type: formData.type,
+            meetingDateTime,
+            deadlineDateTime,
+            imageFile
+        };
+
+        // zod 통합 유효성 검증
+        const validationResult = validateCreateGathering(formDataToValidate, token);
+        
+        if (!validationResult.success) {
+            setError(validationResult.error ?? null);
             return;
         }
 
-        // 필수 필드 검증
-        if (!formData.name || !formData.location || !meetingDate) {
-            setError("모든 필수 항목을 입력해주세요.");
-            return;
-        }
-
-        if (!imageFile) {
-            setError("이미지를 첨부해주세요.");
-            return;
-        }
-
-        if (formData.capacity < 5) {
-            setError("모집 정원은 최소 5명 이상이어야 합니다.");
-            return;
-        }
-
-        // 마감일이 모임일 이후인지 확인
-        if (deadlineDate && meetingDate && deadlineDate > meetingDate) {
-            setError("마감 날짜는 모임 날짜 이전이어야 합니다.");
-            return;
-        }
-
-        setIsSubmitting(true); // 로딩 시작
+        setIsSubmitting(true);
         setError(null);
 
         // FormData 객체 생성
@@ -163,13 +139,15 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
         apiFormData.append('type', formData.type);
         apiFormData.append('capacity', formData.capacity.toString());
 
-        // 날짜 포맷팅 (ISO 형식 YYYY-MM-DDTHH:MM:SS)
-        if (meetingDate) {
-            apiFormData.append('dateTime', meetingDate.toISOString());
+        // 날짜 포맷팅
+        if (meetingDateTime) {
+            const finalMeetingDateTime = dateTimeValueToDate(meetingDateTime);
+            apiFormData.append('dateTime', formatDateToISO(finalMeetingDateTime));
         }
 
-        if (deadlineDate) {
-            apiFormData.append('registrationEnd', deadlineDate.toISOString());
+        if (deadlineDateTime) {
+            const finalDeadlineDateTime = dateTimeValueToDate(deadlineDateTime);
+            apiFormData.append('registrationEnd', formatDateToISO(finalDeadlineDateTime));
         }
 
         // 이미지 파일 추가
@@ -190,14 +168,16 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                 console.error('모임 생성 실패:', error);
                 setIsSubmitting(false);
 
+                let errorMessage = '알 수 없는 에러가 발생했습니다';
+                
                 if (axios.isAxiosError(error)) {
                     const serverError = error?.response?.data?.error;
-                    openConfirmDialog(setConfirmDialog, serverError?.message);
+                    errorMessage = serverError?.message ?? '서버 처리 중 오류가 발생했습니다.';
                 } else if (error instanceof Error) {
-                    openConfirmDialog(setConfirmDialog, error.message);
-                } else {
-                    openConfirmDialog(setConfirmDialog, '알 수 없는 에러가 발생했습니다');
+                    errorMessage = error.message;
                 }
+                
+                openConfirmDialog(setConfirmDialog, errorMessage);
             }
         });
     };
@@ -291,36 +271,31 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                             {/* 서비스 선택 컴포넌트 */}
                             <SelectionService selectedType={formData.type} onSelect={handleServiceTypeSelect} />
 
-                            {/* 날짜 선택 */}
-                            <div className="w-full mb-5 flex flex-col md:flex-row items-center gap-5">
-                                {/* 모임 날짜 */}
-                                <div className="w-full flex flex-col">
-                                    <h1 className="font-bold text-gray-800 mb-3">모임 날짜</h1>
-                                    <DatePicker
-                                        selected={meetingDate}
-                                        onChange={(date) => setMeetingDate(date)}
-                                        className="w-[70%] md:w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold"
-                                        dateFormat="yyyy-MM-dd HH:mm"
-                                        showTimeSelect
-                                        timeFormat="HH:mm"
-                                        timeIntervals={30}
-                                        placeholderText="날짜와 시간을 선택해주세요"
+                            {/* 날짜/시간 선택 */}
+                            <div className="flex flex-col md:flex-row gap-5 mb-5">
+                                {/* 모임 날짜/시간 입력 */}
+                                <div className="flex-1">
+                                    <h1 className="font-bold text-gray-800 mb-3">모임 일정</h1>
+                                    <input
+                                        type="text"
+                                        value={formatDateTimeValue(meetingDateTime)}
+                                        onClick={() => setShowMeetingPicker(true)}
+                                        readOnly
+                                        className="w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold cursor-pointer"
+                                        placeholder="날짜와 시간을 선택해주세요"
                                     />
                                 </div>
 
-                                {/* 마감 날짜 */}
-                                <div className="w-full flex flex-col">
-                                    <h1 className="font-bold text-gray-800 mb-3">마감 날짜</h1>
-                                    <DatePicker
-                                        selected={deadlineDate}
-                                        onChange={(date) => setDeadlineDate(date)}
-                                        className="w-[70%] md:w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold"
-                                        dateFormat="yyyy-MM-dd HH:mm"
-                                        showTimeSelect
-                                        timeFormat="HH:mm"
-                                        timeIntervals={30}
-                                        placeholderText="날짜와 시간을 선택해주세요"
-                                        maxDate={meetingDate ? new Date(meetingDate.getTime() + 1000) : undefined}
+                                {/* 마감 날짜/시간 입력 */}
+                                <div className="flex-1">
+                                    <h1 className="font-bold text-gray-800 mb-3">마감 일정</h1>
+                                    <input
+                                        type="text"
+                                        value={formatDateTimeValue(deadlineDateTime)}
+                                        onClick={() => setShowDeadlinePicker(true)}
+                                        readOnly
+                                        className="w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold cursor-pointer"
+                                        placeholder="날짜와 시간을 선택해주세요"
                                     />
                                 </div>
                             </div>
@@ -353,6 +328,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                     </form>
                 </div>
             </div>
+
             {/* 모임 생성 완료/실패 모달 */}
             <ConfirmDialog
                 open={confirmDialog.open}
@@ -360,6 +336,46 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                 onClose={() => setConfirmDialog({ open: false, text: '' })}
                 onConfirm={confirmDialog.onConfirm}
             />
+
+            {/* 모임 일정 선택 모달 */}
+            {showMeetingPicker && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black opacity-50" onClick={() => setShowMeetingPicker(false)}></div>
+                    <div className="relative bg-white rounded-lg p-6 max-w-md w-full">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-bold">모임 일정 선택</h2>
+                            <button onClick={() => setShowMeetingPicker(false)}>
+                                <XIcon className="w-6 h-6 text-gray-500" />
+                            </button>
+                        </div>
+                        <CustomDateTimePicker
+                            value={meetingDateTime}
+                            onChange={setMeetingDateTime}
+                            label=""
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* 마감 일정 선택 모달 */}
+            {showDeadlinePicker && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black opacity-50" onClick={() => setShowDeadlinePicker(false)}></div>
+                    <div className="relative bg-white rounded-lg p-6 max-w-md w-full">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-bold">마감 일정 선택</h2>
+                            <button onClick={() => setShowDeadlinePicker(false)}>
+                                <XIcon className="w-6 h-6 text-gray-500" />
+                            </button>
+                        </div>
+                        <CustomDateTimePicker
+                            value={deadlineDateTime}
+                            onChange={setDeadlineDateTime}
+                            label=""
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
-}
+};

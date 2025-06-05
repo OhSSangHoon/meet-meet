@@ -3,7 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { formatDate, formatTime } from '../shared/utils/format';
+import { formatDate, formatTime } from '@/components/shared/utils/date';
 import { useFetchMyCreatedReviews } from '@/hooks/api/mypage/useFetchMyCreatedReviews';
 import { JoinedGathering } from '@/types/gatherings';
 import { ReviewItem } from '@/types/reviews';

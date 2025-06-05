@@ -1,5 +1,5 @@
 import { Participant } from './GatheringDetailUI';
-import { formatDate, formatTime } from '@/components/shared/utils/format';
+import { formatDate, formatTime } from '@/components/shared/utils/date';
 import { Gathering } from '@/types/gatherings';
 import { Check, UserRoundCheck } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";

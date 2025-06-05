@@ -3,7 +3,7 @@
 import { useFetchCreatedGatherings } from '@/hooks/api/mypage/useFetchCreatedGatherings';
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { formatDate, formatTime, getTimeRemaining } from '../shared/utils/format';
+import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/date';
 import { UserRoundCheck, Hand } from "lucide-react"
 import Image from 'next/image';
 

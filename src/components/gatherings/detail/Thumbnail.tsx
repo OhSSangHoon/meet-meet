@@ -1,5 +1,5 @@
 import { Gathering } from '@/types/gatherings'
-import { getTimeRemaining } from '@/components/shared/utils/format'
+import { getTimeRemaining } from '@/components/shared/utils/date'
 import Image from 'next/image'
 import SaveToggleButton from '../shared/ui/SaveToggleButton'
 

@@ -8,7 +8,7 @@ import { Gathering } from '@/types/gatherings';
 import GatheringFilters from '@/components/gatherings/shared/ui/GatheringsFilters';
 import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import GatheringsHeader from '@/components/gatherings/shared/ui/GatheringsHeader';
-import { getTimeRemaining } from '../shared/utils/format';
+import { getTimeRemaining } from '@/components/shared/utils/date';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 
 export default function SavedGatheringsClient() {

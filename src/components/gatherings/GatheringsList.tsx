@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useFetchInfiniteGatherings } from "@/hooks/api/gatherings/useFetchInfiniteGatherings";
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering, GatheringsListProps } from "@/types/gatherings";
-import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/format';
+import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/date';
 import { filterGatherings } from '@/components/gatherings/shared/utils/fetch';
 import { UserRoundCheck } from "lucide-react"
 import Image from "next/image";
