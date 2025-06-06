@@ -5,7 +5,7 @@
  * @type {function} onConfirm 확인 버튼 클릭 시 실행할 콜백 함수
  */
 export interface ConfirmDialogState {
-    open: boolean;
+    isOpen: boolean;
     text: string;
     onConfirm?: () => void;
 }
@@ -21,5 +21,5 @@ export function openConfirmDialog(
     text: string,
     onConfirm?: () => void
 ) {
-    setDialog({ open: true, text, onConfirm });
+    setDialog({ isOpen: true, text, onConfirm });
 }

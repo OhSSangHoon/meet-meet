@@ -3,6 +3,7 @@ import { ReviewItem } from '@/types/reviews';
 import { Heart } from 'lucide-react';
 import Image from 'next/image';
 
+/** 모임 상세 페이지 리뷰 목록 */
 export default function Review({ review }: { review: ReviewItem }) {
     return (
         <div

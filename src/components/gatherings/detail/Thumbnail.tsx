@@ -3,7 +3,7 @@ import { getTimeRemaining } from '@/components/shared/utils/date'
 import Image from 'next/image'
 import SaveToggleButton from '../shared/ui/SaveToggleButton'
 
-
+/** 모임 상세 페이지 썸네일 */
 export default function Thumbnail({ detail, id }: { detail: Gathering, id: string }) {
     return (
         <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] relative'>

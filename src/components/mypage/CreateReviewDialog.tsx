@@ -16,6 +16,7 @@ interface ReviewDialogProps {
   onClose: () => void;
 }
 
+/** 마이페이지 리뷰 생성 다이얼로그 */
 export default function CreateReviewDialog({
   reviewFormData,
   onClose,
@@ -80,7 +81,7 @@ export default function CreateReviewDialog({
         </div>
       </div>
       <ConfirmDialog
-        open={confirmDialog.open}
+        isOpen={confirmDialog.open}
         text={confirmDialog.text}
         onClose={() => setConfirmDialog({ open: false, text: '' })}
         onConfirm={confirmDialog.onConfirm}

@@ -23,13 +23,14 @@ const editProfile = async (imageFile: File | null, companyName: string, token: s
     }
 };
 
-export default function ProfileEditDialog({ setProfileEditDialogOpen }: { setProfileEditDialogOpen: (open: boolean) => void }) {
+/** 마이페이지 프로필 수정 다이얼로그 */
+export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setIsProfileEditDialogOpen: (open: boolean) => void }) {
     const { token, updateUserProfile } = useContext(AuthContext);
 
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [companyName, setCompanyName] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
-    const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({ open: false, text: '' });
+    const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({ isOpen: false, text: '' });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -73,7 +74,7 @@ export default function ProfileEditDialog({ setProfileEditDialogOpen }: { setPro
                 setError(null);
                 setImageFile(null);
                 setCompanyName('');
-                openConfirmDialog(setConfirmDialog, '프로필 수정 완료', () => setProfileEditDialogOpen(false));
+                openConfirmDialog(setConfirmDialog, '프로필 수정 완료', () => setIsProfileEditDialogOpen(false));
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -85,7 +86,7 @@ export default function ProfileEditDialog({ setProfileEditDialogOpen }: { setPro
     }
 
     const handleCancel = () => {
-        setProfileEditDialogOpen(false);
+        setIsProfileEditDialogOpen(false);
         setImageFile(null);
         setCompanyName('');
         setError(null);
@@ -144,9 +145,9 @@ export default function ProfileEditDialog({ setProfileEditDialogOpen }: { setPro
                 </div>
             </form>
             <ConfirmDialog
-                open={confirmDialog.open}
+                isOpen={confirmDialog.isOpen}
                 text={'프로필을 수정했습니다'}
-                onClose={() => setConfirmDialog({ open: false, text: '' })}
+                onClose={() => setConfirmDialog({ isOpen: false, text: '' })}
                 onConfirm={confirmDialog.onConfirm}
             />
         </div>

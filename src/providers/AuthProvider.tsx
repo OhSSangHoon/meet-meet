@@ -181,12 +181,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         <AuthContext value={{ token, userName, userId, userEmail, userCompanyName, userImage, loginDialogOpen, isLoading, setLoginDialogOpen, setToken, signUp, signIn, signOut, updateUserProfile }}>
             {children}
             <ConfirmDialog
-                open={loginDialogOpen}
+                isOpen={loginDialogOpen}
                 onClose={handleLoginModalConfirm}
                 text="로그인이 필요합니다"
             />
             <ConfirmDialog
-                open={signUpDialogOpen}
+                isOpen={signUpDialogOpen}
                 onClose={handleSignupModalConfirm}
                 text="회원가입이 완료되었습니다"
             />

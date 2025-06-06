@@ -5,10 +5,11 @@ import { AuthContext } from '@/providers/AuthProvider';
 import Image from 'next/image';
 import ProfileEditDialog from './ProfileEditDialog';
 
+/** 마이페이지 프로필 카드 */
 export default function ProfileCard() {
   const { userName, userCompanyName, userEmail, userImage } = useContext(AuthContext)
 
-  const [profileEditDialogOpen, setProfileEditDialogOpen] = useState(false);
+  const [isProfileEditDialogOpen, setIsProfileEditDialogOpen] = useState(false);
 
   return (
     <section className="overflow-hidden border-2 border-gray-200 rounded-lg">
@@ -16,7 +17,7 @@ export default function ProfileCard() {
       <section className="bg-main-350 relative px-4 py-6">
         <div className="mb-1 text-lg font-bold text-white">내 프로필</div>
         <div className="absolute top-4 right-4">
-          <button type="button" onClick={() => setProfileEditDialogOpen(true)} className='rounded-full hover-button'>
+          <button type="button" onClick={() => setIsProfileEditDialogOpen(true)} className='rounded-full hover-button'>
             <Image
               src="/icons/edit.svg"
               alt="프로필 수정"
@@ -54,7 +55,7 @@ export default function ProfileCard() {
         </div>
       </section>
 
-      {profileEditDialogOpen && <ProfileEditDialog setProfileEditDialogOpen={setProfileEditDialogOpen} />}
+      {isProfileEditDialogOpen && <ProfileEditDialog setIsProfileEditDialogOpen={setIsProfileEditDialogOpen} />}
     </section>
   );
 }

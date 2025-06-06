@@ -4,14 +4,15 @@ import Image from 'next/image';
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label: string;
     disabled: boolean;
-    error?: string;
+    isError?: string;
     errorResponseMessage?: string | null;
     isPasswordVisible?: boolean;
     handlePasswordVisibility?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+/** 로그인 폼, 회원가입 폼 Input Field */
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
-    ({ label, id, type, placeholder, error, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
+    ({ label, id, type, placeholder, isError, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
         <div className="w-full flex flex-col gap-2">
             <label htmlFor={id} className="block text-sm text-gray-900 font-bold">{label}</label>
             <div className='relative'>
@@ -20,8 +21,8 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
                     type={label === '비밀번호' ? (isPasswordVisible ? 'text' : 'password') : type}
                     id={id}
                     placeholder={placeholder}
-                    aria-invalid={disabled ? (error ? 'true' : 'false') : undefined}
-                    className={`block w-full p-2.5 rounded-lg bg-gray-50 text-sm text-gray-900 border-2 focus:outline-none ${error || errorResponseMessage ? 'border-red-600' : 'focus:border-main-300'}`}
+                    aria-invalid={disabled ? (isError ? 'true' : 'false') : undefined}
+                    className={`block w-full p-2.5 rounded-lg bg-gray-50 text-sm text-gray-900 border-2 focus:outline-none ${isError || errorResponseMessage ? 'border-red-600' : 'focus:border-main-300'}`}
                     {...props}
                 />
                 {label === '비밀번호' && (
@@ -43,7 +44,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
             {errorResponseMessage ? (
                 <p className='text-red-600 text-sm'>{errorResponseMessage}</p>
             ) :
-                (error && <p className='text-red-600 text-sm'>{error}</p>)
+                (isError && <p className='text-red-600 text-sm'>{isError}</p>)
             }
         </div>
     )

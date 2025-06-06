@@ -1,4 +1,4 @@
-import AuthPoster from '@/components/auth/AuthPoster';
+import AuthPoster from '@/components/auth/shared/ui/AuthPoster';
 import SignInForm from '@/components/auth/SignInForm';
 
 export default function SignInPage() {

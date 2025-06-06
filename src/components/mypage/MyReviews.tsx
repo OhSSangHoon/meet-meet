@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 
 const CreateReviewDialog = dynamic(() => import('./CreateReviewDialog'), { ssr: false });
 
+/** 마이페이지 나의 리뷰 */
 export default function MyReviews({ teamId }: { teamId: string }) {
   const { token, userId } = useContext(AuthContext);
 

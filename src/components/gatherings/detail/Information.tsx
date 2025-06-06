@@ -7,6 +7,7 @@ import Image from 'next/image';
 import SaveToggleButton from '../shared/ui/SaveToggleButton';
 import JoinedCountsProgressBar from '../shared/ui/JoinedCountsProgressBar';
 
+/** 모임 상세 페이지 상단 우측 정보 */
 export default function Information({ detail, id, participants }: { detail: Gathering, id: string, participants: Participant[] }) {
     return (
         <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] px-6 py-5 border-2 border-gray-300 bg-white rounded-lg flex flex-col justify-between gap-4 overflow-hidden'

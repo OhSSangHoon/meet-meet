@@ -22,7 +22,7 @@ const signUpFormSchema = z.object({
 
 type SignupFormSchemaType = z.infer<typeof signUpFormSchema>;
 
-export default function RegisterForm() {
+export default function SignUpForm() {
     const { signUp } = useContext(AuthContext)
 
     const [passwordCheck, setPasswordCheck] = useState('');
@@ -73,7 +73,7 @@ export default function RegisterForm() {
                     placeholder="이름을 입력해 주세요"
                     {...register('name')}
                     disabled={isSubmitted}
-                    error={errors.name?.message}
+                    isError={errors.name?.message}
                 />
                 <InputField
                     label="아이디"
@@ -82,7 +82,7 @@ export default function RegisterForm() {
                     placeholder="이메일을 입력해 주세요"
                     {...register('email')}
                     disabled={isSubmitted}
-                    error={errors.email?.message}
+                    isError={errors.email?.message}
                     errorResponseMessage={errorResponseMessage}
                 />
                 <InputField
@@ -92,7 +92,7 @@ export default function RegisterForm() {
                     placeholder='회사명을 입력해 주세요'
                     {...register('companyName')}
                     disabled={isSubmitted}
-                    error={errors.companyName?.message}
+                    isError={errors.companyName?.message}
                 />
                 <InputField
                     label='비밀번호'
@@ -103,7 +103,7 @@ export default function RegisterForm() {
                     disabled={isSubmitted}
                     handlePasswordVisibility={() => setIsPasswordVisible((v) => !v)}
                     isPasswordVisible={isPasswordVisible}
-                    error={errors.password?.message}
+                    isError={errors.password?.message}
                 />
                 <div className='w-full flex flex-col gap-2'>
                     <label

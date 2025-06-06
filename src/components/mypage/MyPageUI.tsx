@@ -12,6 +12,7 @@ enum MypageTab {
   CreatedGatherings = 2,
 }
 
+/** 마이페이지 UI */
 export default function MyPageUI({ teamId }: { teamId: string }) {
   const [selectedTab, setSelectedTab] = useState<MypageTab>(MypageTab.JoinedGatherings);
 

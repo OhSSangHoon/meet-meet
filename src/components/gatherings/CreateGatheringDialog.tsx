@@ -8,7 +8,7 @@ import { XIcon } from "lucide-react";
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import SelectionService from "./SelectionService";
-import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue} from '@/components/shared/utils/date';
+import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/components/shared/utils/date';
 import { validateCreateGathering, CreateGatheringFormSchemaType } from '@/components/gatherings/schema/createGatheringSchema';
 import { useQueryClient } from '@tanstack/react-query';
 import CustomDateTimePicker from '@/components/gatherings/shared/ui/dateTimePicker';
@@ -39,7 +39,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     const [isSubmitting, setIsSubmitting] = useState(false); // 모임 생성 처리 상태
 
     // 모임 생성 완료/실패 모달
-    const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({ open: false, text: '' });
+    const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({ isOpen: false, text: '' });
     const { createGathering } = useCreateGathering({
         token,
         onCallback: (message) => openConfirmDialog(setConfirmDialog, message),
@@ -48,7 +48,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     // 입력 필드 변경 핸들러
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        
+
         if (name === 'capacity') {
             const numValue = parseInt(value);
             setFormData(prev => ({
@@ -123,7 +123,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
 
         // zod 통합 유효성 검증
         const validationResult = validateCreateGathering(formDataToValidate, token);
-        
+
         if (!validationResult.success) {
             setError(validationResult.error ?? null);
             return;
@@ -169,14 +169,14 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                 setIsSubmitting(false);
 
                 let errorMessage = '알 수 없는 에러가 발생했습니다';
-                
+
                 if (axios.isAxiosError(error)) {
                     const serverError = error?.response?.data?.error;
                     errorMessage = serverError?.message ?? '서버 처리 중 오류가 발생했습니다.';
                 } else if (error instanceof Error) {
                     errorMessage = error.message;
                 }
-                
+
                 openConfirmDialog(setConfirmDialog, errorMessage);
             }
         });
@@ -331,9 +331,9 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
 
             {/* 모임 생성 완료/실패 모달 */}
             <ConfirmDialog
-                open={confirmDialog.open}
+                isOpen={confirmDialog.isOpen}
                 text={confirmDialog.text}
-                onClose={() => setConfirmDialog({ open: false, text: '' })}
+                onClose={() => setConfirmDialog({ isOpen: false, text: '' })}
                 onConfirm={confirmDialog.onConfirm}
             />
 

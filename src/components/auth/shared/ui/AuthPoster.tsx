@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+/** 로그인 폼, 회원가입 폼 배경 이미지 */
 export default function AuthPoster() {
     return (
         <div className='flex flex-col sm:flex-row lg:flex-col gap-2 items-center justify-center'>
