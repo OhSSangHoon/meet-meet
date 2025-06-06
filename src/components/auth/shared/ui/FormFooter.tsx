@@ -6,6 +6,7 @@ interface FormFooterProps {
     text: string;
 }
 
+/** 로그인 폼, 회원가입 폼 Footer */
 export default function FormFooter({ route, description, text }: FormFooterProps) {
     return (
         <p className='text-center text-sm text-gray-400'>

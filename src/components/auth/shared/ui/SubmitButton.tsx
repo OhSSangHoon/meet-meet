@@ -10,6 +10,7 @@ interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
     }
 }
 
+/** 로그인 폼, 회원가입 폼 Submit Button */
 export default function SubmitButton({ isSubmitting, isPasswordMatch, text, props }: SubmitButtonProps) {
     return (
         <button

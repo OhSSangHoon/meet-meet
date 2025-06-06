@@ -7,6 +7,7 @@ import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/ut
 import { UserRoundCheck, Hand } from "lucide-react"
 import Image from 'next/image';
 
+/** 마이페이지 내가 만든 모임 */
 export default function CreatedGatherings() {
   const { token, userId } = useContext(AuthContext);
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { Gathering } from '@/types/gatherings';
 
 interface FooterProps {
@@ -13,6 +15,7 @@ interface FooterProps {
     setLoginDialogOpen: (open: boolean) => void;
 }
 
+/** 모임 상세 페이지 Footer */
 export default function Footer({ userId, detail, isParticipated, leaveGathering, joinGathering, token, setDialogOpen, handleCopyUrl, id, setLoginDialogOpen }: FooterProps) {
     return (
         <footer className='sticky bottom-0 w-full h-16 border-t border-gray-300 bg-white' >

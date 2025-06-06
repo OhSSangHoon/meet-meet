@@ -1,3 +1,4 @@
+/** 모임 상세 페이지 리뷰 페이지 변환 버튼 */
 export default function PageConverter({ page, setPage, totalPages }: { page: number, setPage: (page: number) => void, totalPages: number }) {
     return (
         <div className="flex justify-center items-center gap-2 mt-4">

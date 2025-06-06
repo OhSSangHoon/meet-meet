@@ -8,6 +8,7 @@ import { useCheckJoined } from '@/hooks/api/gatherings/detail/useCheckJoined';
 import { useJoinGathering } from '@/hooks/api/gatherings/detail/useJoinGathering';
 import { useCancelGathering } from '@/hooks/api/gatherings/detail/useCancelGathering';
 import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGathering';
+import { useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from '@/providers/AuthProvider';
 import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
 import { ReviewItem, Reviews } from '@/types/reviews';
@@ -20,7 +21,7 @@ import Information from '@/components/gatherings/detail/Information';
 import Review from '@/components/gatherings/detail/Review';
 import PageConverter from '@/components/gatherings/detail/PageConverter';
 import Footer from '@/components/gatherings/detail/Footer';
-import { useQueryClient } from '@tanstack/react-query';
+
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 export interface Participant {
@@ -44,13 +45,13 @@ const handleCopyUrl = () => {
 
 const LIMIT = 4;
 
+/** 모임 상세 페이지 UI */
 export default function GatheringsDetailUI({ id, detailReviews }: { id: string, detailReviews: Reviews }) {
     const { token, userId, loginDialogOpen, setLoginDialogOpen } = useContext(AuthContext);
-    const queryClient = useQueryClient();
 
     const [page, setPage] = useState(detailReviews?.currentPage ?? 1);
     const [reviews, setReviews] = useState<ReviewItem[]>(detailReviews.data);
-    const [dialog, setDialog] = useState<ConfirmDialogState>({ open: false, text: '' });
+    const [dialog, setDialog] = useState<ConfirmDialogState>({ isOpen: false, text: '' });
 
     const router = useRouter();
 
@@ -83,18 +84,19 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
         if (nextPageData) setReviews(detailReviews.data.concat(nextPageData.data));
     }, [page, nextPageData, detailReviews.data]);
 
+    const queryClient = useQueryClient();
 
     const handleDeleteConfirm = () => {
         cancelGathering(Number(id));
 
         queryClient.invalidateQueries({ queryKey: ['gatherings'] });
 
-        setDialog((prev) => ({ ...prev, open: false }));
+        setDialog((prev) => ({ ...prev, isOpen: false }));
     };
 
     return (
-        <>
-            <main className='contents-container'>
+        <main>
+            <section className='contents-container'>
                 {/* 모임 썸네일과 정보 */}
                 {detailLoading ? (
                     <section className='flex flex-col sm:flex-row gap-4'>
@@ -122,7 +124,7 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                         <PageConverter page={page} setPage={setPage} totalPages={detailReviews?.totalPages} />
                     ) : (<p className='p-4 sm:p-20 mx-auto text-sm text-gray-500'>아직 리뷰가 없습니다.</p>)}
                 </section>
-            </main >
+            </section >
             {/* 모임 참가 Footer */}
             <Footer
                 token={token!}
@@ -136,20 +138,20 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                 setLoginDialogOpen={setLoginDialogOpen}
                 setDialogOpen={(open: boolean) => {
                     if (open) openConfirmDialog(setDialog, '모임을 삭제 하시겠습니까?', handleDeleteConfirm);
-                    else setDialog((prev) => ({ ...prev, open: false }));
+                    else setDialog((prev) => ({ ...prev, isOpen: false }));
                 }}
             />
             <ConfirmDialog
-                open={loginDialogOpen}
+                isOpen={loginDialogOpen}
                 text='로그인이 필요합니다'
                 onClose={() => setLoginDialogOpen(false)}
                 onCallback={() => router.push('/signin')} />
             <ConfirmDialog
-                open={dialog.open}
+                isOpen={dialog.isOpen}
                 text={dialog.text}
-                onClose={() => setDialog((prev) => ({ ...prev, open: false }))}
+                onClose={() => setDialog((prev) => ({ ...prev, isOpen: false }))}
                 onConfirm={dialog.onConfirm}
             />
-        </>
+        </main>
     );
 }

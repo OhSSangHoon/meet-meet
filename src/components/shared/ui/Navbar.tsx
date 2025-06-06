@@ -11,11 +11,12 @@ import Link from 'next/link';
 
 export default function Navbar() {
     const { token, signOut, userName, userImage } = useContext(AuthContext);
-    const queryClient = useQueryClient();
-    const savedIds = queryClient.getQueryData<string[]>(['savedGatherings']);
-    const userSavedCount = Array.isArray(savedIds) ? savedIds.length : 0;
 
     const pathname = usePathname();
+
+    const queryClient = useQueryClient();
+    const savedIds = queryClient.getQueryData<string[]>(['savedGatherings']);
+    const savedCounts = Array.isArray(savedIds) ? savedIds.length : 0;
 
     const navLinks = [
         { href: '/gatherings', label: '모임찾기' },
@@ -42,7 +43,7 @@ export default function Navbar() {
                                 className={`flex items-center gap-1 ${pathname.includes(link.href) ? 'text-main-600' : ''} over:opacity-50 duration-300 ease-in-out`}
                             >
                                 <span>{link.label}</span>
-                                {link.href === '/saved' && <span className='bg-main-600 px-2 rounded-md text-xs text-button-text'>{userSavedCount}</span>}
+                                {link.href === '/saved' && <span className='bg-main-600 px-2 rounded-md text-xs text-button-text'>{savedCounts}</span>}
                             </Link>
                         )
                     })}

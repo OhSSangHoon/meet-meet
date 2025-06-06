@@ -14,11 +14,11 @@ import { handleApiError } from '@/lib/api/handleApiResponse';
 * @returns {function} cancelGathering - 모임 삭제 함수
 */
 export const useCancelGathering = ({ token, onCallback }: GatheringApiParams) => {
-    const queryClient = useQueryClient();
-
     const removeGathering = useGatheringsStore((s) => s.removeGathering);
 
     const router = useRouter();
+
+    const queryClient = useQueryClient();
 
     const cancelGathering = useMutation({
         mutationFn: async (id: number) => {

@@ -1,8 +1,6 @@
 "use client"
 
-
 import { useState, useEffect, useCallback } from 'react';
-
 
 interface Filters {
     location: string;
@@ -49,7 +47,7 @@ export default function LocationDateFilter({
             sortBy,
             sortOrder
         };
-        
+
         onFilterChange(filters);
     }, [selectedLocation, selectedDate, sortBy, sortOrder, onFilterChange]);
 
@@ -68,7 +66,7 @@ export default function LocationDateFilter({
     ];
 
     // 페이지별로 다르게 정렬
-    const sortOptions = pageType === 'search' 
+    const sortOptions = pageType === 'search'
         ? [
             { value: 'registrationEnd', label: '마감임박순' }
         ]
@@ -89,7 +87,7 @@ export default function LocationDateFilter({
 
     const handleSortChange = (newSortBy: string) => {
         setSortBy(newSortBy);
-        
+
         // 정렬 기준에 따른 기본 정렬 순서 설정
         if (pageType === 'search') {
             setSortOrder('asc');

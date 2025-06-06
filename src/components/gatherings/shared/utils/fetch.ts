@@ -1,4 +1,3 @@
-
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { apiClient } from '@/lib/api/axios';
 import { Gathering } from "@/types/gatherings";

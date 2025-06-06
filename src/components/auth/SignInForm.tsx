@@ -19,7 +19,7 @@ const signInFormSchema = z.object({
 
 type SignInFormSchemaType = z.infer<typeof signInFormSchema>;
 
-export default function LoginForm() {
+export default function SignInForm() {
     const { signIn } = useContext(AuthContext);
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -67,7 +67,7 @@ export default function LoginForm() {
                     placeholder="이메일을 입력해 주세요"
                     {...register('email')}
                     disabled={isSubmitted}
-                    error={errors.email?.message}
+                    isError={errors.email?.message}
                 />
                 <InputField
                     label='비밀번호'
@@ -78,7 +78,7 @@ export default function LoginForm() {
                     disabled={isSubmitted}
                     handlePasswordVisibility={() => setIsPasswordVisible((v) => !v)}
                     isPasswordVisible={isPasswordVisible}
-                    error={errors.password?.message}
+                    isError={errors.password?.message}
                     errorResponseMessage={errorResponseMessage}
                 />
                 <SubmitButton

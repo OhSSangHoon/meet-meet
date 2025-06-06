@@ -11,10 +11,11 @@ import dynamic from 'next/dynamic';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
+/** 마이페이지 참여중인 모임 */
 export default function JoinedGatherings() {
   const { token } = useContext(AuthContext);
 
-  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const { data: gatherings = [], isLoading, error } = useFetchJoinedGatherings(token!);
@@ -23,7 +24,7 @@ export default function JoinedGatherings() {
     token,
     onCallback: (message) => {
       setErrorMessage(message);
-      setErrorModalOpen(true);
+      setIsErrorDialogOpen(true);
     },
   });
 
@@ -164,9 +165,9 @@ export default function JoinedGatherings() {
       ))}
 
       <ConfirmDialog
-        open={errorModalOpen}
+        isOpen={isErrorDialogOpen}
         text={errorMessage}
-        onClose={() => setErrorModalOpen(false)}
+        onClose={() => setIsErrorDialogOpen(false)}
       />
     </div>
   );

@@ -1,7 +1,9 @@
+'use client';
+
 import { X } from 'lucide-react';
 
 interface CheckingModalProps {
-    open: boolean;
+    isOpen: boolean;
     text: string;
     onClose: () => void;
     onConfirm?: () => void;
@@ -9,16 +11,16 @@ interface CheckingModalProps {
 }
 
 /**
- * 프로젝트 공통 모달
- * @param open 모달 열기 여부
- * @param text 모달에 표시할 텍스트
+ * 프로젝트 공통 다이얼로그
+ * @param isOpen 다이얼로그 열기 여부
+ * @param text 다이얼로그에 표시할 텍스트
  * @param onClose 닫기 함수
  * @param onConfirm 확인 함수
  * @param onCallback 전달받을 콜백 함수
- * @returns 모달 팝업
+ * @returns 팝업
  */
-export default function ConfirmDialog({ open, text, onClose, onConfirm, onCallback }: CheckingModalProps) {
-    if (!open) return null;
+export default function ConfirmDialog({ isOpen, text, onClose, onConfirm, onCallback }: CheckingModalProps) {
+    if (!isOpen) return null;
 
     const handleConfirm = () => {
         onClose();
