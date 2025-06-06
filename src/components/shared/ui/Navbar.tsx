@@ -10,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Navbar() {
-    const { token, signout, userName, userImage } = useContext(AuthContext);
+    const { token, signOut, userName, userImage } = useContext(AuthContext);
     const queryClient = useQueryClient();
     const savedIds = queryClient.getQueryData<string[]>(['savedGatherings']);
     const userSavedCount = Array.isArray(savedIds) ? savedIds.length : 0;
@@ -59,7 +59,7 @@ export default function Navbar() {
                                 <DropdownMenuLabel className='text-main-500'>{userName}</DropdownMenuLabel>
                                 <DropdownMenuSeparator className='h-[0.1rem] bg-gray-300' />
                                 <DropdownMenuItem ><Link href='/mypage'>마이페이지</Link></DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => signout()} className='cursor-pointer'>로그아웃</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => signOut()} className='cursor-pointer'>로그아웃</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     )}

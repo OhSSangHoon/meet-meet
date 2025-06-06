@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!email || !password) return new NextResponse(JSON.stringify({ error: '이메일과 비밀번호는 필수입니다' }), { status: 400 });
 
     try {
-        const response = await apiServer.post(EXTERNAL_PATHS.signin, { email, password })
+        const response = await apiServer.post(EXTERNAL_PATHS.signIn, { email, password })
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

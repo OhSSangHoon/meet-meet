@@ -1,7 +1,7 @@
 /** 외부 경로: 클라이언트, API 라우트 -> 백엔드 서버
- * @string signin -> 로그인
- * @string signout -> 로그아웃
- * @string signup -> 회원가입
+ * @string signIn -> 로그인
+ * @string signOut -> 로그아웃
+ * @string signUp -> 회원가입
  * @string user -> 유저 정보 조회
  * @string fetchGatherings -> 모임 목록 조회
  * @string createGathering -> 모임 생성
@@ -9,9 +9,9 @@
  * @function leaveGathering -> 모임 참여 취소
  */
 export const EXTERNAL_PATHS = {
-    signin: '/auths/signin',
-    signout: '/auths/signout',
-    signup: '/auths/signup',
+    signIn: '/auths/signIn',
+    signOut: '/auths/signOut',
+    signUp: '/auths/signUp',
     user: '/auths/user',
 
     fetchGatherings: '/gatherings',
@@ -29,9 +29,9 @@ export const EXTERNAL_PATHS = {
 } as const;
 
 /** 내부 경로: 클라이언트 -> API 라우트
- * @string signin -> 로그인
- * @string signout -> 로그아웃
- * @string signup -> 회원가입
+ * @string signIn -> 로그인
+ * @string signOut -> 로그아웃
+ * @string signUp -> 회원가입
  * @string user -> 유저 정보 조회
  * @string fetchGatherings -> 모임 목록 조회
  * @string createGathering -> 모임 생성
@@ -46,9 +46,9 @@ export const EXTERNAL_PATHS = {
  * @function fetchGatheringReviews -> 모임 상세 리뷰 조회
  */
 export const INTERNAL_PATHS = {
-    signin: '/api/auths/signin',
-    signout: '/api/auths/signout',
-    signup: '/api/auths/signup',
+    signIn: '/api/auths/signIn',
+    signOut: '/api/auths/signOut',
+    signUp: '/api/auths/signUp',
     user: '/api/auths/user',
 
     fetchGatherings: '/api/gatherings',

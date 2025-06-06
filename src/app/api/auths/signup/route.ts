@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!email || !password || !name || !companyName) return new NextResponse(JSON.stringify({ error: '이메일, 비밀번호, 닉네임, 회사명은 필수 입력입니다' }), { status: 400 });
 
     try {
-        const response = await apiServer.post(EXTERNAL_PATHS.signup, {
+        const response = await apiServer.post(EXTERNAL_PATHS.signUp, {
             email,
             password,
             name,

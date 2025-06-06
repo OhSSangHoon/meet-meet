@@ -5,7 +5,7 @@ export default function AuthPoster() {
         <div className='flex flex-col sm:flex-row lg:flex-col gap-2 items-center justify-center'>
             <Image
                 src='/images/auth_background.avif'
-                alt='signin background poster'
+                alt='로그인, 회원가입 페이지 배경 이미지'
                 width={2000}
                 height={2000}
                 className='w-[10rem] h-[14rem] md:w-[18rem] md:h-[26rem] lg:w-[22rem] lg:h-[32rem] hover:scale-105 transtion-all duration-200 ease-in-out pointer-events-none'

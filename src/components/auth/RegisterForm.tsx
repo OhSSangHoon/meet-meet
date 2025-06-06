@@ -11,7 +11,7 @@ import InputField from './shared/ui/InputField';
 import SubmitButton from './shared/ui/SubmitButton';
 import FormFooter from './shared/ui/FormFooter';
 
-const signupFormSchema = z.object({
+const signUpFormSchema = z.object({
     name: z.string().min(1, '이름을 입력해 주세요.'),
     email: z.string().min(1, '이메일을 입력해 주세요.').email('올바른 이메일 형식이 아닙니다.'),
     companyName: z.string().min(1, '회사명을 정확하게 입력해 주세요.'),
@@ -20,10 +20,10 @@ const signupFormSchema = z.object({
         .min(8, '비밀번호가 8자 이상이 되도록 해주세요.'),
 });
 
-type SignupFormSchemaType = z.infer<typeof signupFormSchema>;
+type SignupFormSchemaType = z.infer<typeof signUpFormSchema>;
 
 export default function RegisterForm() {
-    const { signup } = useContext(AuthContext)
+    const { signUp } = useContext(AuthContext)
 
     const [passwordCheck, setPasswordCheck] = useState('');
     const [isPasswordMatch, setIsPasswordMatch] = useState(false);
@@ -37,7 +37,7 @@ export default function RegisterForm() {
         watch,
         formState: { errors, isSubmitting, isSubmitted },
     } = useForm<SignupFormSchemaType>({
-        resolver: zodResolver(signupFormSchema),
+        resolver: zodResolver(signUpFormSchema),
     });
 
     const name = watch('name');
@@ -47,7 +47,7 @@ export default function RegisterForm() {
 
     const onSubmit = async (data: SignupFormSchemaType) => {
         try {
-            await signup(data.email, data.password, data.name, data.companyName);
+            await signUp(data.email, data.password, data.name, data.companyName);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;

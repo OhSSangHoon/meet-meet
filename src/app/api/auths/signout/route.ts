@@ -10,7 +10,7 @@ import { apiServer } from '@/lib/api/axios';
  */
 export async function POST() {
     try {
-        const response = await apiServer.post(EXTERNAL_PATHS.signout)
+        const response = await apiServer.post(EXTERNAL_PATHS.signOut);
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

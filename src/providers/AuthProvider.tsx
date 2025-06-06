@@ -16,9 +16,9 @@ type AuthContextType = {
     loginDialogOpen: boolean;
     setLoginDialogOpen: Dispatch<SetStateAction<boolean>>;
     setToken: Dispatch<SetStateAction<string | null>>;
-    signup: (email: string, password: string, name: string, companyName: string) => Promise<void>;
-    signin: (email: string, password: string) => Promise<void>;
-    signout: () => Promise<void>;
+    signUp: (email: string, password: string, name: string, companyName: string) => Promise<void>;
+    signIn: (email: string, password: string) => Promise<void>;
+    signOut: () => Promise<void>;
     updateUserProfile: (data: { name: string, id: number, email: string, companyName: string, image: string }) => void;
     userName: string;
     userId: number;
@@ -33,9 +33,9 @@ export const AuthContext = createContext<AuthContextType>({
     loginDialogOpen: false,
     setLoginDialogOpen: () => { },
     setToken: () => { },
-    signup: async () => { },
-    signin: async () => { },
-    signout: async () => { },
+    signUp: async () => { },
+    signIn: async () => { },
+    signOut: async () => { },
     updateUserProfile: () => { },
     userName: '',
     userId: 0,
@@ -55,15 +55,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [previousPath, setPreviousPath] = useState<string>('/');
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
-    const [signupDialogOpen, setSignupDialogOpen] = useState(false);
+    const [signUpDialogOpen, setSignupDialogOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const router = useRouter();
     const pathname = usePathname();
 
-    const signup = async (email: string, password: string, name: string, companyName: string) => {
+    const signUp = async (email: string, password: string, name: string, companyName: string) => {
         try {
-            const result = await apiClient.post(INTERNAL_PATHS.signup, { email, password, name, companyName })
+            const result = await apiClient.post(INTERNAL_PATHS.signUp, { email, password, name, companyName })
             if (result.status === 200) {
                 setSignupDialogOpen(true);
                 router.replace('/login')
@@ -73,9 +73,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }
     }
 
-    const signin = async (email: string, password: string) => {
+    const signIn = async (email: string, password: string) => {
         try {
-            const result = await apiClient.post(INTERNAL_PATHS.signin, { email, password });
+            const result = await apiClient.post(INTERNAL_PATHS.signIn, { email, password });
             if (result.status === 200) {
                 localStorage.setItem('token', result.data.token);
                 setToken(result.data.token);
@@ -120,7 +120,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         localStorage.setItem('user_image', data.image);
     };
 
-    const signout = async () => {
+    const signOut = async () => {
         setToken(null);
         setUserId(0);
         setUserName('');
@@ -134,7 +134,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         localStorage.removeItem('user_company_name');
         localStorage.removeItem('user_image');
         queryClient.invalidateQueries({ queryKey: ['checkGatheringJoined'] });
-        await axios.post(INTERNAL_PATHS.signout);
+        await axios.post(INTERNAL_PATHS.signOut);
     }
 
     // 페이지 이동 시 토큰, 유저명, 유저 아이디 감지
@@ -178,7 +178,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     };
 
     return (
-        <AuthContext value={{ token, userName, userId, userEmail, userCompanyName, userImage, loginDialogOpen, isLoading, setLoginDialogOpen, setToken, signup, signin, signout, updateUserProfile }}>
+        <AuthContext value={{ token, userName, userId, userEmail, userCompanyName, userImage, loginDialogOpen, isLoading, setLoginDialogOpen, setToken, signUp, signIn, signOut, updateUserProfile }}>
             {children}
             <ConfirmDialog
                 open={loginDialogOpen}
@@ -186,7 +186,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 text="로그인이 필요합니다"
             />
             <ConfirmDialog
-                open={signupDialogOpen}
+                open={signUpDialogOpen}
                 onClose={handleSignupModalConfirm}
                 text="회원가입이 완료되었습니다"
             />

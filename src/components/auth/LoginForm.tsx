@@ -10,17 +10,17 @@ import InputField from './shared/ui/InputField';
 import SubmitButton from './shared/ui/SubmitButton';
 import FormFooter from './shared/ui/FormFooter';
 
-const signinFormSchema = z.object({
+const signInFormSchema = z.object({
     email: z.string().email('올바른 이메일 형식이 아닙니다.'),
     password: z
         .string()
         .min(8, '비밀번호는 8자 이상이어야 합니다.')
 });
 
-type SigninFormSchemaType = z.infer<typeof signinFormSchema>;
+type SignInFormSchemaType = z.infer<typeof signInFormSchema>;
 
 export default function LoginForm() {
-    const { signin } = useContext(AuthContext);
+    const { signIn } = useContext(AuthContext);
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [errorResponseMessage, setErrorResponseMessage] = useState<string | null>(null);
@@ -30,17 +30,17 @@ export default function LoginForm() {
         watch,
         handleSubmit,
         formState: { errors, isSubmitting, isSubmitted },
-    } = useForm<SigninFormSchemaType>({
-        resolver: zodResolver(signinFormSchema)
+    } = useForm<SignInFormSchemaType>({
+        resolver: zodResolver(signInFormSchema)
     });
 
     const email = watch('email');
     const password = watch('password');
 
-    const onSubmit = async (data: SigninFormSchemaType) => {
+    const onSubmit = async (data: SignInFormSchemaType) => {
         setErrorResponseMessage(null);
         try {
-            await signin(data.email, data.password);
+            await signIn(data.email, data.password);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;
