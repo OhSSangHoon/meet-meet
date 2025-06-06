@@ -46,9 +46,9 @@ export const EXTERNAL_PATHS = {
  * @function fetchGatheringReviews -> 모임 상세 리뷰 조회
  */
 export const INTERNAL_PATHS = {
-    signIn: '/api/auths/signIn',
-    signOut: '/api/auths/signOut',
-    signUp: '/api/auths/signUp',
+    signIn: '/api/auths/signin',
+    signOut: '/api/auths/signout',
+    signUp: '/api/auths/signup',
     user: '/api/auths/user',
 
     fetchGatherings: '/api/gatherings',
