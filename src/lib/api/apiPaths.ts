@@ -9,9 +9,9 @@
  * @function leaveGathering -> 모임 참여 취소
  */
 export const EXTERNAL_PATHS = {
-    signIn: '/auths/signIn',
-    signOut: '/auths/signOut',
-    signUp: '/auths/signUp',
+    signIn: '/auths/signin',
+    signOut: '/auths/signout',
+    signUp: '/auths/signup',
     user: '/auths/user',
 
     fetchGatherings: '/gatherings',
