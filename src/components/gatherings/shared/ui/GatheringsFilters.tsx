@@ -1,5 +1,6 @@
 "use client"
 
+import Button from '@/components/shared/ui/Button';
 import { useEffect, useState } from 'react';
 
 interface GatheringFiltersProps {
@@ -10,7 +11,7 @@ interface GatheringFiltersProps {
     initialSubType?: string;
 }
 
-export default function GatheringFilters({ 
+export default function GatheringFilters({
     onTypeChange,
     showCreateButton = false,
     onCreateClick,
@@ -28,7 +29,7 @@ export default function GatheringFilters({
 
     const handleMainTypeChange = (type: string) => {
         setSelectedMainType(type);
-        
+
         if (type === 'DORANDORAN') {
             setSelectedSubType('WORKATION');
             onTypeChange?.(type, 'WORKATION');
@@ -48,28 +49,28 @@ export default function GatheringFilters({
             {/* 대분류 선택 */}
             <div className="flex flex-row relative">
                 <div className={`absolute bottom-0 h-0.5 bg-gray-900 transition-all duration-300 ease-in-out w-20 ${selectedMainType === 'DALLAEMFIT' ? 'translate-x-2' : 'translate-x-26'}`} />
-                <button 
+                <button
                     onClick={() => handleMainTypeChange('DALLAEMFIT')}
                     className={`text-gray-900 text-lg font-semibold px-4 py-1`}
                 >
                     북적북적
                 </button>
-                <button 
+                <button
                     onClick={() => handleMainTypeChange('DORANDORAN')}
                     className={`text-gray-900 text-lg font-semibold px-4 py-1`}
                 >
                     도란도란
                 </button>
-                {showCreateButton && (    
-                    <button 
-                        onClick={onCreateClick} 
-                        className="bg-main-500 text-white font-semibold text-sm px-4 py-2 rounded-lg ml-auto"
-                    >
-                        모임 만들기
-                    </button>
+                {showCreateButton && (
+                    <Button
+                        variant='default'
+                        text='모임 만들기'
+                        onClick={onCreateClick}
+                        customClassName="ml-auto"
+                    />
                 )}
             </div>
-            
+
             {/* 북적북적 소분류 선택 */}
             {selectedMainType === 'DALLAEMFIT' && (
                 <div className="w-full flex flex-col justify-start py-5 border-b-2 border-gray-200">
@@ -95,7 +96,7 @@ export default function GatheringFilters({
                     </div>
                 </div>
             )}
-            
+
             {/* 도란도란 선택 시 border */}
             {selectedMainType === 'DORANDORAN' && (
                 <div className="w-full h-[78px] flex flex-col justify-start py-5 border-b-2 border-gray-200" />

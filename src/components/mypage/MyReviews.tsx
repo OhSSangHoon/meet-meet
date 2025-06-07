@@ -10,6 +10,7 @@ import { ReviewItem } from '@/types/reviews';
 import { Heart, UserRoundCheck } from 'lucide-react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import Button from '../shared/ui/Button';
 
 const CreateReviewDialog = dynamic(() => import('./CreateReviewDialog'), { ssr: false });
 
@@ -100,13 +101,12 @@ export default function MyReviews({ teamId }: { teamId: string }) {
                   </div>
                   {/* 버튼 */}
                   {tab === 0 && (
-                    <button
-                      type="button"
-                      className="max-w-36 padding-button rounded-lg bg-main-500 text-sm text-white cursor-pointer hover:opacity-70"
+                    <Button
+                      variant='default'
+                      text='리뷰 작성하기'
                       onClick={() => setReviewableGathering({ teamId, userId: userId, gatheringId: Number(gathering.id) })}
-                    >
-                      리뷰 작성하기
-                    </button>
+                      customClassName='w-32'
+                    />
                   )}
                 </div>
               </div>

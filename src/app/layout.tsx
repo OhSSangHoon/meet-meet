@@ -15,20 +15,37 @@ export const metadata: Metadata = {
   title: "Meet Meet",
   description: "고민하지 말고 모여봐요!",
   keywords: [
-    '미밋',
     '밋밋',
-    '미밋 모임 앱',
-    '미밋 모임',
+    '밋밋 모임 앱',
+    '밋밋 모임',
     'Meet Meet',
-    'MeetMeet',
     'meet meet',
+    'MeetMeet',
     'meetmeet',
   ],
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     title: 'Meet Meet',
+    siteName: 'Meet Meet',
     description: '고민하지 말고 모여봐요!',
+    images: [
+      {
+        url: '/images/og_image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Meet Meet 대표 이미지',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Meet Meet',
+    description: '고민하지 말고 모여봐요!',
+    images: ['/og-image.png'],
+  },
+  alternates: {
+    canonical: '/',
   },
 };
 

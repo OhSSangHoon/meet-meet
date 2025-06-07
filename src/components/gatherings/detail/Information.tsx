@@ -59,7 +59,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
                                         alt="프로필 이미지"
                                         width={100}
                                         height={100}
-                                        className={`w-8 h-8 rounded-full border-2 border-white ${i === 0 ? 'ml-0' : '-ml-2'}`}
+                                        className={`w-8 h-8 rounded-full border border-gray-300 ${i === 0 ? 'ml-0' : '-ml-2'}`}
                                     />
                                 ))}
                                 <Tooltip>

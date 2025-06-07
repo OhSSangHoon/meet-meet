@@ -4,6 +4,7 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { useCreateReview } from '@/hooks/api/mypage/useCreateReview';
 import dynamic from 'next/dynamic';
+import Button from '../shared/ui/Button';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
@@ -65,19 +66,19 @@ export default function CreateReviewDialog({
         />
 
         <div className="flex gap-2">
-          <button
-            type="button"
+          <Button
+            variant='cancel'
+            text='취소'
             onClick={onClose}
-            className="w-full px-4 py-2 rounded-lg bg-gray-300 cursor-pointer">
-            취소
-          </button>
-          <button
-            type="button"
+            customClassName="w-full"
+          />
+          <Button
+            variant='default'
+            text='제출'
             onClick={handleSubmit}
-            className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white cursor-pointer"
-          >
-            제출
-          </button>
+            customClassName="w-full"
+          />
+
         </div>
       </div>
       <ConfirmDialog

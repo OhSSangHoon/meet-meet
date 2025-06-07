@@ -1,5 +1,11 @@
+import { Metadata } from 'next';
 import { ReviewItem } from "@/types/reviews";
 import Reviews from "@/components/reviews/Reviews";
+
+export const metadata: Metadata = {
+    title: `모든 리뷰 | Meet Meet`,
+    description: `모임 찾기 페이지 입니다`,
+};
 
 async function getInitialReviews(): Promise<ReviewItem[]> {
     try {
@@ -27,8 +33,8 @@ async function getInitialReviews(): Promise<ReviewItem[]> {
 
         if (Array.isArray(data)) {
             // 클라이언트 필터링
-            return data.filter((review: ReviewItem) => 
-                review.Gathering.type === 'OFFICE_STRETCHING' || 
+            return data.filter((review: ReviewItem) =>
+                review.Gathering.type === 'OFFICE_STRETCHING' ||
                 review.Gathering.type === 'MINDFULNESS'
             );
         } else {

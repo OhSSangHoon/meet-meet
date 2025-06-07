@@ -19,7 +19,7 @@ export default function Navbar() {
     const savedCounts = Array.isArray(savedIds) ? savedIds.length : 0;
 
     const navLinks = [
-        { href: '/gatherings', label: '모임찾기' },
+        { href: '/gatherings', label: '모임 찾기' },
         { href: '/saved', label: '찜한 모임' },
         { href: '/reviews', label: '모든 리뷰' },
     ]
@@ -53,7 +53,13 @@ export default function Navbar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <div className='w-8 h-8 rounded-full border border-gray-300 overflow-hidden'>
-                                    <Image src={userImage} alt='profile image' width={1000} height={1000} className='rounded-full cursor-pointer' />
+                                    <Image
+                                        src={userImage && userImage !== 'null' && userImage !== '' ? userImage : '/icons/default_profile_image.svg'}
+                                        alt='profile image'
+                                        width={1000}
+                                        height={1000}
+                                        className='rounded-full cursor-pointer'
+                                    />
                                 </div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className='w-[9rem] mt-2 p-2 border-2 border-gray-300 rounded-md bg-white flex flex-col gap-2'>

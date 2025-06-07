@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import Button from './Button';
 
 interface CheckingModalProps {
     isOpen: boolean;
@@ -40,12 +41,11 @@ export default function ConfirmDialog({ isOpen, text, onClose, onConfirm, onCall
                         <X className='w-6 h-6' />
                     </button>
                 </div>
-                <button
-                    className="px-6 py-2 bg-main-500 text-white rounded-md cursor-pointer hover:bg-main-600 transition"
+                <Button
+                    variant='default'
+                    text='확인'
                     onClick={handleConfirm}
-                >
-                    확인
-                </button>
+                />
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
 'use client';
 
+import Button from '@/components/shared/ui/Button';
 import { Gathering } from '@/types/gatherings';
 
 interface FooterProps {
@@ -27,26 +28,37 @@ export default function Footer({ userId, detail, isParticipated, leaveGathering,
                 {/* 모임 생성자 권한 확인 */}
                 {userId === detail?.createdBy ?
                     <div className='flex justify-between sm:justify-end gap-2'>
-                        <button type="button"
+                        <Button
+                            variant='cancel'
+                            text='삭제하기'
                             onClick={() => { setDialogOpen(true) }}
-                            className='w-24 h-[60%] py-1 bg-button-text text-button border-button border-1 rounded-lg cursor-pointer hover:opacity-60 transition duration-300 ease-in'>삭제하기</button>
-                        <button type="button"
+                            customClassName='w-24 h-[60%]'
+                        />
+                        <Button
                             onClick={handleCopyUrl}
-                            className='w-24 h-[60%] py-1 bg-button text-button-text rounded-lg cursor-pointer hover:opacity-60 transition duration-300 ease-in'>공유하기</button>
+                            text='공유하기'
+                            customClassName='w-24 h-[60%]'
+                        />
                     </div>
                     :
                     // 모임 참가 여부 확인 (생성자가 아닌 경우)
                     isParticipated ? (
-                        <button type="button"
+                        <Button
+                            variant='cancel'
+                            text='참여 취소하기'
                             onClick={() => leaveGathering(Number(id))}
-                            className='max-w-36 h-[60%] py-1 px-2 bg-button-text text-button border-1 border-button rounded-lg cursor-pointer hover:opacity-60 transition duration-300 ease-in'>참여 취소하기</button>
+                            customClassName='max-w-36 h-[60%]'
+                        />
                     ) : (
-                        <button type="button"
+                        <Button
+                            variant='default'
+                            text='참여하기'
                             onClick={() => {
                                 if (!token) setSignInDialogOpen(true);
                                 else joinGathering(Number(id))
                             }}
-                            className='w-24 h-[60%] py-1 bg-button text-button-text rounded-lg cursor-pointer hover:opacity-60 transition duration-300 ease-in'>참여하기</button>
+                            customClassName='w-28 h-[60%]'
+                        />
                     )
                 }
             </div>

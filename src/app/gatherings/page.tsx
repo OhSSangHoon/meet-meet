@@ -1,5 +1,11 @@
+import { Metadata } from 'next';
 import { Gathering } from "@/types/gatherings";
 import Gatherings from "@/components/gatherings/Gatherings";
+
+export const metadata: Metadata = {
+    title: `모임 찾기 | Meet Meet`,
+    description: `모임 찾기 페이지 입니다`,
+};
 
 async function getInitialGatherings(): Promise<Gathering[]> {
     try {
@@ -24,8 +30,8 @@ async function getInitialGatherings(): Promise<Gathering[]> {
 
         if (Array.isArray(data)) {
             // DALLAEMFIT의 경우 클라이언트에서 필터링
-            return data.filter((gathering: Gathering) => 
-                gathering.type === 'OFFICE_STRETCHING' || 
+            return data.filter((gathering: Gathering) =>
+                gathering.type === 'OFFICE_STRETCHING' ||
                 gathering.type === 'MINDFULNESS'
             );
         } else {

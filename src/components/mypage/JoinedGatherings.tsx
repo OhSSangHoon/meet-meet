@@ -9,6 +9,7 @@ import { UserRoundCheck, CheckCircle } from "lucide-react"
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import OverlayForDisabled from '../shared/ui/OverlayForDisabled';
+import Button from '../shared/ui/Button';
 
 const LoadingUI = dynamic(() => import('@/components/mypage/LoadingUI'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
@@ -118,34 +119,34 @@ export default function JoinedGatherings() {
               </div>
             </div>
 
-            {/* 개설 확정 모임은 참여 상태라면 리뷰 작성이 가능*/}
-            {data?.participantCount >= 5 && (
-              <div>
-                {data.isReviewed ? (
-                  <button
-                    type="button"
-                    className="padding-button rounded-lg bg-button text-button-text text-sm cursor-pointer hover:opacity-60 transition duration-300 ease-in"
-                  >
-                    내가 쓴 리뷰 보기
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="padding-button rounded-lg bg-button text-button-text text-sm cursor-pointer hover:opacity-60 transition duration-300 ease-in"
-                  >
-                    리뷰 작성하기
-                  </button>
-                )}
-              </div>
-            )}
-            {/* 참여 취소 */}
-            <button
-              type="button"
-              onClick={() => leaveGathering(Number(data?.id))}
-              className="padding-button rounded-lg text-button border-1 border-button text-sm hover:bg-white hover-button"
-            >
-              참여 취소하기
-            </button>
+            <div className='flex gap-2'>
+              {/* 개설 확정 모임은 참여 상태라면 리뷰 작성이 가능*/}
+              {data?.participantCount >= 5 && (
+                <div>
+                  {data.isReviewed ? (
+                    <Button
+                      variant='cancel'
+                      text='내가 쓴 리뷰 보기'
+                      customClassName='w-32'
+                    />
+                  ) : (
+                    <Button
+                      variant='default'
+                      text='리뷰 작성하기'
+                      customClassName='w-32'
+                    />
+                  )}
+                </div>
+              )}
+              {/* 참여 취소 */}
+              <Button
+                variant='cancel'
+                text='참여 취소하기'
+                onClick={() => leaveGathering(Number(data?.id))}
+                customClassName='w-32'
+              />
+            </div>
+
           </div>
         </div>
       ))}

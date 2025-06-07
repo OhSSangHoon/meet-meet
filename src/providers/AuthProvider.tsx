@@ -42,7 +42,6 @@ export const AuthContext = createContext<AuthContextType>({
     userImage: '',
 });
 
-const DEFAULT_PROFILE_IMAGE = '/icons/default_profile_image.svg';
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [token, setToken] = useState<string | null>(null);
@@ -50,12 +49,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [userId, setUserId] = useState(0);
     const [userEmail, setUserEmail] = useState('이메일');
     const [userCompanyName, setUserCompanyName] = useState('회사명');
-    const [userImage, setUserImage] = useState(DEFAULT_PROFILE_IMAGE);
+    const [userImage, setUserImage] = useState('');
 
     const [isLoading, setIsLoading] = useState(true);
     const [previousPath, setPreviousPath] = useState<string>('/');
     const [signInDialogOpen, setSignInDialogOpen] = useState(false);
-    const [signUpDialogOpen, setSignupDialogOpen] = useState(false);
+    const [signUpDialogOpen, setSignUpDialogOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const router = useRouter();
@@ -64,10 +63,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const signUp = async (email: string, password: string, name: string, companyName: string) => {
         try {
             const result = await apiClient.post(INTERNAL_PATHS.signUp, { email, password, name, companyName })
-            if (result.status === 200) {
-                setSignupDialogOpen(true);
-                router.replace('/signin')
-            }
+            if (result.status === 200 || result.status === 201) setSignUpDialogOpen(true);
         } catch (error) {
             throw error;
         }
@@ -108,33 +104,33 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     const signOut = async () => {
-        setToken(null);
-        setUserId(0);
-        setUserName('');
-        setUserEmail('');
-        setUserCompanyName('');
-        setUserImage('');
         localStorage.removeItem('token');
         localStorage.removeItem('user_name');
         localStorage.removeItem('user_id');
         localStorage.removeItem('user_email');
         localStorage.removeItem('user_company_name');
         localStorage.removeItem('user_image');
+        setToken(null);
+        setUserId(0);
+        setUserName('');
+        setUserEmail('');
+        setUserCompanyName('');
+        setUserImage('');
         queryClient.invalidateQueries({ queryKey: ['checkGatheringJoined'] });
         await axios.post(INTERNAL_PATHS.signOut);
     }
 
     const updateUserProfile = (data: { name: string, id: number, email: string, companyName: string, image: string }) => {
-        setUserName(data.name);
-        setUserId(data.id);
-        setUserEmail(data.email);
-        setUserCompanyName(data.companyName);
-        setUserImage(data.image || DEFAULT_PROFILE_IMAGE);
         localStorage.setItem('user_id', data.id.toString());
         localStorage.setItem('user_email', data.email);
         localStorage.setItem('user_name', data.name);
         localStorage.setItem('user_company_name', data.companyName);
         localStorage.setItem('user_image', data.image);
+        setUserName(data.name);
+        setUserId(data.id);
+        setUserEmail(data.email);
+        setUserCompanyName(data.companyName);
+        setUserImage(data.image);
     };
 
 
@@ -147,14 +143,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             const userEmail = localStorage.getItem('user_email');
             const userCompanyName = localStorage.getItem('user_company_name');
             const userImage = localStorage.getItem('user_image');
+            const VALID_USER_IMAGE = userImage && userImage !== 'null' && userImage !== '';
 
             if (storedToken) setToken(storedToken);
             if (userName) setUserName(userName);
             if (userId) setUserId(Number(userId));
             if (userEmail) setUserEmail(userEmail);
             if (userCompanyName) setUserCompanyName(userCompanyName);
-            if (userImage && userImage !== 'null') setUserImage(userImage);
-            else setUserImage(DEFAULT_PROFILE_IMAGE);
+            if (VALID_USER_IMAGE) setUserImage(userImage);
             setIsLoading(false);
         };
 
@@ -168,14 +164,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         if (token && pathname === '/signin') router.replace(previousPath); // 로그인 후 로그인 페이지 접근 시 이전 경로로 이동
     }, [isLoading, token, pathname, router, previousPath]);
 
-    const handleLoginModalConfirm = () => {
+    const handleSignInModalConfirm = () => {
         setSignInDialogOpen(false);
         router.replace('/signin');
     };
 
-    const handleSignupModalConfirm = () => {
-        setSignupDialogOpen(false);
-        router.replace('/');
+    const handleSignUpModalConfirm = () => {
+        setSignUpDialogOpen(false);
+        router.replace('/signin');
     };
 
     if (isLoading) return null;
@@ -199,12 +195,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             {children}
             <ConfirmDialog
                 isOpen={signInDialogOpen}
-                onClose={handleLoginModalConfirm}
+                onClose={handleSignInModalConfirm}
                 text="로그인이 필요합니다"
             />
             <ConfirmDialog
                 isOpen={signUpDialogOpen}
-                onClose={handleSignupModalConfirm}
+                onClose={handleSignUpModalConfirm}
                 text="회원가입이 완료되었습니다"
             />
         </AuthContext>

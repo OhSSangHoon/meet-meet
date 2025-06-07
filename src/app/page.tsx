@@ -1,5 +1,11 @@
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: `Meet Meet - 특별한 만남`,
+  description: `Meet Meet 홈페이지 입니다.`,
+};
 
 interface FeatureCardProps {
   icon: string;
@@ -72,9 +78,8 @@ export default async function MainPage() {
                 특별한<span className="bg-gradient-to-r from-[#8B5CF6] to-[#F472B6] bg-clip-text text-transparent"> 만남</span><br />
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed max-w-md whitespace-nowrap">
-                내 성향에 맞는 모임을 찾아서
-                <strong className="text-[#8B5CF6]"> 진짜 연결</strong>을 만들어보세요<br />
-                고민하지 말고 지금 시작해요!
+                서울의 2030이라면 <strong className="text-[#8B5CF6]">Meet Meet</strong>에서 모임을 만들고<br />
+                새로운 친구를 만들어보세요!
               </p>
             </div>
 
