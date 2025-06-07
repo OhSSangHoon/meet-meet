@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useFetchInfiniteGatherings } from "@/hooks/api/gatherings/useFetchInfiniteGatherings";
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering, GatheringsListProps } from "@/types/gatherings";
-import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/dateFormats';
+import { formatDate, formatTime, getTimeRemaining, isSameDateForFilter } from '@/components/shared/utils/dateFormats';
 import { UserRoundCheck } from "lucide-react";
 import Image from "next/image";
 import JoinedCountsProgressBar from './shared/ui/JoinedCountsProgressBar';
@@ -99,6 +99,31 @@ export default function GatheringsList({
         sortOrder,
     });
 
+    /**
+     * 위치/날짜 필터링 함수 추가
+     */
+    const filterByLocationAndDate = (
+        gatheringsList: Gathering[],
+        location: string,
+        date: string
+    ): Gathering[] => {
+        return gatheringsList.filter(gathering => {
+            // 위치 필터
+            if (location && gathering.location !== location) {
+                return false;
+            }
+            
+            // 날짜 필터 (모임 개최일 기준)
+            if (date && gathering.dateTime) {
+                if (!isSameDateForFilter(gathering.dateTime, date)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        });
+    };
+
     // 모임 목록 필터링
     const mergedGatherings = useMemo(() => {
         // API를 사용하지 않는 경우 (찜목록 등)
@@ -106,19 +131,24 @@ export default function GatheringsList({
             return filterGatherings(gatherings || [], selectedMainType, selectedSubType);
         }
 
-        // 필터가 적용된 경우 무한스크롤 결과만 사용
         const hasActiveFilters = location || date;
-        
-        if (hasActiveFilters) {
-            // 필터가 있으면 무한스크롤 결과만 사용 (빈 배열이어도 SSR로 fallback 안함)
+
+        // 무한스크롤 데이터가 있으면 우선 사용
+        if (infiniteGatherings.length > 0) {
             return filterGatherings(infiniteGatherings, selectedMainType, selectedSubType);
+        } 
+        
+        // 무한스크롤 데이터가 없을 때 SSR 사용
+        if (hasActiveFilters) {
+            // 타입 필터링
+            const typeFiltered = filterGatherings(ssrGatherings, selectedMainType, selectedSubType);
+            // 위치/날짜 필터링
+            const clientFiltered = filterByLocationAndDate(typeFiltered, location, date);
+            // 조건에 맞는 게 없으면 빈 배열
+            return clientFiltered;
         } else {
-            // 필터가 없으면 기존 로직: 무한스크롤 우선, SSR 백업
-            if (infiniteGatherings.length > 0) {
-                return filterGatherings(infiniteGatherings, selectedMainType, selectedSubType);
-            } else {
-                return filterGatherings(ssrGatherings, selectedMainType, selectedSubType);
-            }
+            // 필터가 없으면 SSR 데이터 그대로 사용
+            return filterGatherings(ssrGatherings, selectedMainType, selectedSubType);
         }
     }, [
         fetchFromApi, 
@@ -128,11 +158,9 @@ export default function GatheringsList({
         selectedSubType, 
         location, 
         date,
-        sortBy,
-        sortOrder,
         gatherings
     ]);
-
+        
     // 초기 로딩 여부
     const hasActiveFilters = location || date;
     const isInitialLoading = fetchFromApi && isLoading && infiniteGatherings.length === 0 && 

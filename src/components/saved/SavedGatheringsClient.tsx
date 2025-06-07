@@ -8,7 +8,6 @@ import { Gathering } from '@/types/gatherings';
 import GatheringFilters from '@/components/gatherings/shared/ui/GatheringsFilters';
 import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import GatheringsHeader from '@/components/gatherings/shared/ui/GatheringsHeader';
-import { getTimeRemaining } from '@/components/shared/utils/dateFormats';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 
 export default function SavedGatheringsClient() {
@@ -40,11 +39,6 @@ export default function SavedGatheringsClient() {
                 .map(id => gatheringsMap.get(id))
                 // 모임 데이터가 없는 경우 제외
                 .filter((gathering): gathering is Gathering => gathering !== undefined)
-                // 마감된 모임은 제외
-                .filter(gathering => {
-                    if (!gathering.registrationEnd) return true;
-                    return getTimeRemaining(gathering.registrationEnd) !== '마감됨';
-                })
 
             return orderedGatherings;
         },

@@ -231,23 +231,23 @@ export default function LocationDateFilter({
                 {onSortChange && (
                     <div className="flex items-center gap-3 ml-auto">
                         {pageType === 'search' ? (
-                            // 모임찾기 필터링 (마감 여유순, 마감 임박순)
+                            // 모임찾기 필터링 (마감 여유순, 마감 임박순) - 반응형 적용
                             <button
                                 onClick={handleSearchToggle}
                                 className="flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500 transition-all duration-200"
                             >
                                 <CurrentIcon className="w-4 h-4" />
-                                <span>{currentOption?.label}</span>
+                                <span className="hidden sm:inline">{currentOption?.label}</span>
                             </button>
                         ) : (
-                            // 리뷰 필터링 (최신순, 평점 높은순, 참여인원 많은순)
+                            // 리뷰 필터링 (최신순, 평점 높은순, 참여인원 많은순) - 반응형 적용
                             <div className="relative">
                                 <button
                                     onClick={() => setIsSortOpen(!isSortOpen)}
                                     className="flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500 transition-all duration-200"
                                 >
                                     <CurrentIcon className="w-4 h-4" />
-                                    <span>{currentOption?.label}</span>
+                                    <span className="hidden sm:inline">{currentOption?.label}</span>
                                     <ChevronDown 
                                         className={`w-4 h-4 transition-transform duration-200 ${
                                             isSortOpen ? 'rotate-180' : ''
@@ -267,7 +267,7 @@ export default function LocationDateFilter({
                                                     key={option.value}
                                                     onClick={() => handleSortChange(option.value)}
                                                     className={`
-                                                        w-full flex items-start gap-3 px-3 py-3 text-left hover:bg-gray-50 transition-colors duration-150
+                                                        w-18 sm:w-full flex items-start gap-3 px-3 py-3 text-left hover:bg-gray-50 transition-colors duration-150
                                                         ${isSelected ? 'bg-main-50 text-main-600' : 'text-gray-700'}
                                                         ${option.value === sortOptions[0].value ? 'rounded-t-lg' : ''}
                                                         ${option.value === sortOptions[sortOptions.length - 1].value ? 'rounded-b-lg' : ''}
@@ -276,7 +276,7 @@ export default function LocationDateFilter({
                                                     <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
                                                         isSelected ? 'text-main-600' : 'text-gray-400'
                                                     }`} />
-                                                    <div className="flex-1">
+                                                    <div className="flex-1 hidden sm:block">
                                                         <div className={`text-sm font-medium ${
                                                             isSelected ? 'text-main-600' : 'text-gray-900'
                                                         }`}>
