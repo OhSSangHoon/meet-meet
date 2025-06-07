@@ -6,6 +6,7 @@ import { ReviewItem } from '@/types/reviews';
 import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteReviews';
 import { useReviewsStore } from '@/store/reviewsStore';
 import { filterReviews } from '@/components/reviews/shared/utils/fetch';
+import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
 import ReviewStats from './ReviewStats';
 import { useMemo } from 'react';
 
@@ -30,6 +31,31 @@ interface ReviewsListProps {
     sortOrder?: string;
     reviews?: ReviewItem[];
 }
+
+/**
+ * 리뷰 위치/날짜 필터링 함수
+ */
+const filterReviewsByLocationAndDate = (
+    reviewsList: ReviewItem[],
+    location: string,
+    date: string
+): ReviewItem[] => {
+    return reviewsList.filter(review => {
+        // 위치 필터 (모임 위치 기준)
+        if (location && review.Gathering?.location !== location) {
+            return false;
+        }
+        
+        // 날짜 필터 (모임 개최일 기준)
+        if (date && review.Gathering?.dateTime) {
+            if (!isSameDateForFilter(review.Gathering.dateTime, date)) {
+                return false;
+            }
+        }
+        
+        return true;
+    });
+};
 
 export default function ReviewsList({
     fetchFromApi = true,
@@ -64,20 +90,27 @@ export default function ReviewsList({
 
     // 리뷰 하이브리드 필터링 로직
     const mergedReviews = useMemo(() => {
+        // API를 사용하지 않는 경우 (찜목록 등)
         if (!fetchFromApi) {
             return filterReviews(reviews || [], selectedMainType, selectedSubType);
         }
 
-        if (hasActiveFilters) {
-            // 필터가 있으면 무한스크롤 결과만 사용 (빈 배열이어도 SSR로 fallback 안함)
+        // 무한스크롤 데이터가 있으면 우선 사용
+        if (infiniteReviews.length > 0) {
             return filterReviews(infiniteReviews, selectedMainType, selectedSubType);
+        } 
+        
+        // 무한스크롤 데이터가 없을 때 SSR 사용
+        if (hasActiveFilters) {
+            // 타입 필터링
+            const typeFiltered = filterReviews(ssrReviews, selectedMainType, selectedSubType);
+            // 위치/날짜 필터링
+            const clientFiltered = filterReviewsByLocationAndDate(typeFiltered, location, date);
+            // 조건에 맞는 게 없으면 빈 배열 (이상한 fallback 방지)
+            return clientFiltered;
         } else {
-            // 필터가 없으면 기존 로직: 무한스크롤 우선, SSR 백업
-            if (infiniteReviews.length > 0) {
-                return filterReviews(infiniteReviews, selectedMainType, selectedSubType);
-            } else {
-                return filterReviews(ssrReviews, selectedMainType, selectedSubType);
-            }
+            // 필터가 없으면 SSR 데이터 그대로 사용
+            return filterReviews(ssrReviews, selectedMainType, selectedSubType);
         }
     }, [
         fetchFromApi, 
@@ -86,19 +119,17 @@ export default function ReviewsList({
         selectedMainType, 
         selectedSubType, 
         location, 
-        date, 
-        sortBy,
-        sortOrder,
-        reviews
+        date,  
+        reviews,
+        hasActiveFilters
     ]);
 
     // 로딩 상태 개선 
     const isInitialLoading = fetchFromApi && isLoading && infiniteReviews.length === 0 && 
-    (hasActiveFilters || ssrReviews.length === 0);
+        (hasActiveFilters || ssrReviews.length === 0);
 
     return (
         <div className="w-full flex flex-col">
-
             {/* 리뷰 전용 평균 평점 섹션 */}
             <ReviewStats reviews={mergedReviews} />
 
