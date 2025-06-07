@@ -6,10 +6,10 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/dateFormats';
 import { UserRoundCheck } from "lucide-react"
 import Image from 'next/image';
-import OverlayForDisabled from '../shared/ui/OverlayForDisabled';
 import dynamic from 'next/dynamic';
 
-const LoadingUI = dynamic(() => import('@/components/mypage/LoadingUI'), { ssr: false });
+const LoadingUI = dynamic(() => import('@/components/mypage/shared/ui/LoadingUI'), { ssr: false });
+const OverlayForDisabled = dynamic(() => import('@/components/shared/ui/OverlayForDisabled'), { ssr: false });
 
 /** 마이페이지 내가 만든 모임 */
 export default function CreatedGatherings() {

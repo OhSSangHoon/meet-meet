@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import MyPageUI from '../../components/mypage/MyPageUI';
+import MyPageUI from '@/components/mypage/MyPageUI';
 
 export const metadata: Metadata = {
   title: `마이페이지 | Meet Meet`,
@@ -7,6 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function MyPage() {
-  const teamId = process.env.TEAM_ID_DEV!;
-  return <MyPageUI teamId={teamId} />;
+  return <MyPageUI />;
 }

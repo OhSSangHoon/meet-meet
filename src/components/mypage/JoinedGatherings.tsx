@@ -4,19 +4,19 @@ import { useFetchJoinedGatherings } from '@/hooks/api/mypage/useFetchJoinedGathe
 import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGathering';
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { formatDate, formatTime, getTimeRemaining } from '../shared/utils/dateFormats';
+import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/dateFormats';
 import { UserRoundCheck, CheckCircle } from "lucide-react"
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import OverlayForDisabled from '../shared/ui/OverlayForDisabled';
-import Button from '../shared/ui/Button';
 
-const LoadingUI = dynamic(() => import('@/components/mypage/LoadingUI'), { ssr: false });
+const LoadingUI = dynamic(() => import('@/components/mypage/shared/ui/LoadingUI'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
+const OverlayForDisabled = dynamic(() => import('@/components/shared/ui/OverlayForDisabled'), { ssr: false });
+const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
 
 /** 마이페이지 참여중인 모임 */
-export default function JoinedGatherings() {
-  const { token } = useContext(AuthContext);
+export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOpenReviewDialog }: { setSelectedTab: (tab: number) => void, setMyReviewsTab: (tab: number) => void, onOpenReviewDialog: (gathering: { userId: number, gatheringId: number }) => void }) {
+  const { token, userId } = useContext(AuthContext);
 
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -125,14 +125,19 @@ export default function JoinedGatherings() {
                 <div>
                   {data.isReviewed ? (
                     <Button
-                      variant='cancel'
+                      variant='default'
                       text='내가 쓴 리뷰 보기'
-                      customClassName='w-32'
+                      onClick={() => {
+                        setSelectedTab(1);
+                        setMyReviewsTab(1);
+                      }}
+                      customClassName='w-36'
                     />
                   ) : (
                     <Button
                       variant='default'
                       text='리뷰 작성하기'
+                      onClick={() => onOpenReviewDialog({ userId, gatheringId: Number(data.id) })}
                       customClassName='w-32'
                     />
                   )}

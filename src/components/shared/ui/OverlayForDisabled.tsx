@@ -4,7 +4,7 @@ interface OverlayForDisabledProps {
     emoji?: React.ReactNode;
     filterings: boolean
     notice: string;
-    reason: string;
+    reason?: string;
 }
 
 /** 모집 마감 / 모집 취소 모임 아이템에 씌울 오버레이
