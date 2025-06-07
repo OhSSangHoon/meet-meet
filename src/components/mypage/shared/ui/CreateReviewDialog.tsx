@@ -3,14 +3,14 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { useCreateReview } from '@/hooks/api/mypage/useCreateReview';
+import { Heart } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import Button from '../shared/ui/Button';
+import Button from '@/components/shared/ui/Button';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 interface ReviewDialogProps {
   reviewFormData: {
-    teamId: string;
     gatheringId: number;
     userId: number;
   };
@@ -49,14 +49,21 @@ export default function CreateReviewDialog({
       <div className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4">
         <h2 className="text-xl font-semibold">리뷰 남기기</h2>
         <label className="block">만족스러운 경험이었나요?</label>
-        <input
-          type="number"
-          value={score}
-          onChange={e => setScore(Number(e.target.value))}
-          className="w-full border p-2"
-          min={1}
-          max={5}
-        />
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5].map((val) => (
+            <button
+              key={val}
+              type="button"
+              onClick={() => setScore(val)}
+              className="focus:outline-none cursor-pointer"
+              aria-label={`${val}점`}
+            >
+              <Heart
+                className={`w-8 h-8 transition-colors ${score >= val ? "text-main-500 fill-main-500" : "text-gray-300"}`}
+              />
+            </button>
+          ))}
+        </div>
 
         <label className="block">경험에 대해 알려주세요!</label>
         <textarea

@@ -2,7 +2,7 @@
 
 import { useContext, useRef, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { ConfirmDialogState, openConfirmDialog } from '../shared/utils/confirmDialog';
+import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
 import { Upload } from 'lucide-react';
 import axios from 'axios';
 import dynamic from 'next/dynamic';

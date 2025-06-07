@@ -1,20 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import ProfileCard from "@/components/mypage/ProfileCard";
-import JoinedGatherings from "@/components/mypage/JoinedGatherings";
-import MyReviews from "@/components/mypage/MyReviews";
-import CreatedGatherings from "@/components/mypage/CreatedGatherings";
+import dynamic from 'next/dynamic';
 
-enum MypageTab {
-  JoinedGatherings = 0,
-  MyReviews = 1,
-  CreatedGatherings = 2,
-}
+const ProfileCard = dynamic(() => import('@/components/mypage/ProfileCard'), { ssr: false });
+const JoinedGatherings = dynamic(() => import('@/components/mypage/JoinedGatherings'), { ssr: false });
+const MyReviews = dynamic(() => import('@/components/mypage/MyReviews'), { ssr: false });
+const CreatedGatherings = dynamic(() => import('@/components/mypage/CreatedGatherings'), { ssr: false });
+const CreateReviewDialog = dynamic(() => import('@/components/mypage/shared/ui/CreateReviewDialog'), { ssr: false });
 
 /** 마이페이지 UI */
-export default function MyPageUI({ teamId }: { teamId: string }) {
-  const [selectedTab, setSelectedTab] = useState<MypageTab>(MypageTab.JoinedGatherings);
+export default function MyPageUI() {
+  const [selectedTab, setSelectedTab] = useState<number>(0);
+  const [myReviewsTab, setMyReviewsTab] = useState(0);
+  const [reviewableGathering, setReviewableGathering] = useState<{ userId: number; gatheringId: number } | null>();
 
   return (
     <main className="contents-container">
@@ -28,9 +27,9 @@ export default function MyPageUI({ teamId }: { teamId: string }) {
         <div className=" border-t-[3px] border-gray-800">
           <div className="px-4 py-4 flex gap-4 text-lg font-bold">
             {[
-              { label: "참여중인 모임", value: MypageTab.JoinedGatherings },
-              { label: "나의 리뷰", value: MypageTab.MyReviews },
-              { label: "내가 만든 모임", value: MypageTab.CreatedGatherings },
+              { label: "참여중인 모임", value: 0 },
+              { label: "나의 리뷰", value: 1 },
+              { label: "내가 만든 모임", value: 2 },
             ].map(({ label, value }) => (
               <button
                 key={value}
@@ -47,12 +46,29 @@ export default function MyPageUI({ teamId }: { teamId: string }) {
             ))}
           </div>
 
-          {/* 탭에 따른 내용 */}
-          {selectedTab === MypageTab.JoinedGatherings && <JoinedGatherings />}
-          {selectedTab === MypageTab.MyReviews && <MyReviews teamId={teamId} />}
-          {selectedTab === MypageTab.CreatedGatherings && <CreatedGatherings />}
+          {selectedTab === 0 &&
+            <JoinedGatherings
+              setSelectedTab={setSelectedTab}
+              setMyReviewsTab={setMyReviewsTab}
+              onOpenReviewDialog={setReviewableGathering}
+            />}
+
+          {selectedTab === 1 &&
+            <MyReviews
+              myReviewsTab={myReviewsTab}
+              setMyReviewsTab={setMyReviewsTab}
+              onOpenReviewDialog={setReviewableGathering}
+            />}
+          {selectedTab === 2 && <CreatedGatherings />}
         </div>
       </div>
+
+      {reviewableGathering && (
+        <CreateReviewDialog
+          reviewFormData={reviewableGathering}
+          onClose={() => setReviewableGathering(null)}
+        />
+      )}
     </main>
   );
 }
