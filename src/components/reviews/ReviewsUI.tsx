@@ -36,14 +36,14 @@ interface Sort {
     sortOrder: string;
 }
 
-export default function Reviews({ initialReviews = [] }: PageProps) {
+export default function ReviewsUI({ initialReviews = [] }: PageProps) {
     const [selectedMainType, setSelectedMainType] = useState('DALLAEMFIT'); // 모임 주제
     const [selectedSubType, setSelectedSubType] = useState('ALL'); // 모임 서브타입
     const [sort, setSort] = useState<Sort>({ sortBy: 'createdAt', sortOrder: 'desc' }); // 정렬
     const [filters, setFilters] = useState<Filters>({ location: '', date: '' }); // 필터
-    
+
     const setReviews = useReviewsStore((state) => state.setReviews); // 리뷰 목록 설정
-    
+
     // 초기 SSR 데이터 설정
     useEffect(() => {
         if (initialReviews.length > 0) {
@@ -61,12 +61,12 @@ export default function Reviews({ initialReviews = [] }: PageProps) {
     const handleFilterChange = useCallback((newFilters: Filters) => {
         setFilters(prev => {
             if (
-                prev.location === newFilters.location && 
+                prev.location === newFilters.location &&
                 prev.date === newFilters.date
             ) {
                 return prev; // 값이 동일하면 상태 업데이트 안함
             }
-            
+
             return newFilters;
         });
     }, []);
@@ -75,12 +75,12 @@ export default function Reviews({ initialReviews = [] }: PageProps) {
     const handleSortChange = useCallback((newSort: Sort) => {
         setSort(prev => {
             if (
-                prev.sortBy === newSort.sortBy && 
+                prev.sortBy === newSort.sortBy &&
                 prev.sortOrder === newSort.sortOrder
             ) {
                 return prev;
             }
-            
+
             return newSort;
         });
     }, []);
@@ -88,18 +88,18 @@ export default function Reviews({ initialReviews = [] }: PageProps) {
     return (
         <div className="w-full flex flex-col">
             <GatheringsHeader type="review" />
-            
+
             <div className="w-full flex flex-col">
                 {/* 모임 주제 선택 */}
-                <GatheringsFilters 
+                <GatheringsFilters
                     showCreateButton={false} // 모임 만들기 버튼 숨김
                     onTypeChange={handleTypeChange} // 모임 주제 변경 핸들러
                     initialMainType={selectedMainType} // 초기 모임 주제
                     initialSubType={selectedSubType} // 초기 모임 서브타입
                 />
-                
+
                 {/* 위치 및 날짜 필터 + 정렬 */}
-                <LocationDateFilter 
+                <LocationDateFilter
                     onFilterChange={handleFilterChange} // 필터 변경 핸들러
                     onSortChange={handleSortChange} // 정렬 변경 핸들러
                     pageType="review" // 페이지 타입
@@ -108,7 +108,7 @@ export default function Reviews({ initialReviews = [] }: PageProps) {
                     initialSort="latest" // 초기 정렬
                 />
             </div>
-            
+
             {/* 리뷰 목록 */}
             <ReviewsList
                 fetchFromApi={true} // 무한스크롤 활성화

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
-import { ReviewItem } from "@/types/reviews";
-import Reviews from "@/components/reviews/Reviews";
+import { serverFetcher } from '@/lib/api/serverFetcher';
+import { ReviewItem, Reviews } from "@/types/reviews";
+import ReviewsUI from "@/components/reviews/ReviewsUI";
 
 export const metadata: Metadata = {
     title: `모든 리뷰 | Meet Meet`,
@@ -9,27 +10,11 @@ export const metadata: Metadata = {
 
 async function getInitialReviews(): Promise<ReviewItem[]> {
     try {
-        const response = await fetch(`${process.env.API_URI_DEV}/reviews?limit=3&offset=0&type=DALLAEMFIT&sortBy=createdAt&sortOrder=desc`, {
-            next: { revalidate: 60 },
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const responseData = await serverFetcher<Reviews>(`/reviews?limit=3&offset=0&type=DALLAEMFIT&sortBy=createdAt&sortOrder=desc`, {
+            next: { revalidate: 60 }
         });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('리뷰 목록 데이터 SSR 실패:', {
-                status: response.status,
-                statusText: response.statusText,
-                body: errorText
-            });
-            return [];
-        }
-
-        const responseData = await response.json();
-
         // 페이지네이션된 응답에서 data 배열 추출
-        const data = responseData.data || [];
+        const data = responseData?.data || [];
 
         if (Array.isArray(data)) {
             // 클라이언트 필터링
@@ -53,7 +38,7 @@ export default async function ReviewsPage() {
 
     return (
         <div className="contents-container">
-            <Reviews initialReviews={initialReviews} />
+            <ReviewsUI initialReviews={initialReviews} />
         </div>
     );
 }

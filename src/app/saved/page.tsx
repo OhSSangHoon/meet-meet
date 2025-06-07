@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: `모임 찾기 페이지 입니다`,
 };
 
-export default function LikedMeetingsPage() {
+export default function SavedPage() {
   return (
     <div className="contents-container">
       <SavedGatheringsClient />

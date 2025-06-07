@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Reviews } from '@/types/reviews';
+import { serverFetcher } from '@/lib/api/serverFetcher';
 import GatheringsDetailUI from '@/components/gatherings/detail/GatheringDetailUI';
 
 export interface PageProps {
@@ -49,14 +50,7 @@ export async function generateMetadata(
  */
 async function getDetailReview(id: string): Promise<Reviews> {
     try {
-        const response = await fetch(`${process.env.API_URI_DEV}/reviews?gatheringId=${id}&limit=4&offset=0`, {
-            next: { revalidate: 60 },
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        const data = await response.json();
+        const data = await serverFetcher<Reviews>(`/reviews?gatheringId=${id}&limit=4&offset=0`, { next: { revalidate: 60 } });
 
         if (
             data &&

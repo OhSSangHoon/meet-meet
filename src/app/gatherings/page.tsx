@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { serverFetcher } from '@/lib/api/serverFetcher';
 import { Gathering } from "@/types/gatherings";
 import Gatherings from "@/components/gatherings/Gatherings";
 
@@ -9,24 +10,7 @@ export const metadata: Metadata = {
 
 async function getInitialGatherings(): Promise<Gathering[]> {
     try {
-        const response = await fetch(`${process.env.API_URI_DEV}/gatherings?limit=10&offset=0&type=DALLAEMFIT`, {
-            next: { revalidate: 60 },
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('모임 목록 데이터 SSR 실패:', {
-                status: response.status,
-                statusText: response.statusText,
-                body: errorText
-            });
-            return [];
-        }
-
-        const data = await response.json();
+        const data = await serverFetcher(`/gatherings?limit=10&offset=0&type=DALLAEMFIT`, { next: { revalidate: 60 } });
 
         if (Array.isArray(data)) {
             // DALLAEMFIT의 경우 클라이언트에서 필터링
