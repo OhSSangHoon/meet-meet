@@ -306,3 +306,50 @@ export const getTimeRemaining = (registrationEnd: string | DateTimeValue): strin
         return '마감됨';
     }
 };
+
+
+
+/**
+ * 필터링 날짜 비교 함수
+ * @param dateTimeString ISO 문자열 또는 날짜 문자열
+ * @param targetDate YYYY-MM-DD 형식 문자열
+ * @returns 같은 날짜면 true
+ */
+export const isSameDateForFilter = (dateTimeString: string, targetDate: string): boolean => {
+    if (!dateTimeString || !targetDate) return false;
+    
+    try {
+        // ISO 문자열에서 직접 날짜 부분만 추출
+        const extractedDate = dateTimeString.substring(0, 10);
+        return extractedDate === targetDate;
+    } catch (error) {
+        console.warn('날짜 비교 오류:', error);
+        return false;
+    }
+};
+
+
+/**
+ * 기존 formatDate 함수와 동일한 결과를 보장하는 날짜 추출
+ * @param dateTimeString 날짜 시간 문자열
+ * @returns YYYY-MM-DD 형식 문자열
+ */
+export const extractDateString = (dateTimeString: string): string => {
+    if (!dateTimeString) return '';
+    
+    try {
+        // 기존 formatDate와 동일한 방식으로 한국 시간 변환
+        const date = new Date(dateTimeString);
+        if (isNaN(date.getTime())) return '';
+        
+        const koreanDate = toKoreanTime(date);
+        const year = koreanDate.getFullYear();
+        const month = String(koreanDate.getMonth() + 1).padStart(2, '0');
+        const day = String(koreanDate.getDate()).padStart(2, '0');
+        
+        return `${year}-${month}-${day}`;
+    } catch (error) {
+        console.error('extractDateString error:', error);
+        return '';
+    }
+};
