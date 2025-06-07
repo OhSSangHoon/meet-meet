@@ -1,62 +1,125 @@
 "use client"
 
 import { useState, useEffect, useCallback } from 'react';
+import { ChevronDown, Clock, Timer, Star, Users } from 'lucide-react';
 
 interface Filters {
     location: string;
     date: string;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
+}
+
+interface Sort {
+    sortBy: string;
+    sortOrder: string;
 }
 
 interface LocationDateFilterProps {
     onFilterChange: (filters: Filters) => void;
+    onSortChange?: (sort: Sort) => void;
     pageType: 'search' | 'review';
     initialLocation?: string;
     initialDate?: string;
-    initialSortBy?: string;
-    initialSortOrder?: 'asc' | 'desc';
+    initialSort?: string;
 }
 
 export default function LocationDateFilter({
     onFilterChange,
+    onSortChange,
     pageType,
     initialLocation = '',
     initialDate = '',
-    initialSortBy,
-    initialSortOrder
+    initialSort = pageType === 'search' ? 'deadline_loose' : 'latest'
 }: LocationDateFilterProps) {
     const [selectedLocation, setSelectedLocation] = useState(initialLocation);
     const [selectedDate, setSelectedDate] = useState(initialDate);
-    const [sortBy, setSortBy] = useState(initialSortBy || (pageType === 'search' ? 'registrationEnd' : 'createdAt'));
-    const [sortOrder, setSortOrder] = useState(initialSortOrder || (pageType === 'search' ? 'asc' : 'desc'));
+    const [currentSort, setCurrentSort] = useState(initialSort);
+    const [isSortOpen, setIsSortOpen] = useState(false);
+    const [isLocationOpen, setIsLocationOpen] = useState(false);
 
-    // 초기값이 변경되면 상태 업데이트
+    // 페이지별 정렬 옵션 정의
+    const sortOptions = pageType === 'search' ? [
+        {
+            value: 'deadline_loose',
+            label: '마감 여유순',
+            icon: Clock,
+            sortBy: 'registrationEnd',
+            sortOrder: 'desc'
+        },
+        {
+            value: 'deadline_urgent',
+            label: '마감 임박순', 
+            icon: Timer,
+            sortBy: 'registrationEnd',
+            sortOrder: 'asc'
+        }
+    ] : [
+        {
+            value: 'latest',
+            label: '최신순',
+            icon: Clock,
+            sortBy: 'createdAt',
+            sortOrder: 'desc'
+        },
+        {
+            value: 'high_score',
+            label: '평점 높은순',
+            icon: Star, 
+            sortBy: 'score',
+            sortOrder: 'desc'
+        },
+        {
+            value: 'most_participants',
+            label: '참여인원 많은순',
+            icon: Users,
+            sortBy: 'participantCount',
+            sortOrder: 'desc'
+        }
+    ];
+
+    // 초기값 동기화
     useEffect(() => {
         setSelectedLocation(initialLocation);
         setSelectedDate(initialDate);
-        if (initialSortBy) setSortBy(initialSortBy);
-        if (initialSortOrder) setSortOrder(initialSortOrder);
-    }, [initialLocation, initialDate, initialSortBy, initialSortOrder]);
+    }, [initialLocation, initialDate]);
 
-    // 필터 변경 함수를 useCallback으로 메모이제이션
+    // 필터 변경 처리
     const updateFilters = useCallback(() => {
         const filters: Filters = {
-            location: selectedLocation,
-            date: selectedDate,
-            sortBy,
-            sortOrder
+            location: selectedLocation.trim(),
+            date: selectedDate.trim()
         };
 
         onFilterChange(filters);
-    }, [selectedLocation, selectedDate, sortBy, sortOrder, onFilterChange]);
+    }, [selectedLocation, selectedDate, onFilterChange]);
 
-    // 상태 변경 시에만 필터 업데이트
+    // 상태 변경시 필터 업데이트
     useEffect(() => {
         updateFilters();
     }, [updateFilters]);
 
-    // 위치 옵션 (공통)
+    // 정렬 변경 처리
+    const handleSortChange = (optionValue: string) => {
+        const option = sortOptions.find(opt => opt.value === optionValue);
+        if (option && onSortChange) {
+            setCurrentSort(optionValue);
+            setIsSortOpen(false);
+            
+            const sort: Sort = {
+                sortBy: option.sortBy,
+                sortOrder: option.sortOrder
+            };
+            
+            onSortChange(sort);
+        }
+    };
+
+    // 모임찾기 페이지용 단순 토글 함수
+    const handleSearchToggle = () => {
+        const newSort = currentSort === 'deadline_loose' ? 'deadline_urgent' : 'deadline_loose';
+        handleSortChange(newSort);
+    };
+
+    // 위치 선택 옵션
     const locations = [
         { value: '', label: '지역 선택' },
         { value: '건대입구', label: '건대입구' },
@@ -65,112 +128,180 @@ export default function LocationDateFilter({
         { value: '홍대입구', label: '홍대입구' }
     ];
 
-    // 페이지별로 다르게 정렬
-    const sortOptions = pageType === 'search'
-        ? [
-            { value: 'registrationEnd', label: '마감임박순' }
-        ]
-        : [
-            { value: 'createdAt', label: '최신순' },
-            { value: 'score', label: '평점 높은순' },
-            { value: 'participantCount', label: '참여인원 많은순' }
-        ];
-
-
+    // 위치 선택 함수
     const handleLocationChange = (location: string) => {
         setSelectedLocation(location);
+        setIsLocationOpen(false);
     };
 
+    // 날짜 선택 함수
     const handleDateChange = (date: string) => {
-        setSelectedDate(date);
-    };
-
-    const handleSortChange = (newSortBy: string) => {
-        setSortBy(newSortBy);
-
-        // 정렬 기준에 따른 기본 정렬 순서 설정
-        if (pageType === 'search') {
-            setSortOrder('asc');
-        } else {
-            if (newSortBy === 'createdAt') {
-                setSortOrder('desc');
-            } else if (newSortBy === 'score') {
-                setSortOrder('desc');
-            } else if (newSortBy === 'participantCount') {
-                setSortOrder('desc');
-            }
+        if (date === '' || /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            setSelectedDate(date);
         }
     };
 
-    // 마감 시간 정렬 순서 토글
-    const handleSortOrderToggle = () => {
-        if (pageType === 'search') {
-            const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-            setSortOrder(newOrder);
-        }
-    };
+    const today = new Date().toISOString().split('T')[0];
+    const currentOption = sortOptions.find(opt => opt.value === currentSort);
+    const CurrentIcon = currentOption?.icon || Clock;
+    const currentLocation = locations.find(loc => loc.value === selectedLocation);
 
     return (
-        <div className="w-full flex flex-row gap-4 py-4">
-            <div className="flex flex-wrap gap-3">
-                {/* 위치 선택 */}
-                <div className="flex items-center gap-2">
-                    <select
-                        value={selectedLocation}
-                        onChange={(e) => handleLocationChange(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-transparent"
-                    >
-                        {locations.map((location) => (
-                            <option key={location.value} value={location.value}>
-                                {location.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* 날짜 선택 */}
-                <div className="flex items-center gap-2">
-                    <div className="flex flex-col">
-                        <input
-                            type="date"
-                            value={selectedDate}
-                            onChange={(e) => {
-                                handleDateChange(e.target.value);
-                            }}
-                            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-transparent"
-                            title={pageType === 'search' ? '모임 개최일로 필터링' : '리뷰 작성일로 필터링'}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            {/* 정렬 옵션 */}
-            <div className="flex items-center gap-3 ml-auto">
-                {pageType === 'search' ? (
-                    // 마감임박순
-                    <>
+        <div className="w-full flex flex-col gap-4 py-4">
+            <div className="flex flex-row gap-4">
+                <div className="flex flex-wrap gap-3">
+                    {/* 위치 선택 */}
+                    <div className="relative">
                         <button
-                            onClick={handleSortOrderToggle}
-                            className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-transparent transition-colors"
+                            onClick={() => setIsLocationOpen(!isLocationOpen)}
+                            className="flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500 transition-gathering-item justify-between"
                         >
-                            {sortOrder === 'asc' ? '마감임박순' : '마감여유순'}
+                            <span>{currentLocation?.label || '지역 선택'}</span>
+                            <ChevronDown 
+                                className={`w-4 h-4 transition-transform duration-200 ${
+                                    isLocationOpen ? 'rotate-180' : ''
+                                }`} 
+                            />
                         </button>
-                    </>
-                ) : (
-                    // 최신순, 평점높은순, 참여인원많은순
-                    <>
-                        <select
-                            value={sortBy}
-                            onChange={(e) => handleSortChange(e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-transparent"
+
+                        {/* 위치 드롭다운 메뉴 */}
+                        {isLocationOpen && (
+                            <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                                {locations.map((location, index) => {
+                                    const isSelected = selectedLocation === location.value;
+                                    
+                                    return (
+                                        <button
+                                            key={location.value}
+                                            onClick={() => handleLocationChange(location.value)}
+                                            className={`
+                                                w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150
+                                                ${isSelected ? 'bg-main-50 text-main-600' : 'text-gray-700'}
+                                                ${index === 0 ? 'rounded-t-lg' : ''}
+                                                ${index === locations.length - 1 ? 'rounded-b-lg' : ''}
+                                            `}
+                                        >
+                                            <div className="flex-1">
+                                                <div className={`text-sm font-medium ${
+                                                    isSelected ? 'text-main-600' : 'text-gray-900'
+                                                }`}>
+                                                    {location.label}
+                                                </div>
+                                            </div>
+                                            {isSelected && (
+                                                <div className="w-2 h-2 bg-main-600 rounded-full mt-1.5 ml-1 flex-shrink-0"></div>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {/* 위치 드롭다운 외부 클릭 감지 */}
+                        {isLocationOpen && (
+                            <div 
+                                className="fixed inset-0 z-40" 
+                                onClick={() => setIsLocationOpen(false)}
+                            />
+                        )}
+                    </div>
+
+                    {/* 날짜 선택 */}
+                    <input
+                        type="date"
+                        value={selectedDate}
+                        min={pageType === 'search' ? today : undefined}
+                        onChange={(e) => handleDateChange(e.target.value)}
+                        className="px-3 py-2 border border-gray-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500"
+                    />
+
+                    {/* 초기화 버튼 */}
+                    {(selectedLocation || selectedDate) && (
+                        <button
+                            onClick={() => {
+                                setSelectedLocation('');
+                                setSelectedDate('');
+                            }}
+                            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm transition-colors duration-200"
                         >
-                            {sortOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </>
+                            필터 초기화
+                        </button>
+                    )}
+                </div>
+                {onSortChange && (
+                    <div className="flex items-center gap-3 ml-auto">
+                        {pageType === 'search' ? (
+                            // 모임찾기 필터링 (마감 여유순, 마감 임박순)
+                            <button
+                                onClick={handleSearchToggle}
+                                className="flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500 transition-all duration-200"
+                            >
+                                <CurrentIcon className="w-4 h-4" />
+                                <span>{currentOption?.label}</span>
+                            </button>
+                        ) : (
+                            // 리뷰 필터링 (최신순, 평점 높은순, 참여인원 많은순)
+                            <div className="relative">
+                                <button
+                                    onClick={() => setIsSortOpen(!isSortOpen)}
+                                    className="flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500 transition-all duration-200"
+                                >
+                                    <CurrentIcon className="w-4 h-4" />
+                                    <span>{currentOption?.label}</span>
+                                    <ChevronDown 
+                                        className={`w-4 h-4 transition-transform duration-200 ${
+                                            isSortOpen ? 'rotate-180' : ''
+                                        }`} 
+                                    />
+                                </button>
+
+                                {/* 드롭다운 메뉴 */}
+                                {isSortOpen && (
+                                    <div className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                                        {sortOptions.map((option) => {
+                                            const Icon = option.icon;
+                                            const isSelected = currentSort === option.value;
+                                            
+                                            return (
+                                                <button
+                                                    key={option.value}
+                                                    onClick={() => handleSortChange(option.value)}
+                                                    className={`
+                                                        w-full flex items-start gap-3 px-3 py-3 text-left hover:bg-gray-50 transition-colors duration-150
+                                                        ${isSelected ? 'bg-main-50 text-main-600' : 'text-gray-700'}
+                                                        ${option.value === sortOptions[0].value ? 'rounded-t-lg' : ''}
+                                                        ${option.value === sortOptions[sortOptions.length - 1].value ? 'rounded-b-lg' : ''}
+                                                    `}
+                                                >
+                                                    <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+                                                        isSelected ? 'text-main-600' : 'text-gray-400'
+                                                    }`} />
+                                                    <div className="flex-1">
+                                                        <div className={`text-sm font-medium ${
+                                                            isSelected ? 'text-main-600' : 'text-gray-900'
+                                                        }`}>
+                                                            {option.label}
+                                                        </div>
+                                                    </div>
+                                                    {isSelected && (
+                                                        <div className="w-2 h-2 bg-main-600 rounded-full mt-1.5 flex-shrink-0"></div>
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+
+                                {/* 정렬 드롭다운 외부 클릭 감지 */}
+                                {isSortOpen && (
+                                    <div 
+                                        className="fixed inset-0 z-40" 
+                                        onClick={() => setIsSortOpen(false)}
+                                    />
+                                )}
+                            </div>
+                        )}
+                    </div>
                 )}
             </div>
         </div>

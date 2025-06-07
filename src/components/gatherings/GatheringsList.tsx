@@ -5,18 +5,72 @@ import { useFetchInfiniteGatherings } from "@/hooks/api/gatherings/useFetchInfin
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering, GatheringsListProps } from "@/types/gatherings";
 import { formatDate, formatTime, getTimeRemaining } from '@/components/shared/utils/dateFormats';
-import { filterGatherings } from '@/components/gatherings/shared/utils/fetch';
-import { UserRoundCheck } from "lucide-react"
+import { UserRoundCheck } from "lucide-react";
 import Image from "next/image";
 import JoinedCountsProgressBar from './shared/ui/JoinedCountsProgressBar';
 import SaveToggleButton from './shared/ui/SaveToggleButton';
+import OverlayForDisabled from '@/components/shared/ui/OverlayForDisabled';
+import { useMemo } from 'react';
 
+/**
+ * 모임 목록 프로퍼티 확장
+ * @param location 위치
+ * @param date 날짜
+ * @param sortBy 정렬 기준
+ * @param sortOrder 정렬 순서
+ */
 interface ExtendedGatheringsListProps extends GatheringsListProps {
     location?: string;
     date?: string;
-    sortOrder?: 'asc' | 'desc';
+    sortBy?: string;
+    sortOrder?: string;
 }
 
+/**
+ * 모임 필터링
+ * @param gatheringsList 모임 목록
+ * @param selectedMainType 모임 주제
+ * @param selectedSubType 모임 서브타입
+ * @returns 필터링된 모임 목록
+ */
+const filterGatherings = (
+    gatheringsList: Gathering[],
+    selectedMainType: string,
+    selectedSubType: string
+): Gathering[] => {
+    let filtered: Gathering[];
+
+    if (selectedMainType === 'DORANDORAN') {
+        // 도란도란 = WORKATION만
+        filtered = gatheringsList.filter(gathering => gathering.type === 'WORKATION');
+    } else {
+        // 북적북적 (DALLAEMFIT)
+        if (selectedSubType === 'ALL') {
+            // 전체 = OFFICE_STRETCHING + MINDFULNESS
+            filtered = gatheringsList.filter(gathering =>
+                gathering.type === 'OFFICE_STRETCHING' ||
+                gathering.type === 'MINDFULNESS'
+            );
+        } else {
+            // 특정 서브타입만
+            filtered = gatheringsList.filter(gathering => gathering.type === selectedSubType);
+        }
+    }
+
+    return filtered;
+};
+
+/**
+ * 모임 목록 컴포넌트
+ * @param gatherings 모임 목록
+ * @param fetchFromApi 모임 목록 조회 여부
+ * @param selectedMainType 모임 주제
+ * @param selectedSubType 모임 서브타입
+ * @param location 위치
+ * @param date 날짜
+ * @param sortBy 정렬 기준
+ * @param sortOrder 정렬 순서
+ */
 export default function GatheringsList({
     gatherings,
     fetchFromApi = true,
@@ -24,44 +78,67 @@ export default function GatheringsList({
     selectedSubType = 'ALL',
     location = '',
     date = '',
-    sortOrder = 'asc'
+    sortBy = 'registrationEnd',
+    sortOrder = 'desc',
 }: ExtendedGatheringsListProps) {
     const router = useRouter();
     const ssrGatherings = useGatheringsStore((s) => s.gatherings);
-    const hasSSRData = ssrGatherings.length > 0;
 
     const {
         infiniteGatherings,
         lastItemRef,
         isFetchingNextPage,
         infiniteScrollEnabled,
+        isLoading,
     } = useFetchInfiniteGatherings({
         enabled: fetchFromApi,
         mainType: selectedMainType,
         location,
         date,
-        sortBy: 'registrationEnd',
-        sortOrder
+        sortBy,
+        sortOrder,
     });
 
-    // 데이터 합치기 시 정렬 순서 유지
-    const mergedGatherings = (() => {
+    // 모임 목록 필터링
+    const mergedGatherings = useMemo(() => {
+        // API를 사용하지 않는 경우 (찜목록 등)
         if (!fetchFromApi) {
-            // API를 사용하지 않는 경우 (찜목록 등)
-            return filterGatherings(gatherings || ssrGatherings, selectedMainType, selectedSubType);
+            return filterGatherings(gatherings || [], selectedMainType, selectedSubType);
         }
 
-        if (!hasSSRData) {
+        // 필터가 적용된 경우 무한스크롤 결과만 사용
+        const hasActiveFilters = location || date;
+        
+        if (hasActiveFilters) {
+            // 필터가 있으면 무한스크롤 결과만 사용 (빈 배열이어도 SSR로 fallback 안함)
             return filterGatherings(infiniteGatherings, selectedMainType, selectedSubType);
+        } else {
+            // 필터가 없으면 기존 로직: 무한스크롤 우선, SSR 백업
+            if (infiniteGatherings.length > 0) {
+                return filterGatherings(infiniteGatherings, selectedMainType, selectedSubType);
+            } else {
+                return filterGatherings(ssrGatherings, selectedMainType, selectedSubType);
+            }
         }
+    }, [
+        fetchFromApi, 
+        infiniteGatherings, 
+        ssrGatherings, 
+        selectedMainType, 
+        selectedSubType, 
+        location, 
+        date,
+        sortBy,
+        sortOrder,
+        gatherings
+    ]);
 
-        const serverSortedData = infiniteGatherings.length > 0 ? infiniteGatherings : ssrGatherings;
+    // 초기 로딩 여부
+    const hasActiveFilters = location || date;
+    const isInitialLoading = fetchFromApi && isLoading && infiniteGatherings.length === 0 && 
+        (hasActiveFilters || ssrGatherings.length === 0);
 
-        return filterGatherings(serverSortedData, selectedMainType, selectedSubType);
-    })();
-
-    const isInitialLoading = fetchFromApi && !hasSSRData && infiniteGatherings.length === 0;
-
+    // 마감 여부
     const isExpired = (gathering: Gathering): boolean => {
         if (!gathering.registrationEnd) return false;
         return getTimeRemaining(gathering.registrationEnd) === '마감됨';
@@ -80,17 +157,15 @@ export default function GatheringsList({
                         key={`${gathering.teamId || 'unknown'}-${gathering.id}-${index}`}
                         onClick={expired ? undefined : () => router.push(`/gatherings/detail/${gathering.id}`)}
                         ref={isLastItem && fetchFromApi ? lastItemRef : undefined}
-                        className={`w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative `}
+                        className="w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative"
                     >
-                        {/* 마감된 모임 오버레이 */}
-                        {expired && (
-                            <div className="absolute bg-black/90 inset-0 z-10 flex items-center justify-center text-center">
-                                <div className="px-4 py-2 black-bg rounded-lg flex flex-col text-sm text-white">
-                                    <span className="">마감된 챌린지에요,</span>
-                                    <span className="">다음 기회에 만나요🙌</span>
-                                </div>
-                            </div>
-                        )}
+                        {/* 오버레이 컴포넌트 */}
+                        <OverlayForDisabled
+                            emoji=""
+                            filterings={expired}
+                            notice="마감된 챌린지에요,"
+                            reason="다음 기회에 만나요🙌"
+                        />
 
                         {/* 이미지 영역 */}
                         <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
@@ -189,17 +264,22 @@ export default function GatheringsList({
                 </div>
             )}
 
-            {/* 빈 목록 - 페이지별 다른 메시지 */}
+            {/* 빈 목록 메시지 */}
             {!isInitialLoading && mergedGatherings.length === 0 && (
-                <div className="w-full h-[100px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">
+                <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">
                     {fetchFromApi ? (
-                        // 모임찾기 페이지 (API 데이터 사용)
-                        <>
-                            <p className="">아직 모임이 없어요,</p>
-                            <p className="">지금 모임을 만들어보세요</p>
-                        </>
+                        hasActiveFilters ? (
+                            <>
+                                <p className="">선택한 조건에 맞는 모임이 없어요,</p>
+                                <p className="">다른 조건으로 검색해보세요</p>
+                            </>
+                        ) : (
+                            <>
+                                <p className="">아직 모임이 없어요,</p>
+                                <p className="">지금 모임을 만들어보세요</p>
+                            </>
+                        )
                     ) : (
-                        // 찜목록 페이지 (Props 데이터 사용)
                         <>
                             <p className="">아직 찜한 모임이 없어요</p>
                         </>

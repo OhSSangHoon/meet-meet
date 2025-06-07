@@ -11,7 +11,7 @@ import SelectionService from "./SelectionService";
 import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/components/shared/utils/dateFormats';
 import { validateCreateGathering, CreateGatheringFormSchemaType } from '@/components/gatherings/schema/createGatheringSchema';
 import { useQueryClient } from '@tanstack/react-query';
-import CustomDateTimePicker from '@/components/gatherings/shared/ui/dateTimePicker';
+import DateTimePicker from '@/components/gatherings/dateTimePicker';
 
 // 모달 컴포넌트
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
@@ -348,7 +348,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                                 <XIcon className="w-6 h-6 text-gray-500" />
                             </button>
                         </div>
-                        <CustomDateTimePicker
+                        <DateTimePicker
                             value={meetingDateTime}
                             onChange={setMeetingDateTime}
                             label=""
@@ -368,7 +368,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                                 <XIcon className="w-6 h-6 text-gray-500" />
                             </button>
                         </div>
-                        <CustomDateTimePicker
+                        <DateTimePicker
                             value={deadlineDateTime}
                             onChange={setDeadlineDateTime}
                             label=""

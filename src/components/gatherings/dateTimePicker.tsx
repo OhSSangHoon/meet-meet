@@ -1,13 +1,13 @@
 import { TIME_OPTIONS, DateTimeValue } from '@/components/shared/utils/dateFormats';
 import { useState } from 'react';
 
-interface CustomDateTimePickerProps {
+interface DateTimePickerProps {
   value: DateTimeValue | null;
   onChange: (value: DateTimeValue) => void;
   label: string;
 }
 
-const CustomDateTimePicker = ({ value, onChange, label }: CustomDateTimePickerProps) => {
+const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
   // 현재 달력에서 보여줄 년/월 상태
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -295,4 +295,4 @@ const CustomDateTimePicker = ({ value, onChange, label }: CustomDateTimePickerPr
   );
 };
 
-export default CustomDateTimePicker;
+export default DateTimePicker;

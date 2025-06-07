@@ -7,8 +7,19 @@ import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteRev
 import { useReviewsStore } from '@/store/reviewsStore';
 import { filterReviews } from '@/components/reviews/shared/utils/fetch';
 import ReviewStats from './ReviewStats';
+import { useMemo } from 'react';
 
-
+/**
+ * 리뷰 목록 프로퍼티
+ * @param fetchFromApi 무한스크롤 활성화 여부
+ * @param selectedMainType 모임 주제
+ * @param selectedSubType 모임 서브타입
+ * @param location 위치
+ * @param date 날짜
+ * @param sortBy 정렬 기준
+ * @param sortOrder 정렬 순서
+ * @param reviews 리뷰 목록
+ */
 interface ReviewsListProps {
     fetchFromApi?: boolean;
     selectedMainType?: string;
@@ -16,7 +27,7 @@ interface ReviewsListProps {
     location?: string;
     date?: string;
     sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: string;
     reviews?: ReviewItem[];
 }
 
@@ -31,14 +42,17 @@ export default function ReviewsList({
     reviews
 }: ReviewsListProps) {
     const ssrReviews = useReviewsStore((s) => s.reviews);
-    const hasSSRData = ssrReviews.length > 0;
 
-    // 무한스크롤 훅
+    // 필터 활성화 여부 확인
+    const hasActiveFilters = location || date;
+
+    // 리뷰 무한스크롤 훅
     const {
         infiniteReviews,
         lastItemRef,
         isFetchingNextPage,
         infiniteScrollEnabled,
+        isLoading,
     } = useFetchInfiniteReviews({
         enabled: fetchFromApi,
         mainType: selectedMainType,
@@ -48,26 +62,43 @@ export default function ReviewsList({
         sortOrder
     });
 
-    // 데이터 병합 로직
-    const mergedReviews = (() => {
+    // 리뷰 하이브리드 필터링 로직
+    const mergedReviews = useMemo(() => {
         if (!fetchFromApi) {
-            // API를 사용하지 않는 경우 (찜목록 등)
-            return filterReviews(reviews || ssrReviews, selectedMainType, selectedSubType);
+            return filterReviews(reviews || [], selectedMainType, selectedSubType);
         }
 
-        if (!hasSSRData) {
+        if (hasActiveFilters) {
+            // 필터가 있으면 무한스크롤 결과만 사용 (빈 배열이어도 SSR로 fallback 안함)
             return filterReviews(infiniteReviews, selectedMainType, selectedSubType);
+        } else {
+            // 필터가 없으면 기존 로직: 무한스크롤 우선, SSR 백업
+            if (infiniteReviews.length > 0) {
+                return filterReviews(infiniteReviews, selectedMainType, selectedSubType);
+            } else {
+                return filterReviews(ssrReviews, selectedMainType, selectedSubType);
+            }
         }
+    }, [
+        fetchFromApi, 
+        infiniteReviews, 
+        ssrReviews, 
+        selectedMainType, 
+        selectedSubType, 
+        location, 
+        date, 
+        sortBy,
+        sortOrder,
+        reviews
+    ]);
 
-        // SSR 데이터가 있는 경우
-        const serverData = infiniteReviews.length > 0 ? infiniteReviews : ssrReviews;
-        return filterReviews(serverData, selectedMainType, selectedSubType);
-    })();
-
-    const isInitialLoading = fetchFromApi && !hasSSRData && infiniteReviews.length === 0;
+    // 로딩 상태 개선 
+    const isInitialLoading = fetchFromApi && isLoading && infiniteReviews.length === 0 && 
+    (hasActiveFilters || ssrReviews.length === 0);
 
     return (
         <div className="w-full flex flex-col">
+
             {/* 리뷰 전용 평균 평점 섹션 */}
             <ReviewStats reviews={mergedReviews} />
 
@@ -132,8 +163,23 @@ export default function ReviewsList({
                 {/* 빈 목록 메시지 */}
                 {!isInitialLoading && mergedReviews.length === 0 && (
                     <div className="w-full h-[100px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">
-                        <p className="">아직 리뷰가 없어요,</p>
-                        <p className="">첫 번째 리뷰를 남겨보세요</p>
+                        {fetchFromApi ? (
+                            hasActiveFilters ? (
+                                <>
+                                    <p className="">선택한 조건에 맞는 리뷰가 없어요,</p>
+                                    <p className="">다른 조건으로 검색해보세요</p>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="">아직 리뷰가 없어요,</p>
+                                    <p className="">첫 번째 리뷰를 남겨보세요</p>
+                                </>
+                            )
+                        ) : (
+                            <>
+                                <p className="">아직 리뷰가 없어요</p>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
