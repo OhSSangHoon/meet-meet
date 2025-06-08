@@ -11,7 +11,7 @@ interface LoadingUIProps {
  */
 export default function LoadingUI({ width = 'w-full' }: LoadingUIProps) {
     return (
-        <div className={`relative ${width} p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item animate-pulse`}>
+        <div className={`relative ${width} p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item animate-pulse`}>
             {/* 좌측: 썸네일 및 뱃지 */}
             <article className="relative">
                 {/* 상단 뱃지 */}

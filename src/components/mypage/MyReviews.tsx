@@ -3,18 +3,23 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { formatDate, formatTime } from '@/components/shared/utils/dateFormats';
 import { useFetchMyCreatedReviews } from '@/hooks/api/mypage/useFetchMyCreatedReviews';
 import { JoinedGathering } from '@/types/gatherings';
 import { ReviewItem } from '@/types/reviews';
-import { Heart, UserRoundCheck } from 'lucide-react';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
 const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
+const CreatableReview = dynamic(() => import('@/components/mypage/CreatableReview'), { ssr: false });
+const CreatedReview = dynamic(() => import('@/components/mypage/CreatedReview'), { ssr: false });
 
-/** 마이페이지 나의 리뷰 */
-export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewDialog }: { myReviewsTab: number, setMyReviewsTab: (tab: number) => void, onOpenReviewDialog: (gathering: { userId: number, gatheringId: number }) => void }) {
+interface MyReviewsProps {
+  myReviewsTab: number;
+  setMyReviewsTab: (tab: number) => void;
+  onOpenReviewDialog: (gathering: { userId: number, gatheringId: number }) => void;
+}
+
+/** 마이페이지 '나의 리뷰' */
+export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewDialog }: MyReviewsProps) {
   const { token, userId } = useContext(AuthContext);
 
   const queryClient = useQueryClient();
@@ -30,125 +35,53 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
   const { data: createdReviews } = useFetchMyCreatedReviews(token!, reviewedGatherings.map(gathering => gathering.id), userId);
 
   return (
-    <div className="px-4 flex w-full flex-col justify-start gap-5">
-      <div className="flex items-center gap-2">
+    <section className="px-4 flex w-full flex-col justify-start gap-5">
+      <div className="flex justify-center sm:justify-start items-center gap-2">
         {/* 작성 가능한 리뷰, 작성한 리뷰 버튼 */}
-        <button
-          type="button"
+        <Button
+          variant='default'
+          text='작성 가능한 리뷰'
           onClick={() => setMyReviewsTab(0)}
-          className={`rounded-lg px-4 py-2 text-sm transition-colors ${myReviewsTab === 0 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} cursor-pointer`}
-        >
-          작성 가능한 리뷰
-        </button>
-        <button
-          type="button"
+          customClassName={`rounded-lg px-4 py-2 text-sm ${myReviewsTab === 0 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} hover:text-white`}
+        />
+        <Button
+          variant='default'
+          text='작성한 리뷰'
           onClick={() => setMyReviewsTab(1)}
-          className={`rounded-lg px-4 py-2 text-sm transition-colors ${myReviewsTab === 1 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} cursor-pointer`}
-        >
-          작성한 리뷰
-        </button>
+          customClassName={`rounded-lg px-4 py-2 text-sm ${myReviewsTab === 1 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} hover:text-white`}
+        />
       </div>
 
       {/* 리뷰 */}
       {myReviewsTab === 0 ? (
-        reviewableGatherings.length === 0 ?
+        !reviewableGatherings || reviewableGatherings.length === 0 ?
           <span className="text-gray-500 text-center">작성 가능한 리뷰가 없어요</span>
           :
           <div className="flex flex-col gap-4">
             {reviewableGatherings.map((gathering: JoinedGathering) => (
-              <div
+              <CreatableReview
                 key={gathering.id}
-                className="relative min-h-[100px] w-full p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
-              >
-                {/* 이미지 */}
-                <div className="flex-shrink-0">
-                  <Image
-                    src={gathering.image ?? ''}
-                    alt="모임 이미지"
-                    width={1000}
-                    height={1000}
-                    className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
-                  />
-                </div>
-                {/* 정보 + 버튼 */}
-                <div className="flex flex-col justify-between">
-                  {/* 정보 */}
-                  <div className='flex flex-col gap-1'>
-                    <h1 className="text-xl font-semibold">{gathering.name}</h1>
-                    <p className="text-gray-600">{gathering?.location}</p>
-                    <div className='flex items-center gap-4 text-sm font-medium'>
-                      <div className='flex items-center gap-1'>
-                        <UserRoundCheck className="w-4 h-4 text-main-500" />
-                        <span>{gathering.participantCount ?? '-'}/{gathering.capacity ?? '-'}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        <span className={`inline-flex items-center rounded-md`}>
-                          {formatDate(gathering?.dateTime ?? '')}
-                        </span>
-                        <span className={`inline-flex items-center rounded-md`}>
-                          {formatTime(gathering?.dateTime ?? '')}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  {/* 버튼 */}
-                  {myReviewsTab === 0 && (
-                    <Button
-                      variant='default'
-                      text='리뷰 작성하기'
-                      onClick={() => onOpenReviewDialog({ userId, gatheringId: Number(gathering.id) })}
-                      customClassName='w-32'
-                    />
-                  )}
-                </div>
-              </div>
+                gathering={gathering}
+                myReviewsTab={myReviewsTab}
+                userId={userId}
+                onOpenReviewDialog={onOpenReviewDialog}
+              />
             ))}
           </div>
       ) :
         (
-          createdReviews?.length === 0 ?
+          !createdReviews || createdReviews?.length === 0 ?
             <span className="text-gray-500 text-center">아직 작성한 리뷰가 없어요</span>
             :
             <div
-              className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
+              className="relative min-h-[100px] w-full p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
             >
               {createdReviews?.map((review: ReviewItem) => (
-                <div key={`${review?.Gathering?.id}-${review?.id}`} className='flex gap-4'>
-                  {/* 이미지 */}
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={review?.Gathering?.image ?? ''}
-                      alt="모임 이미지"
-                      width={1000}
-                      height={1000}
-                      className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <div className='flex items-center gap-1'>
-                      {Array.from({ length: review?.score }).map((_, index) => (
-                        <Heart key={index} className="w-4 h-4 text-main-500 fill-main-500" />
-                      ))}
-                    </div>
-                    <p>{review?.comment}</p>
-                    <div className='flex gap-1 items-center'>
-                      <h1 className="text-xl font-semibold">{review?.Gathering?.name}</h1>
-                      <p className="text-gray-600">{review?.Gathering?.location}</p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <span className={`inline-flex items-center rounded-md`}>
-                        {formatDate(review?.Gathering?.dateTime ?? '')}
-                      </span>
-                      <span className={`inline-flex items-center rounded-md`}>
-                        {formatTime(review?.Gathering?.dateTime ?? '')}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                <div key={`${review?.Gathering?.id}-${review?.id}`}><CreatedReview review={review} /></div>
               ))}
             </div>
         )
       }
-    </div >
+    </section >
   );
 }

@@ -17,15 +17,15 @@ export default function MyPageUI() {
 
   return (
     <main className="contents-container">
-      <div className="pt-10 px-6 flex flex-col gap-4">
+      <section className="pt-10 px-6 flex flex-col gap-4">
         <h1 className="text-2xl font-bold text-gray-700">마이 페이지</h1>
 
         {/* 프로필 카드 */}
         <ProfileCard />
 
-        {/* 탭 네비게이션 */}
-        <div className=" border-t-[3px] border-gray-800">
-          <div className="px-4 py-4 flex gap-4 text-lg font-bold">
+        <section className=" border-t-[3px] border-gray-800">
+          {/* 탭 네비게이션 */}
+          <section className="sm:px-4 py-4 flex gap-4 justify-between sm:justify-start text-sm sm:text-lg font-bold">
             {[
               { label: "참여중인 모임", value: 0 },
               { label: "나의 리뷰", value: 1 },
@@ -44,7 +44,7 @@ export default function MyPageUI() {
                 {label}
               </button>
             ))}
-          </div>
+          </section>
 
           {selectedTab === 0 &&
             <JoinedGatherings
@@ -60,8 +60,8 @@ export default function MyPageUI() {
               onOpenReviewDialog={setReviewableGathering}
             />}
           {selectedTab === 2 && <CreatedGatherings />}
-        </div>
-      </div>
+        </section>
+      </section>
 
       {reviewableGathering && (
         <CreateReviewDialog

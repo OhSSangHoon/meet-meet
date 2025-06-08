@@ -57,5 +57,5 @@ export const INTERNAL_PATHS = {
     cancelGathering: (id: number) => `/api/gatherings/cancel?id=${id}`,
     leaveGathering: (id: number) => `/api/gatherings/leave?id=${id}`,
     FETCH_JOINED_GATHERINGS: `/api/gatherings/joined?&limit=1000`,
-    fetchCreatedGatherings: (userId: number) => `/api/gatherings?createdBy=${userId}&limit=1000`,
+    fetchCreatedGatherings: (userId: number) => `/api/gatherings?createdBy=${userId}&limit=1000&sortBy=registrationEnd`,
 } as const;

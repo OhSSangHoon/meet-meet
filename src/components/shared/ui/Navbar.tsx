@@ -27,7 +27,7 @@ export default function Navbar() {
     return (
         <nav className="sticky z-50 top-0 w-full bg-white border-b-2 border-gray-300 text-xs md:text-base font-bold">
             <div className="max-w-screen-lg mx-auto h-[3.75rem] py-8 px-5 flex justify-between items-center">
-                <section className='flex gap-4 items-center'>
+                <section className='flex gap-2 sm:gap-4 items-center'>
                     <Image
                         src="/images/logo.avif"
                         alt="logo image"

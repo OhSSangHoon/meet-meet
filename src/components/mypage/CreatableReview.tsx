@@ -1,0 +1,39 @@
+import { Gathering } from '@/types/gatherings';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const GatheringInformation = dynamic(() => import('@/components/mypage/shared/ui/GatheringInformation'), { ssr: false });
+const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
+
+/** 나의 리뷰 - 작성 가능한 리뷰 */
+export default function CreatableReview({ gathering, myReviewsTab, userId, onOpenReviewDialog }: { gathering: Gathering, myReviewsTab: number, userId: number, onOpenReviewDialog: (gathering: { userId: number, gatheringId: number }) => void }) {
+    return (
+        <div
+            key={gathering.id}
+            className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
+        >
+            {/* 이미지 */}
+            <div className="flex-shrink-0">
+                <Image
+                    src={gathering.image ?? ''}
+                    alt="모임 이미지"
+                    width={1000}
+                    height={1000}
+                    className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
+                />
+            </div>
+            {/* 정보 */}
+            <GatheringInformation data={gathering}>
+                {myReviewsTab === 0 && (
+                    <Button
+                        variant='default'
+                        text='리뷰 작성하기'
+                        onClick={() => onOpenReviewDialog({ userId, gatheringId: Number(gathering.id) })}
+                        customClassName='w-28 sm:w-32 text-xs sm:text-base'
+                    />
+                )}
+            </GatheringInformation>
+        </div>
+    );
+}
+

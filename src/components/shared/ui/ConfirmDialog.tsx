@@ -30,7 +30,7 @@ export default function ConfirmDialog({ isOpen, text, onClose, onConfirm, onCall
     };
 
     return (
-        <div className="fixed inset-0 z-50 px-4 sm:px-0 flex items-center justify-center bg-black/30">
+        <div className="dialog-background">
             <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8 sm:w-100 flex flex-col gap-4">
                 <div className='flex justify-between items-center'>
                     <span className="text-lg font-semibold">{text}</span>

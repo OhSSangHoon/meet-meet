@@ -7,6 +7,7 @@ import { Upload } from 'lucide-react';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 
+const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 const editProfile = async (imageFile: File | null, companyName: string, token: string) => {
@@ -93,7 +94,7 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-2 bg-black/50">
+        <section className="dialog-background">
             <h1 className='text-2xl font-semibold text-white'>PROFILE EDIT</h1>
             <form
                 className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4"
@@ -101,13 +102,13 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
                 <div className="grid grid-cols-3 items-center gap-y-6 gap-x-4 w-full mb-2">
                     <label className="col-span-1 text-left font-semibold">IMAGE</label>
                     <div className="col-span-2 flex items-center gap-4">
-                        <button
-                            type="button"
-                            className="w-10 h-10 cursor-pointer"
+                        <Button
+                            variant='cancel'
                             onClick={handleFileClick}
+                            customClassName='size-16'
                         >
                             <Upload className='w-full h-full' />
-                        </button>
+                        </Button>
                         <input
                             type="file"
                             ref={fileInputRef}
@@ -127,16 +128,18 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
                 </div>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
                 <div className='flex gap-4'>
-                    <button
-                        type="button"
+                    <Button
+                        variant='default'
+                        text='취소'
                         onClick={handleCancel}
-                        className="w-full padding-button hover-button rounded-lg bg-button-categories text-button-text font-semibold">
-                        취소
-                    </button>
-                    <button type="submit"
-                        className="w-full padding-button hover-button rounded-lg bg-button  text-button-text font-semibold">
-                        수정하기
-                    </button>
+                        customClassName='w-full padding-button hover-button rounded-lg bg-button-categories text-button-text font-semibold'
+                    />
+                    <Button
+                        variant='default'
+                        text='수정하기'
+                        type='submit'
+                        customClassName='w-full padding-button hover-button rounded-lg bg-button text-button-text font-semibold'
+                    />
                 </div>
             </form>
             <ConfirmDialog
@@ -145,6 +148,6 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
                 onClose={() => setConfirmDialog({ isOpen: false, text: '' })}
                 onConfirm={confirmDialog.onConfirm}
             />
-        </div>
+        </section>
     );
 }
