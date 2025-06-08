@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
-import { Reviews } from '@/types/reviews';
 import { serverFetcher } from '@/lib/api/serverFetcher';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { Gathering } from '@/types/gatherings';
+import { Reviews } from '@/types/reviews';
 import GatheringsDetailUI from '@/components/gatherings/detail/GatheringDetailUI';
 
 export interface PageProps {
@@ -25,13 +27,7 @@ export async function generateMetadata(
     let detail;
 
     try {
-        const response = await fetch(`${process.env.API_URI_DEV}/gatherings/${id}`, {
-            next: { revalidate: 60 },
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        detail = await response.json();
+        detail = await serverFetcher<Gathering>(`${EXTERNAL_PATHS.fetchGatheringDetail(Number(id))}`, { next: { revalidate: 60 } });
     } catch (error) {
         console.error('모임 상세 페이지 메타데이터 생성 실패:', error);
         detail = null;

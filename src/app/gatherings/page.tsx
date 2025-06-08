@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { serverFetcher } from '@/lib/api/serverFetcher';
 import { Gathering } from "@/types/gatherings";
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import Gatherings from "@/components/gatherings/Gatherings";
 
 export const metadata: Metadata = {
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 async function getInitialGatherings(): Promise<Gathering[]> {
     try {
-        const data = await serverFetcher(`/gatherings?limit=10&offset=0&type=DALLAEMFIT`, { next: { revalidate: 60 } });
+        const data = await serverFetcher(`${EXTERNAL_PATHS.GATHERINGS}?limit=10&offset=0&type=DALLAEMFIT`);
 
         if (Array.isArray(data)) {
             // DALLAEMFIT의 경우 클라이언트에서 필터링

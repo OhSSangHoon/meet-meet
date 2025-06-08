@@ -5,7 +5,7 @@ export interface ServerFetcherOptions extends RequestInit {
 }
 
 /**
- * Server Side API Fetcher
+ * Server Side API Fetcher (SSG)
  * @param url 
  * @param options 
  * @returns Response JSON
@@ -17,12 +17,11 @@ export async function serverFetcher<T = unknown>(
     const defaultHeaders = { 'Content-Type': 'application/json' };
 
     const mergedOptions: RequestInit = {
-        ...options,
+        ...options, // revalidate, no-store, cache 등 옵션 설정
         headers: {
             ...defaultHeaders,
             ...(options?.headers || {}),
         },
-        cache: options?.cache || 'no-store',
     };
 
     const fullUrl = `${process.env.API_URI_DEV}${url}`;

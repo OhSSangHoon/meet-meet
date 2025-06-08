@@ -17,7 +17,7 @@ export default function CreatedGatherings() {
 
   const { data: gatherings = [], isLoading, error } = useFetchCreatedGatherings(token!, userId);
 
-  if (isLoading) return <LoadingUI width="w-full" height="h-32" />;
+  if (isLoading) return <LoadingUI />;
   if (error) return <p className="text-center text-red-500">에러: {(error as Error).message}</p>;
   if (!isLoading && !error && gatherings.length === 0) return <p className="text-center text-gray-500">내가 만든 모임이 없어요</p>;
 

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { serverFetcher } from '@/lib/api/serverFetcher';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { ReviewItem, Reviews } from "@/types/reviews";
 import ReviewsUI from "@/components/reviews/ReviewsUI";
 
@@ -10,9 +11,7 @@ export const metadata: Metadata = {
 
 async function getInitialReviews(): Promise<ReviewItem[]> {
     try {
-        const responseData = await serverFetcher<Reviews>(`/reviews?limit=3&offset=0&type=DALLAEMFIT&sortBy=createdAt&sortOrder=desc`, {
-            next: { revalidate: 60 }
-        });
+        const responseData = await serverFetcher<Reviews>(`${EXTERNAL_PATHS.REVIEWS}?limit=3&offset=0&type=DALLAEMFIT&sortBy=createdAt&sortOrder=desc`);
         // 페이지네이션된 응답에서 data 배열 추출
         const data = responseData?.data || [];
 

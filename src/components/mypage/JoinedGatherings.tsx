@@ -40,7 +40,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
     return a.isCompleted ? 1 : -1;
   });
 
-  if (isLoading) return <LoadingUI width="w-full" height="h-32" />;
+  if (isLoading) return <LoadingUI />;
   if (error) return <div className="text-red-500">에러: {error.message}</div>;
   if (gatherings.length === 0) return <div className="text-gray-500 text-center">참여한 모임이 없습니다</div>;
 

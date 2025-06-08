@@ -1,8 +1,7 @@
 'use client';
 
 interface LoadingUIProps {
-    width: string;
-    height: string;
+    width?: string;
 }
 
 /**
@@ -10,9 +9,9 @@ interface LoadingUIProps {
  * @prop {string} width w-full, w-[17.5rem] 등
  * @prop {string} height h-32, h-[10rem] 등
  */
-export default function LoadingUI({ width = 'w-full', height = 'h-32' }: LoadingUIProps) {
+export default function LoadingUI({ width = 'w-full' }: LoadingUIProps) {
     return (
-        <div className={`relative min-h-[100px] ${width} ${height} p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item animate-pulse`}>
+        <div className={`relative ${width} p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item animate-pulse`}>
             {/* 좌측: 썸네일 및 뱃지 */}
             <article className="relative">
                 {/* 상단 뱃지 */}
