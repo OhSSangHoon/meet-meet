@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { AuthContext } from "@/providers/AuthProvider";
 
 const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
 
@@ -22,6 +23,11 @@ export default function GatheringFilters({
 }: GatheringFiltersProps) {
     const [selectedMainType, setSelectedMainType] = useState(initialMainType);
     const [selectedSubType, setSelectedSubType] = useState(initialSubType);
+
+    const isLoggedIn = useContext(AuthContext);
+
+    console.log('AuthContext 값:', isLoggedIn);
+    console.log('로그인 상태:', !!isLoggedIn);
 
     // 초기값이 변경되면 상태 업데이트
     useEffect(() => {
@@ -63,7 +69,7 @@ export default function GatheringFilters({
                 >
                     도란도란
                 </button>
-                {showCreateButton && (
+                {showCreateButton && isLoggedIn?.token && (
                     <Button
                         variant='default'
                         text='모임 만들기'
