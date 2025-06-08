@@ -30,6 +30,26 @@ export interface Gathering {
 }
 
 /**
+ * 참여자 프로퍼티
+ * @type {string} joinedAt 참여 일시
+ * @type {boolean} isCompleted 마감 여부
+ * @type {boolean} isReviewed 나의 리뷰 작성 여부
+ */
+export interface Participant {
+    teamId: number;
+    userId: number;
+    gatheringId: number;
+    joinedAt: string;
+    User: {
+        id: number;
+        email: string;
+        name: string;
+        companyName: string;
+        image: string;
+    }
+}
+
+/**
  * 모임 목록 컴포넌트 프로퍼티
  * @type {Gathering[]} gatherings 모임 목록
  * @type {boolean} loading 로딩 여부

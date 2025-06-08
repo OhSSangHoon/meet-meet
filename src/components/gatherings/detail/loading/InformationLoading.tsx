@@ -1,3 +1,5 @@
+'use client';
+
 import { UserRoundCheck } from 'lucide-react';
 import Image from 'next/image';
 

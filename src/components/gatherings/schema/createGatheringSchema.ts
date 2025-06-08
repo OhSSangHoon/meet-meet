@@ -35,7 +35,7 @@ const validateDateTimeValue = (value: DateTimeValue | null) => {
 /**
  * 마감일이 모임일보다 이전인지 검증 함수
  */
-const validateDeadlineBeforeMeeting = (
+const validateDeadlineBeforeGathering = (
     deadlineDateTime: DateTimeValue | null,
     meetingDateTime: DateTimeValue | null
 ) => {
@@ -93,7 +93,7 @@ export const createGatheringFormSchema = z.object({
             return isValidDateTimeValue(value) && isAfterNow(value);
         }, '마감 날짜는 현재 시간 이후여야 합니다.')
 }).refine((data) => {
-    return validateDeadlineBeforeMeeting(data.deadlineDateTime, data.meetingDateTime);
+    return validateDeadlineBeforeGathering(data.deadlineDateTime, data.meetingDateTime);
 }, {
     message: '마감일은 모임일 이전이어야 합니다.',
     path: ['deadlineDateTime']

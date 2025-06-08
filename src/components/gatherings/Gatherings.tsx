@@ -1,14 +1,16 @@
 "use client"
 
 import { useContext, useEffect, useState, useCallback } from "react";
-import { Gathering } from "@/types/gatherings";
-import { useGatheringsStore } from '@/store/gatheringsStore';
-import CreateMeetingModal from "@/components/gatherings/CreateGatheringDialog";
-import GatheringsList from "@/components/gatherings/GatheringsList";
 import { AuthContext } from "@/providers/AuthProvider";
-import GatheringFilters from "./shared/ui/GatheringsFilters";
-import GatheringsHeader from "./shared/ui/GatheringsHeader";
-import LocationDateFilter from "./shared/ui/LocationDateFilter";
+import { useGatheringsStore } from '@/store/gatheringsStore';
+import { Gathering } from "@/types/gatherings";
+import dynamic from "next/dynamic";
+
+const CreateGatheringModal = dynamic(() => import('@/components/gatherings/CreateGatheringDialog'), { ssr: false });
+const GatheringsList = dynamic(() => import('@/components/gatherings/GatheringsList'), { ssr: false });
+const GatheringFilters = dynamic(() => import('@/components/gatherings/shared/ui/GatheringsFilters'), { ssr: false });
+const GatheringsHeader = dynamic(() => import('@/components/gatherings/shared/ui/GatheringsHeader'), { ssr: false });
+const LocationDateFilter = dynamic(() => import('@/components/gatherings/shared/ui/LocationDateFilter'), { ssr: false });
 
 /**
  * 모임 페이지 프로퍼티
@@ -42,8 +44,8 @@ export default function Gatherings({ initialGatherings = [] }: PageProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMainType, setSelectedMainType] = useState('DALLAEMFIT');
     const [selectedSubType, setSelectedSubType] = useState('ALL');
-    const [filters, setFilters] = useState<Filters>({ 
-        location: '', 
+    const [filters, setFilters] = useState<Filters>({
+        location: '',
         date: ''
     });
     const [sort, setSort] = useState<Sort>({
@@ -51,9 +53,9 @@ export default function Gatherings({ initialGatherings = [] }: PageProps) {
         sortOrder: 'desc'
     });
     const isLoggedIn = useContext(AuthContext);
-    
+
     const setGatherings = useGatheringsStore((state) => state.setGatherings); // 모임 목록 설정
-    
+
     // 초기 모임 목록 설정
     useEffect(() => {
         if (initialGatherings.length > 0) {
@@ -81,12 +83,12 @@ export default function Gatherings({ initialGatherings = [] }: PageProps) {
     const handleFilterChange = useCallback((newFilters: Filters) => {
         setFilters(prev => {
             if (
-                prev.location === newFilters.location && 
+                prev.location === newFilters.location &&
                 prev.date === newFilters.date
             ) {
                 return prev;
             }
-            
+
             return newFilters;
         });
     }, []);
@@ -95,12 +97,12 @@ export default function Gatherings({ initialGatherings = [] }: PageProps) {
     const handleSortChange = useCallback((newSort: Sort) => {
         setSort(prev => {
             if (
-                prev.sortBy === newSort.sortBy && 
+                prev.sortBy === newSort.sortBy &&
                 prev.sortOrder === newSort.sortOrder
             ) {
                 return prev;
             }
-            
+
             return newSort;
         });
     }, []);
@@ -108,7 +110,7 @@ export default function Gatherings({ initialGatherings = [] }: PageProps) {
     return (
         <>
             {isModalOpen && (
-                <CreateMeetingModal 
+                <CreateGatheringModal
                     onClose={closeModal}
                 />
             )}
@@ -116,16 +118,16 @@ export default function Gatherings({ initialGatherings = [] }: PageProps) {
                 <GatheringsHeader type="search" />
                 <div className="w-full flex flex-col">
                     {/* 모임 주제 선택 및 모임 만들기 */}
-                    <GatheringFilters 
+                    <GatheringFilters
                         showCreateButton={!!isLoggedIn} // 모임 만들기 버튼 표시 여부
                         onCreateClick={openModal} // 모임 만들기 버튼 클릭 핸들러
                         onTypeChange={handleTypeChange} // 모임 주제 변경 핸들러
                         initialMainType={selectedMainType} // 초기 모임 주제
                         initialSubType={selectedSubType} // 초기 모임 서브타입
                     />
-                    
+
                     {/* 위치/날짜 필터 + 정렬 */}
-                    <LocationDateFilter 
+                    <LocationDateFilter
                         onFilterChange={handleFilterChange} // 필터 변경 핸들러
                         onSortChange={handleSortChange} // 정렬 변경 핸들러
                         pageType="search" // 페이지 타입
@@ -133,7 +135,7 @@ export default function Gatherings({ initialGatherings = [] }: PageProps) {
                         initialDate={filters.date} // 초기 날짜
                     />
                 </div>
-                
+
                 {/* 모임 목록 조회 */}
                 <GatheringsList
                     fetchFromApi={true} // 무한스크롤 활성화

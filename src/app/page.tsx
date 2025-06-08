@@ -14,7 +14,7 @@ interface FeatureCardProps {
   gradient: string;
 }
 
-interface MeetingCardProps {
+interface GatheringCardProps {
   title: string;
   schedule: string;
   category: string;
@@ -39,14 +39,14 @@ const FeatureCard = ({ icon, title, description, gradient }: FeatureCardProps) =
 );
 
 /** 지금 핫한 모임 카드  */
-const MeetingCard = ({
+const GatheringCard = ({
   title,
   schedule,
   category,
   participants,
   categoryColor,
   image
-}: MeetingCardProps) => (
+}: GatheringCardProps) => (
   <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all">
     <div className="space-y-4">
       {/* 모임 이미지 위치 */}
@@ -179,7 +179,7 @@ export default async function MainPage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <MeetingCard
+              <GatheringCard
                 title="한강 러닝해요"
                 schedule="20일 후 마감"
                 category="액티비티"
@@ -187,7 +187,7 @@ export default async function MainPage() {
                 categoryColor="bg-[#6EE7B7]"
                 image="https://media.timeout.com/images/103202193/750/562/image.jpg"
               />
-              <MeetingCard
+              <GatheringCard
                 title="원데이 클래스 같이 들어요"
                 schedule="곧 마감"
                 category="액티비티"
@@ -195,7 +195,7 @@ export default async function MainPage() {
                 categoryColor="bg-[#F6D55C]"
                 image="https://cdn.banronbodo.com/news/photo/202404/22773_29231_3931.jpg"
               />
-              <MeetingCard
+              <GatheringCard
                 title="경제 공부해요@@"
                 schedule="3시간 후 마감"
                 category="도란도란"
@@ -203,7 +203,7 @@ export default async function MainPage() {
                 categoryColor="bg-[#8B5CF6]"
                 image="/images/main_meeting2.avif"
               />
-              <MeetingCard
+              <GatheringCard
                 title="성수 팝업 같이 가요"
                 schedule="14일 후 마감"
                 category="엔터테인먼트"

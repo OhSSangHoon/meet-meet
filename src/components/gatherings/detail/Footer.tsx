@@ -1,7 +1,9 @@
 'use client';
 
-import Button from '@/components/shared/ui/Button';
 import { Gathering } from '@/types/gatherings';
+import dynamic from 'next/dynamic';
+
+const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
 
 interface FooterProps {
     userId: number;

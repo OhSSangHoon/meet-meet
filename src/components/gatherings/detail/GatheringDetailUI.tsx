@@ -13,30 +13,16 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
 import { ReviewItem, Reviews } from '@/types/reviews';
 import dynamic from 'next/dynamic';
-import InformationLoading from '@/components/gatherings/detail/loading/InformationLoading';
-import ThumbnailLoading from '@/components/gatherings/detail/loading/ThumbnailLoading';
-import ReviewLoading from '@/components/gatherings/detail/loading/ReviewLoading';
-import Thumbnail from '@/components/gatherings/detail/Thumbnail';
-import Information from '@/components/gatherings/detail/Information';
-import Review from '@/components/gatherings/detail/Review';
-import PageConverter from '@/components/gatherings/detail/PageConverter';
-import Footer from '@/components/gatherings/detail/Footer';
 
+const InformationLoading = dynamic(() => import('@/components/gatherings/detail/loading/InformationLoading'), { ssr: false });
+const ThumbnailLoading = dynamic(() => import('@/components/gatherings/detail/loading/ThumbnailLoading'), { ssr: false });
+const ReviewLoading = dynamic(() => import('@/components/gatherings/detail/loading/ReviewLoading'), { ssr: false });
+const Thumbnail = dynamic(() => import('@/components/gatherings/detail/Thumbnail'), { ssr: false });
+const Information = dynamic(() => import('@/components/gatherings/detail/Information'), { ssr: false });
+const PageConverter = dynamic(() => import('@/components/gatherings/detail/PageConverter'), { ssr: false });
+const Review = dynamic(() => import('@/components/gatherings/detail/Review'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
-
-export interface Participant {
-    teamId: number;
-    userId: number;
-    gatheringId: number;
-    joinedAt: string;
-    User: {
-        id: number;
-        email: string;
-        name: string;
-        companyName: string;
-        image: string;
-    }
-}
+const Footer = dynamic(() => import('@/components/gatherings/detail/Footer'), { ssr: false });
 
 const handleCopyUrl = () => {
     const currentUrl = window.location.href;

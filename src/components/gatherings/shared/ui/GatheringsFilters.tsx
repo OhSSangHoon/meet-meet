@@ -1,7 +1,9 @@
 "use client"
 
-import Button from '@/components/shared/ui/Button';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
 
 interface GatheringFiltersProps {
     onTypeChange?: (mainType: string, subType: string) => void;

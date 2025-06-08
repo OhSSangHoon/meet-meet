@@ -1,18 +1,17 @@
+'use client';
+
 import { Gathering } from '@/types/gatherings'
-import { getTimeRemaining } from '@/components/shared/utils/dateFormats'
 import Image from 'next/image'
-import SaveToggleButton from '../shared/ui/SaveToggleButton'
+import dynamic from 'next/dynamic'
+
+const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
+const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
 
 /** 모임 상세 페이지 썸네일 */
 export default function Thumbnail({ detail, id }: { detail: Gathering, id: string }) {
     return (
         <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] relative'>
-            <div className="relative px-3 bg-white/80 rounded-full flex items-center text-xs">
-                <div className="absolute top-3 left-3 bg-main-600 rounded-full px-3 py-1 flex justify-center items-center gap-2 z-10">
-                    <Image src={"/icons/Alarm.svg"} alt="시간" width={24} height={24} />
-                    <span className="font-medium text-white">{getTimeRemaining(detail?.registrationEnd || '')}</span>
-                </div>
-            </div>
+            <DateReminder registrationEnd={detail?.registrationEnd} />
             <Image src={detail?.image}
                 alt='모임 이미지'
                 width={1000}

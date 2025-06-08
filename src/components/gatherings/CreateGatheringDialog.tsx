@@ -1,20 +1,19 @@
 "use client"
 
-import { AuthContext } from '@/providers/AuthProvider';
 import { useState, useRef, useEffect, useContext } from "react";
 import { useCreateGathering } from '@/hooks/api/gatherings/useCreateGathering';
+import { useQueryClient } from '@tanstack/react-query';
+import { AuthContext } from '@/providers/AuthProvider';
 import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
+import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/components/shared/utils/dateFormats';
+import { validateCreateGathering, CreateGatheringFormSchemaType } from '@/components/gatherings/schema/createGatheringSchema';
 import { XIcon } from "lucide-react";
 import axios from 'axios';
 import dynamic from 'next/dynamic';
-import SelectionService from "./SelectionService";
-import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/components/shared/utils/dateFormats';
-import { validateCreateGathering, CreateGatheringFormSchemaType } from '@/components/gatherings/schema/createGatheringSchema';
-import { useQueryClient } from '@tanstack/react-query';
-import DateTimePicker from '@/components/gatherings/dateTimePicker';
 
-// 모달 컴포넌트
+const SelectionService = dynamic(() => import('@/components/gatherings/SelectionService'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
+const DateTimePicker = dynamic(() => import('@/components/gatherings/DateTimePicker'), { ssr: false });
 
 export default function CreateGatheringDialog({ onClose }: { onClose: () => void }) {
     const { token } = useContext(AuthContext);
@@ -31,9 +30,9 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     const [fileName, setFileName] = useState(""); // 이미지 파일 이름
     const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 요소 참조
     const [imageFile, setImageFile] = useState<File | null>(null); // 이미지 파일
-    const [meetingDateTime, setMeetingDateTime] = useState<DateTimeValue | null>(null); // 모임 일정
+    const [meetingDateTime, setGatheringDateTime] = useState<DateTimeValue | null>(null); // 모임 일정
     const [deadlineDateTime, setDeadlineDateTime] = useState<DateTimeValue | null>(null); // 마감 일정
-    const [showMeetingPicker, setShowMeetingPicker] = useState(false); // 모임 일정 선택 모달 상태
+    const [showGatheringPicker, setShowGatheringPicker] = useState(false); // 모임 일정 선택 모달 상태
     const [showDeadlinePicker, setShowDeadlinePicker] = useState(false); // 마감 일정 선택 모달 상태
     const [error, setError] = useState<string | null>(null); // 에러 메시지
     const [isSubmitting, setIsSubmitting] = useState(false); // 모임 생성 처리 상태
@@ -141,8 +140,8 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
 
         // 날짜 포맷팅
         if (meetingDateTime) {
-            const finalMeetingDateTime = dateTimeValueToDate(meetingDateTime);
-            apiFormData.append('dateTime', formatDateToISO(finalMeetingDateTime));
+            const finalGatheringDateTime = dateTimeValueToDate(meetingDateTime);
+            apiFormData.append('dateTime', formatDateToISO(finalGatheringDateTime));
         }
 
         if (deadlineDateTime) {
@@ -279,7 +278,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
                                     <input
                                         type="text"
                                         value={formatDateTimeValue(meetingDateTime)}
-                                        onClick={() => setShowMeetingPicker(true)}
+                                        onClick={() => setShowGatheringPicker(true)}
                                         readOnly
                                         className="w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold cursor-pointer"
                                         placeholder="날짜와 시간을 선택해주세요"
@@ -338,19 +337,19 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
             />
 
             {/* 모임 일정 선택 모달 */}
-            {showMeetingPicker && (
+            {showGatheringPicker && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black opacity-50" onClick={() => setShowMeetingPicker(false)}></div>
+                    <div className="absolute inset-0 bg-black opacity-50" onClick={() => setShowGatheringPicker(false)}></div>
                     <div className="relative bg-white rounded-lg p-6 max-w-md w-full">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-bold">모임 일정 선택</h2>
-                            <button onClick={() => setShowMeetingPicker(false)}>
+                            <button onClick={() => setShowGatheringPicker(false)}>
                                 <XIcon className="w-6 h-6 text-gray-500" />
                             </button>
                         </div>
                         <DateTimePicker
                             value={meetingDateTime}
-                            onChange={setMeetingDateTime}
+                            onChange={setGatheringDateTime}
                             label=""
                         />
                     </div>

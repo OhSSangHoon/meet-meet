@@ -1,11 +1,14 @@
-import { Participant } from './GatheringDetailUI';
+'use client';
+
 import { formatDate, formatTime } from '@/components/shared/utils/dateFormats';
-import { Gathering } from '@/types/gatherings';
+import { Gathering, Participant } from '@/types/gatherings';
 import { Check, UserRoundCheck } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import Image from 'next/image';
-import SaveToggleButton from '../shared/ui/SaveToggleButton';
-import JoinedCountsProgressBar from '../shared/ui/JoinedCountsProgressBar';
+import dynamic from 'next/dynamic';
+
+const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
+const JoinedCountsProgressBar = dynamic(() => import('@/components/gatherings/shared/ui/JoinedCountsProgressBar'), { ssr: false });
 
 /** 모임 상세 페이지 상단 우측 정보 */
 export default function Information({ detail, id, participants }: { detail: Gathering, id: string, participants: Participant[] }) {
@@ -13,7 +16,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
         <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] px-6 py-5 border-2 border-gray-300 bg-white rounded-lg flex flex-col justify-between gap-4 overflow-hidden'
         >
             {/* 상단 */}
-            <div className='flex justify-between gap-8'>
+            <section className='flex justify-between gap-8'>
                 {/* LEFT */}
                 <div className='flex flex-col'>
                     {/* 제목, 주소 */}
@@ -38,10 +41,13 @@ export default function Information({ detail, id, participants }: { detail: Gath
                 <div className='hidden sm:flex'>
                     <SaveToggleButton gatheringId={id} />
                 </div>
-            </div>
+            </section>
+
+            {/* 구분선 */}
             <div className="w-full border-t-2 border-dotted border-gray-300"></div>
+
             {/* 하단 */}
-            <div className='flex flex-col gap-1'>
+            <section className='flex flex-col gap-1'>
                 {/* 모집정원, 개설확정 */}
                 <div className="flex justify-between text-sm">
                     <div className="flex items-center gap-2">
@@ -106,7 +112,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
                     <span>최소 5명</span>
                     <span>최대 {detail?.capacity}명</span>
                 </div>
-            </div>
+            </section>
         </article>
     )
 }

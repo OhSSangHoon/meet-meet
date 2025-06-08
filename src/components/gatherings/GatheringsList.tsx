@@ -3,14 +3,17 @@
 import { useRouter } from "next/navigation";
 import { useFetchInfiniteGatherings } from "@/hooks/api/gatherings/useFetchInfiniteGatherings";
 import { useGatheringsStore } from '@/store/gatheringsStore';
-import { Gathering, GatheringsListProps } from "@/types/gatherings";
+import { useMemo } from 'react';
 import { formatDate, formatTime, getTimeRemaining, isSameDateForFilter } from '@/components/shared/utils/dateFormats';
+import { Gathering, GatheringsListProps } from "@/types/gatherings";
 import { UserRoundCheck } from "lucide-react";
 import Image from "next/image";
-import JoinedCountsProgressBar from './shared/ui/JoinedCountsProgressBar';
-import SaveToggleButton from './shared/ui/SaveToggleButton';
-import OverlayForDisabled from '@/components/shared/ui/OverlayForDisabled';
-import { useMemo } from 'react';
+import dynamic from 'next/dynamic';
+
+const JoinedCountsProgressBar = dynamic(() => import('@/components/gatherings/shared/ui/JoinedCountsProgressBar'), { ssr: false });
+const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
+const OverlayForDisabled = dynamic(() => import('@/components/shared/ui/OverlayForDisabled'), { ssr: false });
+const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
 
 /**
  * 모임 목록 프로퍼티 확장
@@ -112,14 +115,14 @@ export default function GatheringsList({
             if (location && gathering.location !== location) {
                 return false;
             }
-            
+
             // 날짜 필터 (모임 개최일 기준)
             if (date && gathering.dateTime) {
                 if (!isSameDateForFilter(gathering.dateTime, date)) {
                     return false;
                 }
             }
-            
+
             return true;
         });
     };
@@ -136,8 +139,8 @@ export default function GatheringsList({
         // 무한스크롤 데이터가 있으면 우선 사용
         if (infiniteGatherings.length > 0) {
             return filterGatherings(infiniteGatherings, selectedMainType, selectedSubType);
-        } 
-        
+        }
+
         // 무한스크롤 데이터가 없을 때 SSR 사용
         if (hasActiveFilters) {
             // 타입 필터링
@@ -151,19 +154,19 @@ export default function GatheringsList({
             return filterGatherings(ssrGatherings, selectedMainType, selectedSubType);
         }
     }, [
-        fetchFromApi, 
-        infiniteGatherings, 
-        ssrGatherings, 
-        selectedMainType, 
-        selectedSubType, 
-        location, 
+        fetchFromApi,
+        infiniteGatherings,
+        ssrGatherings,
+        selectedMainType,
+        selectedSubType,
+        location,
         date,
         gatherings
     ]);
-        
+
     // 초기 로딩 여부
     const hasActiveFilters = location || date;
-    const isInitialLoading = fetchFromApi && isLoading && infiniteGatherings.length === 0 && 
+    const isInitialLoading = fetchFromApi && isLoading && infiniteGatherings.length === 0 &&
         (hasActiveFilters || ssrGatherings.length === 0);
 
     // 마감 여부
@@ -206,15 +209,7 @@ export default function GatheringsList({
                                 sizes="(max-width: 768px) 100vw, 320px"
                             />
                             {/* 마감 시간 배지 */}
-                            <div className={`absolute top-3 left-3 rounded-lg px-3 py-1.5 flex items-center gap-1.5 shadow-sm ${expired
-                                ? 'bg-gray-600'
-                                : 'bg-main-600'
-                                }`}>
-                                <Image src={"/icons/Alarm.svg"} alt="시간" width={16} height={16} />
-                                <span className="text-sm font-medium text-white">
-                                    {getTimeRemaining(gathering.registrationEnd)}
-                                </span>
-                            </div>
+                            <DateReminder registrationEnd={gathering.registrationEnd} />
                         </div>
 
                         {/* 콘텐츠 영역 */}
