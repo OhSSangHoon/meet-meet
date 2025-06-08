@@ -182,10 +182,7 @@ export default function CreateGatheringDialog({ onClose }: { onClose: () => void
     };
 
     return (
-        <div className="fixed inset-0 z-50">
-            {/* 배경 */}
-            <div className="absolute inset-0 bg-black opacity-50"></div>
-
+        <div className="dialog-background">
             {/* 모달 컨테이너 */}
             <div className="relative w-full h-full flex items-center justify-center md:p-4">
                 <div className="w-full max-w-2xl max-h-full flex flex-col">
