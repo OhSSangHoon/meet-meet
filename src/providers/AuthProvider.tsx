@@ -4,7 +4,7 @@ import { createContext, useState, Dispatch, SetStateAction, useEffect } from "re
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 
@@ -62,7 +62,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const signUp = async (email: string, password: string, name: string, companyName: string) => {
         try {
-            const result = await apiClient.post(INTERNAL_PATHS.SIGN_UP, { email, password, name, companyName })
+            const result = await internalClient.post(INTERNAL_PATHS.SIGN_UP, { email, password, name, companyName })
             if (result.status === 200 || result.status === 201) setSignUpDialogOpen(true);
         } catch (error) {
             throw error;
@@ -71,7 +71,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const signIn = async (email: string, password: string) => {
         try {
-            const result = await apiClient.post(INTERNAL_PATHS.SIGN_IN, { email, password });
+            const result = await internalClient.post(INTERNAL_PATHS.SIGN_IN, { email, password });
             if (result.status === 200) {
                 localStorage.setItem('token', result.data.token);
                 setToken(result.data.token);
@@ -85,7 +85,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const fetchUser = async () => {
         try {
-            const result = await apiClient.get(INTERNAL_PATHS.USER);
+            const result = await internalClient.get(INTERNAL_PATHS.USER);
             if (result.status === 200) {
                 setUserName(result.data.name);
                 setUserId(result.data.id);

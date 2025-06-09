@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { AxiosError } from 'axios';
-import { apiServer } from '@/lib/api/clientFetchers';
+import { externalClient } from '@/lib/api/clientFetchers';
 
 /**
  * 모임 생성 API
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
         if (!token) return new NextResponse(JSON.stringify({ error: '토큰이 필요합니다' }), { status: 401 });
 
-        const response = await apiServer.post(EXTERNAL_PATHS.GATHERINGS, formData, {
+        const response = await externalClient.post(EXTERNAL_PATHS.GATHERINGS, formData, {
             headers: {
                 'Authorization': token!,
                 'Content-Type': 'multipart/form-data',
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     try {
         const searchParams = request.nextUrl.searchParams;
-        const response = await apiServer.get(EXTERNAL_PATHS.GATHERINGS, {
+        const response = await externalClient.get(EXTERNAL_PATHS.GATHERINGS, {
             params: Object.fromEntries(searchParams),
             headers: {
                 'Authorization': token!,

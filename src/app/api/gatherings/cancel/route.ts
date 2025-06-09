@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { AxiosError } from 'axios';
-import { apiServer } from '@/lib/api/clientFetchers';
+import { externalClient } from '@/lib/api/clientFetchers';
 
 /**
  * 모임 취소
@@ -19,7 +19,7 @@ export async function PUT(request: NextRequest) {
     if (!token) return new NextResponse(JSON.stringify({ error: '토큰이 필요합니다' }), { status: 401 });
 
     try {
-        const response = await apiServer.put(EXTERNAL_PATHS.cancelGathering(id), {}, { headers: { 'Authorization': token } });
+        const response = await externalClient.put(EXTERNAL_PATHS.cancelGathering(id), {}, { headers: { 'Authorization': token } });
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

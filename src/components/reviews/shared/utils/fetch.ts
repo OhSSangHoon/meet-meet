@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/clientFetchers";
+import { internalClient } from "@/lib/api/clientFetchers";
 import { ReviewItem } from "@/types/reviews";
 
 /**
@@ -51,7 +51,7 @@ export async function fetchReviewsPaginated(
         }
 
         // 리뷰 목록 조회
-        const response = await apiClient.get('/api/reviews', { params });
+        const response = await internalClient.get('/api/reviews', { params });
 
         // 응답 데이터 구조 파싱
         let allReviews: ReviewItem[] = [];

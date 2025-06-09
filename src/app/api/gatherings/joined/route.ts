@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { AxiosError } from 'axios';
-import { apiServer } from '@/lib/api/clientFetchers';
+import { externalClient } from '@/lib/api/clientFetchers';
 
 /**
  * 모임 참여 확인
@@ -13,7 +13,7 @@ import { apiServer } from '@/lib/api/clientFetchers';
 export async function GET(request: NextRequest) {
     try {
         const searchParams = request.nextUrl.searchParams;
-        const response = await apiServer.get(EXTERNAL_PATHS.CHECK_JOINED, {
+        const response = await externalClient.get(EXTERNAL_PATHS.CHECK_JOINED, {
             params: Object.fromEntries(searchParams),
             headers: { 'Authorization': request.headers.get('Authorization') },
         });

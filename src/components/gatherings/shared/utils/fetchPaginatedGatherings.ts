@@ -1,5 +1,5 @@
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { Gathering } from "@/types/gatherings";
 
 /**
@@ -55,7 +55,7 @@ export async function fetchPaginatedGatherings(
         }
 
         // 모임 목록 조회
-        const response = await apiClient.get(INTERNAL_PATHS.GATHERINGS, {
+        const response = await internalClient.get(INTERNAL_PATHS.GATHERINGS, {
             params,
         });
 

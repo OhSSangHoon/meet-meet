@@ -1,7 +1,7 @@
 'use client';
 
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { Gathering } from '@/types/gatherings';
 import { useQuery } from '@tanstack/react-query';
 
@@ -15,7 +15,7 @@ export const useFetchCreatedGatherings = (
     userId: number
 ) => {
     const fetchCreatedGatherings = async (): Promise<Gathering[]> => {
-        const { data } = await apiClient.get(INTERNAL_PATHS.fetchCreatedGatherings(userId));
+        const { data } = await internalClient.get(INTERNAL_PATHS.fetchCreatedGatherings(userId));
         return data;
     };
 

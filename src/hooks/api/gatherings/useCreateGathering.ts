@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GatheringApiParams } from '@/types/gatheringApi';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { handleApiError } from '@/lib/api/handleApiResponse';
 
@@ -18,7 +18,7 @@ export const useCreateGathering = ({ token, onCallback }: GatheringApiParams) =>
     const createGathering = useMutation({
         mutationFn: async (formData: FormData) => {
             if (!token) throw new Error('로그인이 필요합니다.');
-            const response = await apiClient.post(INTERNAL_PATHS.GATHERINGS, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            const response = await internalClient.post(INTERNAL_PATHS.GATHERINGS, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             return response.data;
         },
         onSuccess: () => {

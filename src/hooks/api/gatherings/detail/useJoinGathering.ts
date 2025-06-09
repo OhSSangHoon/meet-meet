@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { GatheringApiParams } from '@/types/gatheringApi';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { handleApiError } from '@/lib/api/handleApiResponse';
 
 /** 모임 참여 훅
@@ -17,7 +17,7 @@ export const useJoinGathering = ({ token, onCallback }: GatheringApiParams) => {
     const joinGathering = useMutation({
         mutationFn: async (id: number) => {
             if (!token) throw new Error('로그인이 필요합니다.');
-            const response = await apiClient.post(INTERNAL_PATHS.joinGathering(id));
+            const response = await internalClient.post(INTERNAL_PATHS.joinGathering(id));
             return response.data;
         },
         onSuccess: (_, id) => {
