@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
-import localFont from 'next/font/local';
+import { Metadata } from "next";
 import "./globals.css";
+import localFont from 'next/font/local';
 import Providers from "@/providers/Providers";
 import Navbar from '@/components/shared/ui/Navbar';
 
@@ -12,6 +12,7 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://meet-meet-psi.vercel.app'),
   title: "Meet Meet",
   description: "서울 2030을 위한 모임",
   keywords: [
@@ -23,14 +24,12 @@ export const metadata: Metadata = {
     'MeetMeet',
     'meetmeet',
   ],
-  metadataBase: new URL('https://meet-meet-psi.vercel.app'),
   openGraph: {
-    url: 'https://meet-meet-psi.vercel.app',
     type: 'website',
     locale: 'ko_KR',
     title: 'Meet Meet',
     siteName: 'Meet Meet',
-    description: '서울 2030을 위한 모임',
+    description: '서울 2030을 위한 모임 플랫폼',
     images: [
       {
         url: '/opengraph-image.png',
@@ -44,7 +43,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Meet Meet',
-    description: '서울 2030을 위한 모임',
+    description: '서울 2030을 위한 모임 플랫폼',
     images: ['/opengraph-image.png'],
   },
   alternates: {

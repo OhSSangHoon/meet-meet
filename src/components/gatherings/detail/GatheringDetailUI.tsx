@@ -66,8 +66,11 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
     });
 
     useEffect(() => {
-        if (page === 1) return;
-        if (nextPageData) setReviews(detailReviews.data.concat(nextPageData.data));
+        if (page === 1) {
+            setReviews(detailReviews.data);
+        } else if (nextPageData) {
+            setReviews(nextPageData.data);
+        }
     }, [page, nextPageData, detailReviews.data]);
 
     const queryClient = useQueryClient();

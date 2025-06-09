@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { serverFetcher } from '@/lib/api/serverFetcher';
 import { Gathering } from "@/types/gatherings";
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
-import Gatherings from "@/components/gatherings/Gatherings";
+import Gatherings from "@/components/gatherings/GatheringsUI";
 
 export const metadata: Metadata = {
     title: `모임 찾기 | Meet Meet`,

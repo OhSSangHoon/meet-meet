@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SavedGatheringsClient from '@/components/saved/SavedGatheringsClient';
+import SavedGatheringsClient from '@/components/saved/SavedGatheringUI';
 
 export const metadata: Metadata = {
   title: `찜한 모임 | Meet Meet`,
