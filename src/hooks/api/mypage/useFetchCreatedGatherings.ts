@@ -1,7 +1,7 @@
 'use client';
 
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetcher';
+import { apiClient } from '@/lib/api/clientFetchers';
 import { Gathering } from '@/types/gatherings';
 import { useQuery } from '@tanstack/react-query';
 

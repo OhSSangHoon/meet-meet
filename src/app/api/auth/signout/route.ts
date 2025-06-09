@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { AxiosError } from 'axios';
-import { apiServer } from '@/lib/api/clientFetcher';
+import { apiServer } from '@/lib/api/clientFetchers';
 
 
 /**

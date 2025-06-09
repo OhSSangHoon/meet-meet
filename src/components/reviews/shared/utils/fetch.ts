@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/clientFetcher";
+import { apiClient } from "@/lib/api/clientFetchers";
 import { ReviewItem } from "@/types/reviews";
 
 /**
