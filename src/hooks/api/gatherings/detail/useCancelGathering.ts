@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { GatheringApiParams } from '@/types/gatheringApi';
 import { useRouter } from 'next/navigation';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { handleApiError } from '@/lib/api/handleApiResponse';
 
@@ -23,7 +23,7 @@ export const useCancelGathering = ({ token, onCallback }: GatheringApiParams) =>
     const cancelGathering = useMutation({
         mutationFn: async (id: number) => {
             if (!token) throw new Error('로그인이 필요합니다.');
-            await apiClient.put(INTERNAL_PATHS.cancelGathering(id));
+            await internalClient.put(INTERNAL_PATHS.cancelGathering(id));
             return id;
         },
         onSuccess: (id) => {

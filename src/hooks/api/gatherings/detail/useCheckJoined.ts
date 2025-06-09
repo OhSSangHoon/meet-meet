@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { JoinedGathering } from '@/types/gatherings';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import axios from 'axios';
 
@@ -18,7 +18,7 @@ export const useCheckJoined = (
 
     const checkJoined = async () => {
         try {
-            const response = await apiClient.get(INTERNAL_PATHS.CHECK_JOINED, { headers: { Authorization: `Bearer ${token}` } },);
+            const response = await internalClient.get(INTERNAL_PATHS.CHECK_JOINED, { headers: { Authorization: `Bearer ${token}` } },);
             return response.data.some((gathering: JoinedGathering) => gathering.id === Number(id))
         } catch (error) {
             if (axios.isAxiosError(error)) {

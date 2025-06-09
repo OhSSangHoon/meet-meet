@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { GatheringApiParams } from '@/types/gatheringApi';
 import { handleApiError } from '@/lib/api/handleApiResponse';
 
@@ -23,7 +23,7 @@ export const useCreateReview = ({ token, onCallback }: GatheringApiParams) => {
     const createReview = useMutation({
         mutationFn: async ({ gatheringId, score, comment }: CreateReviewParams) => {
             if (!token) throw new Error('로그인이 필요합니다.');
-            const response = await apiClient.post(INTERNAL_PATHS.REVIEWS, { gatheringId, score, comment });
+            const response = await internalClient.post(INTERNAL_PATHS.REVIEWS, { gatheringId, score, comment });
             return response.data;
         },
         onSuccess: () => {

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from '@/types/gatherings';
 import GatheringsList from '@/components/gatherings/GatheringsList';
@@ -23,7 +23,7 @@ export default function SavedGatheringsClient() {
         queryFn: async () => {
             if (savedIds.length === 0) return [];
 
-            const response = await apiClient.get(INTERNAL_PATHS.GATHERINGS, {
+            const response = await internalClient.get(INTERNAL_PATHS.GATHERINGS, {
                 params: {
                     limit: 1000
                 }

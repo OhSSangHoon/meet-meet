@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { AxiosError } from 'axios';
-import { apiServer } from '@/lib/api/clientFetchers';
+import { externalClient } from '@/lib/api/clientFetchers';
 
 
 /**
@@ -10,7 +10,7 @@ import { apiServer } from '@/lib/api/clientFetchers';
  */
 export async function POST() {
     try {
-        const response = await apiServer.post(EXTERNAL_PATHS.SIGN_OUT);
+        const response = await externalClient.post(EXTERNAL_PATHS.SIGN_OUT);
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

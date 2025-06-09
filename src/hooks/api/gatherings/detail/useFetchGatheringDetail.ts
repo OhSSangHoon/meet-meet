@@ -1,7 +1,7 @@
 'use client';
 
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ export const useFetchGatheringDetail = (
 
     const fetchGatheringDetail = async (id: number) => {
         try {
-            const response = await apiClient.get(INTERNAL_PATHS.fetchGatheringDetail(id));
+            const response = await internalClient.get(INTERNAL_PATHS.fetchGatheringDetail(id));
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -29,7 +29,7 @@ export const useFetchGatheringDetail = (
 
     const fetchGatheringParticipants = async (id: number) => {
         try {
-            const response = await apiClient.get(INTERNAL_PATHS.fetchGatheringParticipants(id));
+            const response = await internalClient.get(INTERNAL_PATHS.fetchGatheringParticipants(id));
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {

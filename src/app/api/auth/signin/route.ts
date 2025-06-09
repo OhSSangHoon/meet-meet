@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { AxiosError } from 'axios';
-import { apiServer } from '@/lib/api/clientFetchers';
+import { externalClient } from '@/lib/api/clientFetchers';
 
 /**
  * 로그인
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!email || !password) return new NextResponse(JSON.stringify({ error: '이메일과 비밀번호는 필수입니다' }), { status: 400 });
 
     try {
-        const response = await apiServer.post(EXTERNAL_PATHS.SIGN_IN, { email, password })
+        const response = await externalClient.post(EXTERNAL_PATHS.SIGN_IN, { email, password })
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

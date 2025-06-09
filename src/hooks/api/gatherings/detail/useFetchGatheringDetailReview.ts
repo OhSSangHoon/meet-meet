@@ -1,7 +1,7 @@
 'use client';
 
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -21,7 +21,7 @@ export const useFetchGatheringDetailReview = (
 ) => {
     const fetchGatheringDetailReviews = async () => {
         try {
-            const response = await apiClient.get(INTERNAL_PATHS.REVIEWS, { params: { gatheringId, limit, offset } });
+            const response = await internalClient.get(INTERNAL_PATHS.REVIEWS, { params: { gatheringId, limit, offset } });
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {

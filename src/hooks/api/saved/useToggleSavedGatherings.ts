@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { getSavedGatherings, setSavedGatherings } from '@/components/gatherings/shared/utils/savedGatherings';
 import { getTimeRemaining } from '@/components/shared/utils/dateFormats';
-import { apiClient } from '@/lib/api/clientFetchers';
+import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from '@/types/gatherings';
 
@@ -23,7 +23,7 @@ export const useToggleSavedGatherings = () => {
     if (gatheringIds.length === 0) return gatheringIds;
 
     try {
-      const response = await apiClient.get(INTERNAL_PATHS.GATHERINGS, {
+      const response = await internalClient.get(INTERNAL_PATHS.GATHERINGS, {
         params: { limit: 1000 }
       });
 
