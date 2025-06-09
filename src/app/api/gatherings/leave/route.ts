@@ -18,9 +18,8 @@ export async function DELETE(request: NextRequest) {
     if (!id) return new NextResponse(JSON.stringify({ error: '모임 id가 필요합니다' }), { status: 400 });
     if (!token) return new NextResponse(JSON.stringify({ error: '토큰이 필요합니다' }), { status: 401 });
 
-    const response = await apiServer.delete(EXTERNAL_PATHS.leaveGathering(id), { headers: { 'Authorization': token } });
-
     try {
+        const response = await apiServer.delete(EXTERNAL_PATHS.leaveGathering(id), { headers: { 'Authorization': token } });
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;

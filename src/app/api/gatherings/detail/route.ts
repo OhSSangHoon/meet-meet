@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (!id) return new NextResponse(JSON.stringify({ error: '모임 id가 필요합니다' }), { status: 400 });
 
     try {
-        const response = await apiServer.get(EXTERNAL_PATHS.fetchGatheringDetail(id), { params: { teamId: process.env.TEAM_ID_DEV, id } });
+        const response = await apiServer.get(EXTERNAL_PATHS.fetchGatheringDetail(id));
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
         const err = error as AxiosError;
