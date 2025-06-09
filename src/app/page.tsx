@@ -68,23 +68,23 @@ const GatheringCard = ({
 export default async function MainPage() {
   return (
     <div className="min-h-screen">
-      <div className="max-w-screen-lg min-h-screen h-full mx-auto pt-8 pb-10 flex flex-col gap-4">
+      <div className="bg-white contents-container">
         {/* Hero Section */}
         <section className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
           <div className="flex-1 space-y-8">
             <div className="space-y-4">
-              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+              <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                 <span className="text-gray-800">가볍게 시작하는</span><br />
                 특별한<span className="bg-gradient-to-r from-[#8B5CF6] to-[#F472B6] bg-clip-text text-transparent"> 만남</span><br />
               </h1>
-              <p className="text-xl text-gray-600 leading-relaxed max-w-md whitespace-nowrap">
+              <p className="text-sm sm:text-xl text-gray-600 leading-relaxed max-w-md whitespace-nowrap">
                 서울의 2030이라면 <strong className="text-[#8B5CF6]">Meet Meet</strong>에서 모임을 만들고<br />
                 새로운 친구를 만들어보세요!
               </p>
             </div>
 
             <Link href="/gatherings" className='inline-block'>
-              <div className="px-8 py-4 bg-button text-button-text font-semibold rounded-2xl hover:bg-main-600 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-150 cursor-pointer">
+              <div className="padding-button hover-button bg-button rounded-lg text-button-text text-sm sm:text-base font-semibold hover:bg-main-600 shadow-lg hover:shadow-xl">
                 지금 시작하기
               </div>
             </Link>
@@ -132,10 +132,10 @@ export default async function MainPage() {
           className="px-6 py-16 space-y-16"
         >
           <div className="text-center space-y-4">
-            <h2 className="text-4xl font-bold text-gray-800">
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-800">
               왜 <span className="bg-gradient-to-r from-[#8B5CF6] to-[#F472B6] bg-clip-text text-transparent">Meet Meet</span>일까요?
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto">
               내가 찾는 모임을 쉽게 조건에 따라 찾을 수 있어요
             </p>
           </div>
@@ -230,9 +230,8 @@ export default async function MainPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 {/* 로고 이미지 위치 */}
-                <div className='w-10 h-10 bg-gray-50 rounded-lg'>
+                <div className='w-10 h-10 bg-gray-50 rounded-lg hover:scale-110 transition-transform cursor-pointer'>
                   <Image src="/images/logo_hero.avif" alt="Meet Meet App" width={1000} height={1000} className="w-full h-full" />
-
                 </div>
                 <span className="text-xl font-bold">Meet Meet</span>
               </div>
@@ -254,23 +253,18 @@ export default async function MainPage() {
             <div className="space-y-4">
               <h3 className="font-semibold">고객지원</h3>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="#" className="hover:text-white transition-colors">문의하기</Link></li>
+                <li><a href="https://forms.gle/AR1iMjGXZVEpN7df8" target="_blank" className="hover:text-white transition-colors">문의하기</a></li>
               </ul>
             </div>
 
             <div className="space-y-4">
               <h3 className="font-semibold">팔로우</h3>
               <div className="flex gap-3">
-                <Link href="https://www.instagram.com/meet_meet_">
-                  <div className="w-8 h-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                    <Image src="/icons/instagram.svg" alt="Instagram" width={500} height={500} className="w-full h-full" />
-                  </div>
-                </Link>
-                <Link href="https://www.github.com/window-ook/meet-meet">
+                <a href="https://www.github.com/window-ook/meet-meet" target="_blank" className="hover:text-white transition-colors">
                   <div className="w-8 h-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
                     <Image src="/icons/github.svg" alt="Instagram" width={500} height={500} className="w-full h-full" />
                   </div>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
