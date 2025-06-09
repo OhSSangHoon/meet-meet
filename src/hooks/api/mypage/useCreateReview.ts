@@ -5,6 +5,7 @@ import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { GatheringApiParams } from '@/types/gatheringApi';
 import { handleApiError } from '@/lib/api/handleApiResponse';
+import { useGatheringsStore } from '@/store/gatheringsStore';
 
 interface CreateReviewParams {
     gatheringId: number;
@@ -20,6 +21,8 @@ interface CreateReviewParams {
 export const useCreateReview = ({ token, onCallback }: GatheringApiParams) => {
     const queryClient = useQueryClient();
 
+    const currentGatheringId = useGatheringsStore(state => state.currentGatheringId);
+
     const createReview = useMutation({
         mutationFn: async ({ gatheringId, score, comment }: CreateReviewParams) => {
             if (!token) throw new Error('로그인이 필요합니다.');
@@ -28,7 +31,8 @@ export const useCreateReview = ({ token, onCallback }: GatheringApiParams) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["myReviews", token] });
-            queryClient.invalidateQueries({ queryKey: ["gatheringReviews"] });
+            queryClient.invalidateQueries({ queryKey: ["joinedGatherings", token] });
+            queryClient.invalidateQueries({ queryKey: ["gatheringReviews", currentGatheringId] });
             onCallback?.('리뷰가 성공적으로 등록되었습니다');
         },
         onError: (error) => {

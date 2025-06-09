@@ -33,7 +33,7 @@ export const useFetchGatheringDetailReview = (
 
     const { data, isLoading, isError } = useQuery({
         enabled: !!gatheringId && enabled,
-        queryKey: ['gatheringReviews', gatheringId],
+        queryKey: ["gatheringReviews", gatheringId],
         queryFn: fetchGatheringDetailReviews,
     })
 

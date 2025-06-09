@@ -7,7 +7,7 @@ const ProfileCard = dynamic(() => import('@/components/mypage/ProfileCard'), { s
 const JoinedGatherings = dynamic(() => import('@/components/mypage/JoinedGatherings'), { ssr: false });
 const MyReviews = dynamic(() => import('@/components/mypage/MyReviews'), { ssr: false });
 const CreatedGatherings = dynamic(() => import('@/components/mypage/CreatedGatherings'), { ssr: false });
-const CreateReviewDialog = dynamic(() => import('@/components/mypage/shared/ui/CreateReviewDialog'), { ssr: false });
+const CreateReviewDialog = dynamic(() => import('@/components/mypage/CreateReviewDialog'), { ssr: false });
 
 /** 마이페이지 UI */
 export default function MyPageUI() {

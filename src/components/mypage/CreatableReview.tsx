@@ -1,3 +1,4 @@
+import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering } from '@/types/gatherings';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -7,6 +8,8 @@ const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: fal
 
 /** 나의 리뷰 - 작성 가능한 리뷰 */
 export default function CreatableReview({ gathering, myReviewsTab, userId, onOpenReviewDialog }: { gathering: Gathering, myReviewsTab: number, userId: number, onOpenReviewDialog: (gathering: { userId: number, gatheringId: number }) => void }) {
+    const setCurrentGatheringId = useGatheringsStore(state => state.setCurrentGatheringId);
+
     return (
         <div
             key={gathering.id}
@@ -28,7 +31,10 @@ export default function CreatableReview({ gathering, myReviewsTab, userId, onOpe
                     <Button
                         variant='default'
                         text='리뷰 작성하기'
-                        onClick={() => onOpenReviewDialog({ userId, gatheringId: Number(gathering.id) })}
+                        onClick={() => {
+                            setCurrentGatheringId(Number(gathering.id))
+                            onOpenReviewDialog({ userId, gatheringId: Number(gathering.id) })
+                        }}
                         customClassName='w-28 sm:w-32 text-xs sm:text-base'
                     />
                 )}

@@ -85,7 +85,6 @@ export default function CreateReviewDialog({
             onClick={handleSubmit}
             customClassName="w-full"
           />
-
         </div>
       </div>
       <ConfirmDialog
@@ -93,6 +92,7 @@ export default function CreateReviewDialog({
         text={confirmDialog.text}
         onClose={() => setConfirmDialog({ open: false, text: '' })}
         onConfirm={confirmDialog.onConfirm}
+        onCallback={() => onClose()}
       />
     </div>
   );

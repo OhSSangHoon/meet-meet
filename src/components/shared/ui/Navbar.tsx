@@ -52,13 +52,13 @@ export default function Navbar() {
                     {token && (
                         <DropdownMenu>
                             <DropdownMenuTrigger>
-                                <div className='w-8 h-8 rounded-full border border-gray-300 overflow-hidden'>
+                                <div className='w-8 h-8 rounded-full border border-gray-300 overflow-hidden cursor-pointer'>
                                     <Image
                                         src={userImage && userImage !== 'null' && userImage !== '' ? userImage : '/icons/default_profile_image.svg'}
                                         alt='profile image'
                                         width={1000}
                                         height={1000}
-                                        className='rounded-full cursor-pointer'
+                                        className='size-full rounded-full'
                                     />
                                 </div>
                             </DropdownMenuTrigger>
