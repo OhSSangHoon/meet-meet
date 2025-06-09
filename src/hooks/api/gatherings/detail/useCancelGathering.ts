@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { GatheringApiParams } from '@/types/gatheringApi';
 import { useRouter } from 'next/navigation';
-import { apiClient } from '@/lib/api/clientFetcher';
+import { apiClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { handleApiError } from '@/lib/api/handleApiResponse';
 
@@ -34,7 +34,15 @@ export const useCancelGathering = ({ token, onCallback }: GatheringApiParams) =>
         },
         onError: (error) => {
             const response = handleApiError(error);
-            response.text().then(message => onCallback?.(message));
+            response.text().then(text => {
+                try {
+                    const json = JSON.parse(text);
+                    const message = json?.error?.message || json?.message || text;
+                    onCallback?.(message);
+                } catch {
+                    onCallback?.(text);
+                }
+            });
         }
     });
 

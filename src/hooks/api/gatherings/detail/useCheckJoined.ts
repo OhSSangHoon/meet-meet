@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { JoinedGathering } from '@/types/gatherings';
-import { apiClient } from '@/lib/api/clientFetcher';
+import { apiClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import axios from 'axios';
 

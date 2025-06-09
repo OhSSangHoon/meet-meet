@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '@/lib/api/clientFetcher';
+import { apiClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from '@/types/gatherings';
 import GatheringsList from '@/components/gatherings/GatheringsList';

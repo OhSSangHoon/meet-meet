@@ -4,7 +4,7 @@ import { createContext, useState, Dispatch, SetStateAction, useEffect } from "re
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { apiClient } from '@/lib/api/clientFetcher';
+import { apiClient } from '@/lib/api/clientFetchers';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 
@@ -116,7 +116,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         setUserEmail('');
         setUserCompanyName('');
         setUserImage('');
-        queryClient.invalidateQueries({ queryKey: ['checkGatheringJoined'] });
+        queryClient.clear();
         await axios.post(INTERNAL_PATHS.SIGN_OUT);
     }
 
