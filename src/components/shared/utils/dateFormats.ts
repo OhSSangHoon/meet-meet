@@ -331,7 +331,7 @@ export const getTimeRemaining = (registrationEnd: string | DateTimeValue): strin
 };
 
 /**
- * 수정된 필터링 날짜 비교 함수 (더 간단하고 정확한 방법)
+ * 수정된 필터링 날짜 비교 함수
  * @param dateTimeString ISO 문자열 또는 날짜 문자열
  * @param targetDate YYYY-MM-DD 형식 문자열
  * @returns 같은 날짜면 true
@@ -345,17 +345,6 @@ export const isSameDateForFilter = (dateTimeString: string, targetDate: string):
         // 정확한 한국 시간 변환
         const koreanDate = new Date(utcDate.getTime() + (9 * 60 * 60 * 1000));
         const koreanDateString = koreanDate.toISOString().substring(0, 10);
-        
-        // 디버깅 로그 (임시)
-        if (dateTimeString.includes('01:00') || dateTimeString.includes('16:00')) {
-            console.log('🕐 새벽 시간 디버깅:', {
-                원본UTC: dateTimeString,
-                한국시간: koreanDate.toISOString(),
-                한국날짜: koreanDateString,
-                타겟날짜: targetDate,
-                매칭결과: koreanDateString === targetDate
-            });
-        }
         
         return koreanDateString === targetDate;
     } catch (error) {
