@@ -5,6 +5,19 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchPaginatedGatherings } from '@/components/gatherings/shared/utils/fetchPaginatedGatherings';
 import { Gathering } from '@/types/gatherings';
 
+
+/**
+ * 무한 스크롤 모임 목록 조회
+ * @param enabled 조회 가능 여부
+ * @param mainType 모임 주제
+ * @param location 위치
+ * @param date 날짜
+ * @param sortBy 정렬 기준
+ * @param sortOrder 정렬 순서
+ * @param filterSavedIds 찜목록 필터링
+ * @param startPage 시작 페이지
+ * @param excludeExpired 마감된 모임 제외 여부
+ */
 interface UseFetchInfiniteGatheringsProps {
     enabled: boolean;
     mainType?: string;
