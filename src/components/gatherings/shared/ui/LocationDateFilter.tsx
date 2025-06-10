@@ -3,16 +3,31 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, Clock, Timer, Star, Users } from 'lucide-react';
 
+/**
+ * 필터 프로퍼티
+ */
 interface Filters {
     location: string;
     date: string;
 }
 
+/**
+ * 정렬 프로퍼티
+ */
 interface Sort {
     sortBy: string;
     sortOrder: string;
 }
 
+/**
+ * 위치 날짜 필터 프로퍼티
+ * @param onFilterChange 필터 변경 콜백
+ * @param onSortChange 정렬 변경 콜백
+ * @param pageType 페이지 타입
+ * @param initialLocation 초기 위치
+ * @param initialDate 초기 날짜
+ * @param initialSort 초기 정렬
+ */
 interface LocationDateFilterProps {
     onFilterChange: (filters: Filters) => void;
     onSortChange?: (sort: Sort) => void;
@@ -28,7 +43,7 @@ export default function LocationDateFilter({
     pageType,
     initialLocation = '',
     initialDate = '',
-    initialSort = pageType === 'search' ? 'deadline_loose' : 'latest'
+    initialSort = pageType === 'search' ? 'registrationEnd_desc' : 'createdAt_desc'
 }: LocationDateFilterProps) {
     const [selectedLocation, setSelectedLocation] = useState(initialLocation);
     const [selectedDate, setSelectedDate] = useState(initialDate);
@@ -39,14 +54,14 @@ export default function LocationDateFilter({
     // 페이지별 정렬 옵션 정의
     const sortOptions = pageType === 'search' ? [
         {
-            value: 'deadline_loose',
+            value: 'registrationEnd_desc',
             label: '마감 여유순',
             icon: Clock,
             sortBy: 'registrationEnd',
             sortOrder: 'desc'
         },
         {
-            value: 'deadline_urgent',
+            value: 'registrationEnd_asc',
             label: '마감 임박순', 
             icon: Timer,
             sortBy: 'registrationEnd',
@@ -54,21 +69,21 @@ export default function LocationDateFilter({
         }
     ] : [
         {
-            value: 'latest',
+            value: 'createdAt_desc',
             label: '최신순',
             icon: Clock,
             sortBy: 'createdAt',
             sortOrder: 'desc'
         },
         {
-            value: 'high_score',
+            value: 'score_desc',
             label: '평점 높은순',
             icon: Star, 
             sortBy: 'score',
             sortOrder: 'desc'
         },
         {
-            value: 'most_participants',
+            value: 'participantCount_desc',
             label: '참여인원 많은순',
             icon: Users,
             sortBy: 'participantCount',
@@ -80,7 +95,8 @@ export default function LocationDateFilter({
     useEffect(() => {
         setSelectedLocation(initialLocation);
         setSelectedDate(initialDate);
-    }, [initialLocation, initialDate]);
+        setCurrentSort(initialSort);
+    }, [initialLocation, initialDate, initialSort]);
 
     // 필터 변경 처리
     const updateFilters = useCallback(() => {
@@ -115,7 +131,7 @@ export default function LocationDateFilter({
 
     // 모임찾기 페이지용 단순 토글 함수
     const handleSearchToggle = () => {
-        const newSort = currentSort === 'deadline_loose' ? 'deadline_urgent' : 'deadline_loose';
+        const newSort = currentSort === 'registrationEnd_desc' ? 'registrationEnd_asc' : 'registrationEnd_desc';
         handleSortChange(newSort);
     };
 
@@ -231,7 +247,7 @@ export default function LocationDateFilter({
                 {onSortChange && (
                     <div className="flex items-center gap-3 ml-auto">
                         {pageType === 'search' ? (
-                            // 모임찾기 필터링 (마감 여유순, 마감 임박순) - 반응형 적용
+                            // 모임찾기 필터링 (마감 여유순, 마감 임박순)
                             <button
                                 onClick={handleSearchToggle}
                                 className="flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500 transition-all duration-200"
@@ -240,7 +256,7 @@ export default function LocationDateFilter({
                                 <span className="hidden sm:inline">{currentOption?.label}</span>
                             </button>
                         ) : (
-                            // 리뷰 필터링 (최신순, 평점 높은순, 참여인원 많은순) - 반응형 적용
+                            // 리뷰 필터링 (최신순, 평점 높은순, 참여인원 많은순)
                             <div className="relative">
                                 <button
                                     onClick={() => setIsSortOpen(!isSortOpen)}

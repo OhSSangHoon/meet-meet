@@ -26,9 +26,6 @@ export default function GatheringFilters({
 
     const isLoggedIn = useContext(AuthContext);
 
-    console.log('AuthContext 값:', isLoggedIn);
-    console.log('로그인 상태:', !!isLoggedIn);
-
     // 초기값이 변경되면 상태 업데이트
     useEffect(() => {
         setSelectedMainType(initialMainType);
@@ -59,12 +56,14 @@ export default function GatheringFilters({
                 <div className={`absolute bottom-0 h-0.5 bg-gray-900 transition-all duration-300 ease-in-out w-20 ${selectedMainType === 'DALLAEMFIT' ? 'translate-x-2' : 'translate-x-26'}`} />
                 <button
                     onClick={() => handleMainTypeChange('DALLAEMFIT')}
+                    title='외향인인 당신에게 추천하는 모임!'
                     className={`text-gray-900 text-lg font-semibold px-4 py-1 cursor-pointer`}
                 >
                     북적북적
                 </button>
                 <button
                     onClick={() => handleMainTypeChange('DORANDORAN')}
+                    title='내향인인 당신에게 추천하는 모임!'
                     className={`text-gray-900 text-lg font-semibold px-4 py-1 cursor-pointer`}
                 >
                     도란도란
@@ -105,9 +104,18 @@ export default function GatheringFilters({
                 </div>
             )}
 
-            {/* 도란도란 선택 시 border */}
+            {/* 선택된 모임 타입에 따라 필터 표시 */}
             {selectedMainType === 'DORANDORAN' && (
-                <div className="w-full h-[78px] flex flex-col justify-start py-5 border-b-2 border-gray-200" />
+                <div className="w-full h-[78px] flex flex-col justify-start py-5 border-b-2 border-gray-200" >
+                    <div className="flex flex-row items-center gap-2">
+                    <button
+                    onClick={() => handleSubTypeChange('ALL')}
+                    className="bg-gray-800 text-white text-sm font-medium px-3 py-2 rounded-lg cursor-pointer"
+                >
+                        전체
+                    </button>
+                </div>
+                </div>
             )}
         </div>
     );
