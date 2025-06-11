@@ -8,7 +8,7 @@ import axios from 'axios';
 /** 
  * 모임 상세 페이지 상세 정보 조회 훅
  * @param id
- * @returns {data, isLoading, isError}
+ * @returns {detail, participants, isLoading, isError, retchIsSaved}
  */
 export const useFetchGatheringDetail = (
     id: number

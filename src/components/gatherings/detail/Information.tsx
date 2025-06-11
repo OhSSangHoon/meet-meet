@@ -77,15 +77,15 @@ export default function Information({ detail, id, participants }: { detail: Gath
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent side="top" align="center" className="flex gap-1 bg-white border border-button rounded-lg p-2 shadow-lg">
-                                        {participants?.slice(4).length > 0 ? (
-                                            participants?.slice(4).map((participant: Participant, i: number) => (
+                                        {participants?.slice(4)?.length > 0 ? (
+                                            participants.slice(4).map((participant: Participant) => (
                                                 <Image
                                                     key={participant?.User?.id}
                                                     src={participant?.User?.image || '/icons/default_profile_image.svg'}
                                                     alt="프로필 이미지"
                                                     width={100}
                                                     height={100}
-                                                    className={`w-8 h-8 rounded-full border-2 border-white ${i === 0 ? 'ml-0' : '-ml-2'}`}
+                                                    className="size-8 rounded-full border-2 border-white"
                                                 />
                                             ))
                                         ) : (

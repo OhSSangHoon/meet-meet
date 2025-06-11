@@ -42,7 +42,6 @@ export const AuthContext = createContext<AuthContextType>({
     userImage: '',
 });
 
-
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [token, setToken] = useState<string | null>(null);
     const [userName, setUserName] = useState('이름');
@@ -133,8 +132,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         setUserImage(data.image);
     };
 
-
-    // 페이지 이동 시 토큰, 유저명, 유저 아이디 감지 (처음 한 번)
+    /** 페이지 이동 시 유저 정보 감지 */
     useEffect(() => {
         const checkAuth = () => {
             const storedToken = localStorage.getItem('token');
@@ -157,11 +155,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         checkAuth();
     }, []);
 
+    /** Protect Routes */
     useEffect(() => {
         if (isLoading) return; // 로딩 중이면 아무것도 하지 않음
-        if (!token && pathname.startsWith('/mypage')) setSignInDialogOpen(true); // 마이페이지 접근 시 로그인 확인
-        if (pathname !== '/signin' && !pathname.includes('/auth/')) setPreviousPath(pathname); // 로그인 후 이전 경로 저장
-        if (token && pathname === '/signin') router.replace(previousPath); // 로그인 후 로그인 페이지 접근 시 이전 경로로 이동
+        if (!token && pathname === '/mypage') setSignInDialogOpen(true); // 마이페이지: 로그인 필요
+        if (!token && pathname === '/saved') setSignInDialogOpen(true); // 찜한 모임: 로그인 필요
+        if (pathname !== '/signin' && !pathname.includes('/auth')) setPreviousPath(pathname); // 로그인 후 이전 경로 저장
+        if (token && pathname === '/signin') router.replace(previousPath); // 로그인: 로그인 되어있는 경우, 이전 경로로 이동
+        if (token && pathname === '/signup') router.replace('/'); // 회원가입: 로그인 되어있는 경우, 메인페이지로 이동(이건 직접 주소 입력으로 뚫고 들어오는 경우 때문에 추가)
     }, [isLoading, token, pathname, router, previousPath]);
 
     const handleSignInModalConfirm = () => {

@@ -74,7 +74,7 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
             <span className="text-gray-500 text-center">아직 작성한 리뷰가 없어요</span>
             :
             <div
-              className="relative min-h-[100px] w-full p-4 rounded-xl flex gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
+              className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
             >
               {createdReviews?.map((review: ReviewItem) => (
                 <div key={`${review?.Gathering?.id}-${review?.id}`}><CreatedReview review={review} /></div>

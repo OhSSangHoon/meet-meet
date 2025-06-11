@@ -25,9 +25,9 @@ export default function JoinedCountsProgressBar({ participantCount, capacity }: 
                 className="absolute -top-1 left-0"
                 style={{ left: `calc(${minPercent}% - 8px)` }}
             >
-                <div className="w-4 h-4 bg-main-500 rounded-full border-2 border-white shadow" />
+                <div className="size-4 bg-main-pink rounded-full border-2 border-white shadow" />
                 {!hideMinIndicator && (
-                    <span className="absolute left-1/2 -translate-x-1/2 mt-1 text-xs text-main-500 font-semibold whitespace-nowrap">
+                    <span className="hidden md:block absolute left-1/2 -translate-x-1/2 mt-1 text-xs text-main-pink font-semibold whitespace-nowrap">
                         개설확정
                     </span>
                 )}

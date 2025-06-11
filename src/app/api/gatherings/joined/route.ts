@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { AxiosError } from 'axios';
 import { externalClient } from '@/lib/api/clientFetchers';
+import { handleApiError } from '@/lib/api/handleApiError';
 
 /**
  * 모임 참여 확인
@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json(response.data);
     } catch (error) {
-        const err = error as AxiosError;
-        return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
+        return handleApiError(error);
     }
 }

@@ -11,8 +11,7 @@ import { externalClient } from '@/lib/api/clientFetchers';
  * @returns 해당 모임의 참가자 목록 조회
 */
 export async function GET(request: NextRequest) {
-    const searchParams = request.nextUrl.searchParams;
-    const id = Number(searchParams.get('id'));
+    const id = Number(request.nextUrl.searchParams.get('id'));
     const token = request.headers.get('Authorization');
 
     if (!id) return new NextResponse(JSON.stringify({ error: '모임 id가 필요합니다' }), { status: 400 });
