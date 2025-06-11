@@ -4,7 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GatheringApiParams } from '@/types/gatheringApi';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { handleApiError } from '@/lib/api/handleApiResponse';
+import { AxiosError } from 'axios';
+import { isErrorResponse } from '@/lib/api/handleApiError';
 
 /** 모임 참여 취소 훅
 * @param token 토큰
@@ -28,16 +29,9 @@ export const useLeaveGathering = ({ token, onCallback }: GatheringApiParams) => 
             onCallback?.('참여 취소했습니다');
         },
         onError: (error) => {
-            const response = handleApiError(error);
-            response.text().then(text => {
-                try {
-                    const json = JSON.parse(text);
-                    const message = json?.error?.message || json?.message || text;
-                    onCallback?.(message);
-                } catch {
-                    onCallback?.(text);
-                }
-            });
+            const err = error as AxiosError;
+            const message = (isErrorResponse(err?.response?.data) && err?.response?.data.message) || '참여 취소에 실패했습니다';
+            onCallback?.(message);
         }
     });
 

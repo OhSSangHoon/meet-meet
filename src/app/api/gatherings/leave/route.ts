@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { AxiosError } from 'axios';
+import { handleApiError } from '@/lib/api/handleApiError';
 import { externalClient } from '@/lib/api/clientFetchers';
 
 /**
@@ -22,7 +22,6 @@ export async function DELETE(request: NextRequest) {
         const response = await externalClient.delete(EXTERNAL_PATHS.leaveGathering(id), { headers: { 'Authorization': token } });
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
-        const err = error as AxiosError;
-        return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
+        return handleApiError(error);
     }
 }

@@ -33,7 +33,7 @@ const LIMIT = 4;
 
 /** 모임 상세 페이지 UI */
 export default function GatheringsDetailUI({ id, detailReviews }: { id: string, detailReviews: Reviews }) {
-    const { token, userId, signInDialogOpen, setSignInDialogOpen } = useContext(AuthContext);
+    const { token, userId, signInDialogOpen, setSignInDialogOpen, signOut } = useContext(AuthContext);
 
     const [page, setPage] = useState(detailReviews?.currentPage ?? 1);
     const [reviews, setReviews] = useState<ReviewItem[]>(detailReviews.data);
@@ -44,7 +44,7 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
     const offset = (page - 1) * LIMIT;
 
     const { detail, participants, isLoading: detailLoading } = useFetchGatheringDetail(Number(id));
-    const { data: isParticipated, } = useCheckJoined(Number(id), token);
+    const { data: isParticipated, errorMessage } = useCheckJoined(Number(id), token);
     const { data: nextPageData, isLoading: reviewsLoading } = useFetchGatheringDetailReview(
         Number(id),
         LIMIT,
@@ -66,20 +66,26 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
     });
 
     useEffect(() => {
-        if (page === 1) {
-            setReviews(detailReviews.data);
-        } else if (nextPageData) {
-            setReviews(nextPageData.data);
-        }
+        if (page === 1) setReviews(detailReviews.data);
+        else if (nextPageData) setReviews(nextPageData.data);
     }, [page, nextPageData, detailReviews.data]);
+
+    useEffect(() => {
+        if (errorMessage) {
+            if (errorMessage === '로그인이 만료되었습니다') {
+                openConfirmDialog(setDialog, errorMessage, () => {
+                    signOut()
+                    router.push('/signin')
+                });
+            }
+        }
+    }, [router, errorMessage, setSignInDialogOpen, signOut]);
 
     const queryClient = useQueryClient();
 
     const handleDeleteConfirm = () => {
         cancelGathering(Number(id));
-
         queryClient.invalidateQueries({ queryKey: ['gatherings'] });
-
         setDialog((prev) => ({ ...prev, isOpen: false }));
     };
 

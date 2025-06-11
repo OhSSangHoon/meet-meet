@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
-import axios, { AxiosError } from 'axios';
+import { handleApiError } from '@/lib/api/handleApiError';
 import { externalClient } from '@/lib/api/clientFetchers';
 
 /**
@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response.data);
   } catch (error) {
-    const err = error as AxiosError;
-    return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -47,15 +46,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response.data);
   } catch (error) {
-    console.error('리뷰 생성 중 오류:', error);
-
-    if (axios.isAxiosError(error) && error.response) {
-      return NextResponse.json(error.response.data, { status: error.response.status });
-    }
-
-    return NextResponse.json(
-      { code: 'SERVER_ERROR', message: '리뷰 생성에 실패했습니다.' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

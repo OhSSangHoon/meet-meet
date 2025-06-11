@@ -6,7 +6,8 @@ import { GatheringApiParams } from '@/types/gatheringApi';
 import { useRouter } from 'next/navigation';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { handleApiError } from '@/lib/api/handleApiResponse';
+import { AxiosError } from 'axios';
+import { isErrorResponse } from '@/lib/api/handleApiError';
 
 /** 모임 삭제 훅
 * @param token 토큰
@@ -33,16 +34,9 @@ export const useCancelGathering = ({ token, onCallback }: GatheringApiParams) =>
             onCallback?.('모임을 삭제했습니다', () => router.replace('/gatherings'));
         },
         onError: (error) => {
-            const response = handleApiError(error);
-            response.text().then(text => {
-                try {
-                    const json = JSON.parse(text);
-                    const message = json?.error?.message || json?.message || text;
-                    onCallback?.(message);
-                } catch {
-                    onCallback?.(text);
-                }
-            });
+            const err = error as AxiosError;
+            const message = (isErrorResponse(err?.response?.data) && err?.response?.data.message) || '모임 취소에 실패했습니다';
+            onCallback?.(message);
         }
     });
 

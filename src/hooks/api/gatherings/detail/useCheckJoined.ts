@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { JoinedGathering } from '@/types/gatherings';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import axios from 'axios';
+import { isErrorResponse } from '@/lib/api/handleApiError';
+import { AxiosError } from 'axios';
 
 /** 
  * 모임 참여 확인 훅
@@ -15,26 +16,22 @@ export const useCheckJoined = (
     id: number,
     token: string | null
 ) => {
-
     const checkJoined = async () => {
-        try {
-            const response = await internalClient.get(INTERNAL_PATHS.CHECK_JOINED, { headers: { Authorization: `Bearer ${token}` } },);
-            return response.data.some((gathering: JoinedGathering) => gathering.id === Number(id))
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const serverError = error?.response?.data?.error;
-                console.error(serverError?.message);
-            }
-            return false;
-        }
+        const response = await internalClient.get(INTERNAL_PATHS.CHECK_JOINED, { headers: { Authorization: `Bearer ${token}` } },);
+        return response.data.some((gathering: JoinedGathering) => gathering.id === Number(id))
     }
 
-    const { data, isLoading, isError } = useQuery({
+    const { data, isLoading, isError, error } = useQuery({
         enabled: !!id && !!token,
         queryKey: ['checkGatheringJoined', id],
         queryFn: () => checkJoined(),
     })
 
-    return { data, isLoading, isError }
+    const errorMessage = error ? (() => {
+        const err = error as AxiosError;
+        return (isErrorResponse(err?.response?.data) && err?.response?.data.message) || '참여 확인에 실패했습니다';
+    })() : null;
+
+    return { data, isLoading, isError, errorMessage }
 }
 

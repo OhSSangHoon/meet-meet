@@ -4,8 +4,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { GatheringApiParams } from '@/types/gatheringApi';
-import { handleApiError } from '@/lib/api/handleApiResponse';
 import { useGatheringsStore } from '@/store/gatheringsStore';
+import { AxiosError } from 'axios';
+import { isErrorResponse } from '@/lib/api/handleApiError';
 
 interface CreateReviewParams {
     gatheringId: number;
@@ -36,16 +37,9 @@ export const useCreateReview = ({ token, onCallback }: GatheringApiParams) => {
             onCallback?.('리뷰가 성공적으로 등록되었습니다');
         },
         onError: (error) => {
-            const response = handleApiError(error);
-            response.text().then(text => {
-                try {
-                    const json = JSON.parse(text);
-                    const message = json?.error?.message || json?.message || text;
-                    onCallback?.(message);
-                } catch {
-                    onCallback?.(text);
-                }
-            });
+            const err = error as AxiosError;
+            const message = (isErrorResponse(err?.response?.data) && err?.response?.data.message) || '리뷰 작성에 실패했습니다';
+            onCallback?.(message);
         }
     });
 

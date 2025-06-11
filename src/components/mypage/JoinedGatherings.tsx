@@ -2,9 +2,9 @@
 
 import { useFetchJoinedGatherings } from '@/hooks/api/mypage/useFetchJoinedGatherings';
 import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGathering';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { getTimeRemaining } from '@/components/shared/utils/dateFormats';
+import { getTimeRemaining, toKoreanTime } from '@/components/shared/utils/dateFormats';
 import { CheckCircle } from "lucide-react"
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -24,12 +24,12 @@ interface JoinedGatheringsProps {
 
 /** 마이페이지 '참여중인 모임' */
 export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOpenReviewDialog }: JoinedGatheringsProps) {
-  const { token, userId } = useContext(AuthContext);
+  const { token, userId, signOut } = useContext(AuthContext);
 
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { data: gatherings = [], isLoading, error } = useFetchJoinedGatherings(token!);
+  const { data: gatherings = [], isLoading, error, errorMessage: fetchErrorMessage } = useFetchJoinedGatherings(token!);
 
   const { leaveGathering } = useLeaveGathering({
     token,
@@ -39,18 +39,33 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
     },
   });
 
-  const sortedGatherings = [...gatherings].sort((a, b) => {
-    if (a.isCompleted === b.isCompleted) {
-      const A_REGISTRATION_END = new Date(a.registrationEnd || '').getTime();
-      const B_REGISTRATION_END = new Date(b.registrationEnd || '').getTime();
-      return B_REGISTRATION_END - A_REGISTRATION_END;
+  // 참여 모임 데이터 페칭 에러 발생 시, 에러 메시지 팝업 (토큰 만료)
+  useEffect(() => {
+    if (fetchErrorMessage) {
+      setErrorMessage(fetchErrorMessage);
+      setIsErrorDialogOpen(true);
     }
+  }, [fetchErrorMessage]);
+
+  const handleErrorDialogClose = () => {
+    setIsErrorDialogOpen(false);
+    if (errorMessage === '로그인이 만료되었습니다') signOut();
+  };
+
+  const sortedGatherings = [...gatherings].sort((a, b) => {
+    // 완료 상태가 같은 경우, 마감일 기준으로 정렬 (최신 마감일 우선)
+    if (a.isCompleted === b.isCompleted) {
+      const aRegistrationEnd = a.registrationEnd ? toKoreanTime(a.registrationEnd).getTime() : 0;
+      const bRegistrationEnd = b.registrationEnd ? toKoreanTime(b.registrationEnd).getTime() : 0;
+      return bRegistrationEnd - aRegistrationEnd;
+    }
+    // 완료되지 않은 모임을 먼저 표시
     return a.isCompleted ? 1 : -1;
   });
 
   if (isLoading) return <LoadingUI />;
-  if (error) return <div className="text-red-500">에러: {error.message}</div>;
-  if (gatherings.length === 0) return <div className="text-gray-500 text-center">참여한 모임이 없습니다</div>;
+  if (error && !fetchErrorMessage) return <div className="text-red-500">에러: {error.message}</div>;
+  if (gatherings.length === 0 && !error) return <div className="text-gray-500 text-center">참여한 모임이 없습니다</div>;
 
   return (
     <section className='px-4 flex flex-col gap-2'>
@@ -146,7 +161,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
       <ConfirmDialog
         isOpen={isErrorDialogOpen}
         text={errorMessage}
-        onClose={() => setIsErrorDialogOpen(false)}
+        onClose={handleErrorDialogClose}
       />
     </section>
   );
