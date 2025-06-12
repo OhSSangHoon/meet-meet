@@ -18,7 +18,7 @@ export default function SavedGatheringsClient() {
     const { savedIds } = useToggleSavedGatherings();
 
     // 찜한 모임의 상세 데이터만 별도로 가져오기
-    const { data: allSavedGatherings = [], isLoading } = useQuery({
+    const { data: allSavedGatherings = [] } = useQuery({
         queryKey: ["allSavedGatherings", savedIds], // savedIds 자동 갱신
         queryFn: async () => {
             if (savedIds.length === 0) return [];
@@ -70,39 +70,18 @@ export default function SavedGatheringsClient() {
                 onTypeChange={handleTypeChange}
                 initialMainType={selectedMainType}
                 initialSubType={selectedSubType}
-                showCreateButton={false} // 찜한 모임 페이지에서는 모임 만들기 버튼 숨김
+                showCreateButton={false}
             />
             
             <GatheringsList
                 ssrGatherings={allSavedGatherings}
                 selectedMainType={selectedMainType}
                 selectedSubType={selectedSubType}
-                filters={{ location: '', date: '' }} // 기본 필터 (찜한 모임에서는 위치/날짜 필터 사용 안함)
-                sort={{ sortBy: 'registrationEnd', sortOrder: 'desc' }} // 기본 정렬
-                enableInfiniteScroll={false} // 찜한 모임에서는 무한스크롤 비활성화
-                savedGatheringIds={savedIds} // 찜한 모임 ID 목록 (선택사항)
+                filters={{ location: '', date: '' }}
+                sort={{ sortBy: 'registrationEnd', sortOrder: 'desc' }}
+                enableInfiniteScroll={false}
+                savedGatheringIds={savedIds}
             />
-
-            {/* 찜한 모임이 없는 경우 안내 메시지 */}
-            {!isLoading && savedIds.length === 0 && (
-                <div className="w-full h-[400px] flex flex-col justify-center items-center text-gray-500 font-medium">
-                    <h3 className="text-lg font-semibold mb-2">아직 찜한 모임이 없어요</h3>
-                    <p className="text-sm text-center">
-                        마음에 드는 모임을 찾아서<br />
-                        하트 버튼을 눌러보세요!
-                    </p>
-                </div>
-            )}
-
-            {/* 로딩 상태 */}
-            {isLoading && savedIds.length > 0 && (
-                <div className="w-full h-[200px] flex justify-center items-center">
-                    <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 border-3 border-main-500 border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-gray-600 font-medium">찜한 모임을 불러오는 중...</span>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

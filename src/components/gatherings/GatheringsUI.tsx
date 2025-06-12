@@ -157,7 +157,6 @@ export default function Gatherings({ ssrGatherings, initialFilters }: Gatherings
                     sort={currentSort}
                     enableInfiniteScroll={true}
                     savedGatheringIds={[]}
-                    excludeExpired={true}
                 />
             </div>
 

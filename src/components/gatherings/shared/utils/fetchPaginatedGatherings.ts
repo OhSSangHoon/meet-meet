@@ -1,7 +1,7 @@
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { Gathering } from "@/types/gatherings";
-import { isSameDateForFilter, isGatheringExpired } from '@/components/shared/utils/dateFormats';
+import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
 
 /**
  * 페이지네이션된 모임 목록 조회
@@ -12,7 +12,6 @@ import { isSameDateForFilter, isGatheringExpired } from '@/components/shared/uti
  * @param filterSavedIds 찜목록 필터링
  * @param sortBy 정렬 기준
  * @param sortOrder 정렬 순서
- * @param excludeExpired 마감된 모임 제외 여부
  */
 export async function fetchPaginatedGatherings(
     page: number,
@@ -22,7 +21,6 @@ export async function fetchPaginatedGatherings(
     filterSavedIds?: string[],
     sortBy: string = 'registrationEnd',
     sortOrder: string = 'desc',
-    excludeExpired: boolean = true
 ): Promise<Gathering[]> {
     try {
         // mainType에 따른 type 파라미터 설정
@@ -66,13 +64,6 @@ export async function fetchPaginatedGatherings(
                 console.error('응답 데이터 형식 오류:', response.data);
                 return [];
             }
-        }
-
-        // 마감된 모임 필터링 추가
-        if (excludeExpired) {
-            gatherings = gatherings.filter((gathering: Gathering) => 
-                !isGatheringExpired(gathering.registrationEnd)
-            );
         }
 
         // 한국 시간 기준 날짜 필터링

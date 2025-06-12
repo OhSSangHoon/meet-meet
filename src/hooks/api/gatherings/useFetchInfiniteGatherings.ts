@@ -16,7 +16,6 @@ import { Gathering } from '@/types/gatherings';
  * @param sortOrder 정렬 순서
  * @param filterSavedIds 찜목록 필터링
  * @param startPage 시작 페이지
- * @param excludeExpired 마감된 모임 제외 여부
  */
 interface UseFetchInfiniteGatheringsProps {
     enabled: boolean;
@@ -27,7 +26,6 @@ interface UseFetchInfiniteGatheringsProps {
     sortOrder?: string;
     filterSavedIds?: string[];
     startPage?: number;
-    excludeExpired?: boolean;
 }
 
 export function useFetchInfiniteGatherings({
@@ -39,7 +37,6 @@ export function useFetchInfiniteGatherings({
     sortOrder = 'desc',
     filterSavedIds,
     startPage = 0,
-    excludeExpired = true
 }: UseFetchInfiniteGatheringsProps) {
     const [infiniteScrollEnabled] = useState(true);
     const [hasTriggeredFirstFetch, setHasTriggeredFirstFetch] = useState(false);
@@ -58,7 +55,6 @@ export function useFetchInfiniteGatherings({
             sortBy,
             sortOrder,
             startPage,
-            excludeExpired,
             filterSavedIds: filterSavedIds?.sort().join(',') || ''
         }
     ];
@@ -82,7 +78,7 @@ export function useFetchInfiniteGatherings({
                 filterSavedIds,
                 sortBy,
                 sortOrder,
-                excludeExpired
+                
             );
         },
         getNextPageParam: (lastPage, allPages) => {
