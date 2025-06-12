@@ -250,7 +250,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                                     name="location"
                                     value={formData.location}
                                     onChange={handleInputChange}
-                                    className="w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold appearance-none bg-[url('/icons/polygon_down.svg')] bg-[length:13px_13px] bg-[right_16px_center] bg-no-repeat"
+                                    className="w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold appearance-none bg-[url('https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717642/polygon_down_kqzif8.svg')] bg-[length:13px_13px] bg-[right_16px_center] bg-no-repeat"
                                 >
                                     {LOCATION_OPTIONS.map(option => (
                                         <option key={option.value} value={option.value}>

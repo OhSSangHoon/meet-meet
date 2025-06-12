@@ -125,7 +125,11 @@ export default function SignUpForm() {
                             className='absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer hover:opacity-60 transition-all duration-200 ease-in-out'
                             onClick={() => setIsPasswordCheckVisible((v) => !v)}
                         >
-                            <Image src={isPasswordCheckVisible ? "/icons/visibility_on.svg" : "/icons/visibility_off.svg"} alt="비밀번호 보기 숨김" width={24} height={24} />
+                            <Image
+                                src={isPasswordCheckVisible ? "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713866/visibility_on_jh4sec.svg" : "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713865/visibility_off_qtspno.svg"}
+                                alt="비밀번호 보기 숨김"
+                                width={24}
+                                height={24} />
                         </button>
                     </div>
                     {!isPasswordMatch || !passwordCheck ? (

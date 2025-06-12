@@ -61,7 +61,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
                                 {participants?.slice(0, 4).map((participant: Participant, i: number) => (
                                     <Image
                                         key={participant?.User?.id}
-                                        src={participant?.User?.image || '/icons/default_profile_image.svg'}
+                                        src={participant?.User?.image || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'}
                                         alt="프로필 이미지"
                                         width={100}
                                         height={100}
@@ -81,7 +81,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
                                             participants.slice(4).map((participant: Participant) => (
                                                 <Image
                                                     key={participant?.User?.id}
-                                                    src={participant?.User?.image || '/icons/default_profile_image.svg'}
+                                                    src={participant?.User?.image || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'}
                                                     alt="프로필 이미지"
                                                     width={100}
                                                     height={100}

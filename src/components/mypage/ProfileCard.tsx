@@ -2,6 +2,7 @@
 
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
+import { SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
@@ -19,14 +20,8 @@ export default function ProfileCard() {
       <section className="bg-main-350 relative px-4 py-6">
         <div className="mb-1 text-sm sm:text-base md:text-lg font-bold text-white">내 프로필</div>
         <div className="absolute top-4 right-4">
-          <button type="button" onClick={() => setIsProfileEditDialogOpen(true)} className='rounded-full hover-button'>
-            <Image
-              src="/icons/edit.svg"
-              alt="프로필 수정"
-              width={36}
-              height={36}
-              className="pointer-events-none size-8 sm:size-10"
-            />
+          <button type="button" onClick={() => setIsProfileEditDialogOpen(true)} className='size-8 sm:size-10 rounded-full flex items-center justify-center hover-button'>
+            <SquarePen className="text-white" />
           </button>
         </div>
       </section>
@@ -36,7 +31,7 @@ export default function ProfileCard() {
         {/* 이미지 */}
         <div className="size-12 sm:size-18 z-1 -mt-20 rounded-full border border-gray-400">
           <Image
-            src={userImage || '/icons/default_profile_image.svg'}
+            src={userImage || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'}
             alt="프로필"
             width={1000}
             height={1000}

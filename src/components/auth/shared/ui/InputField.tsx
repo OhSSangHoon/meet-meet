@@ -33,7 +33,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
                         tabIndex={-1}
                     >
                         <Image
-                            src={isPasswordVisible ? "/icons/visibility_on.svg" : "/icons/visibility_off.svg"}
+                            src={isPasswordVisible ? "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713866/visibility_on_jh4sec.svg" : "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713865/visibility_off_qtspno.svg"}
                             alt="비밀번호 보기 숨김"
                             width={24}
                             height={24}

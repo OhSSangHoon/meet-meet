@@ -48,7 +48,7 @@ export default function DetailInformationLoading() {
                         {/* 참여자들의 프로필 이미지 */}
                         <div className="flex items-center">
                             <Image
-                                src='/icons/default_profile_image.svg'
+                                src='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
                                 alt="프로필 이미지"
                                 width={100}
                                 height={100}

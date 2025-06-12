@@ -6,28 +6,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
         hostname: "sprint-fe-project.s3.ap-northeast-2.amazonaws.com",
       },
       {
         protocol: 'https',
-        hostname: 'media.timeout.com',
+        hostname: 'res.cloudinary.com',
       },
-      {
-        protocol: 'https',
-        hostname: 'cdn.banronbodo.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.mirae-biz.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'github.com',
-      }
     ],
   },
   webpack(config, { isServer: _isServer }) {

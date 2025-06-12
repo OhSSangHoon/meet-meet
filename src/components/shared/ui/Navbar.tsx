@@ -36,7 +36,7 @@ export default function Navbar() {
             <div className="max-w-screen-lg mx-auto h-[3.75rem] py-8 px-5 flex justify-between items-center">
                 <section className='flex gap-2 sm:gap-4 items-center'>
                     <Image
-                        src="/images/logo.avif"
+                        src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713224/logo_krdgww.avif"
                         alt="logo image"
                         width={100}
                         height={100}
@@ -61,7 +61,7 @@ export default function Navbar() {
                             <DropdownMenuTrigger>
                                 <div className='w-8 h-8 rounded-full border border-gray-300 overflow-hidden cursor-pointer'>
                                     <Image
-                                        src={userImage && userImage !== 'null' && userImage !== '' ? userImage : '/icons/default_profile_image.svg'}
+                                        src={userImage && userImage !== 'null' && userImage !== '' ? userImage : 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'}
                                         alt='profile image'
                                         width={1000}
                                         height={1000}

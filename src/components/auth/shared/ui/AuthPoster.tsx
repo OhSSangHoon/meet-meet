@@ -5,7 +5,7 @@ export default function AuthPoster() {
     return (
         <div className='flex flex-col sm:flex-row lg:flex-col gap-2 items-center justify-center'>
             <Image
-                src='/images/auth_background.avif'
+                src='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713004/auth_background_dyr3yy.avif'
                 alt='로그인, 회원가입 페이지 배경 이미지'
                 width={2000}
                 height={2000}

@@ -114,7 +114,11 @@ export default async function MainPage() {
           <div className="flex-1 relative">
             {/* 메인 히어로 이미지 */}
             <div className="w-full max-w-md mx-auto h-96 bg-gradient-to-br from-main-100 to-pink-200 rounded-3xl shadow-2xl flex items-center justify-center">
-              <Image src="/images/logo_hero.avif" alt="Meet Meet App" width={1000} height={1000} className="w-2/3 mx-auto" />
+              <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713054/logo_hero_lp6zw5.avif"
+                alt="메인 히어로 이미지"
+                width={1000}
+                height={1000}
+                className="w-2/3 mx-auto" />
             </div>
             {/* Floating Elements */}
             <div className="absolute top-4 right-4 w-16 h-16 bg-[#F6D55C] rounded-full flex items-center justify-center shadow-lg animate-bounce">
@@ -180,12 +184,12 @@ export default async function MainPage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <GatheringCard
-                title="한강 러닝해요"
-                schedule="20일 후 마감"
+                title="반포 러닝 크루 모집합니다!"
+                schedule="13일 후 마감"
                 category="액티비티"
                 participants={10}
                 categoryColor="bg-[#6EE7B7]"
-                image="https://media.timeout.com/images/103202193/750/562/image.jpg"
+                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/running_p79a4b.avif"
               />
               <GatheringCard
                 title="원데이 클래스 같이 들어요"
@@ -193,23 +197,23 @@ export default async function MainPage() {
                 category="액티비티"
                 participants={4}
                 categoryColor="bg-[#F6D55C]"
-                image="https://cdn.banronbodo.com/news/photo/202404/22773_29231_3931.jpg"
+                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/oneday_class_kwsiry.avif"
               />
               <GatheringCard
-                title="경제 공부해요@@"
+                title="축구 보면서 맥주 고고고"
                 schedule="3시간 후 마감"
                 category="도란도란"
                 participants={6}
                 categoryColor="bg-[#8B5CF6]"
-                image="/images/main_meeting2.avif"
+                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/pub_vqo6b7.avif"
               />
               <GatheringCard
-                title="성수 팝업 같이 가요"
-                schedule="14일 후 마감"
+                title="더 현대 팝업 가실 분?!"
+                schedule="6일 2시간 후 마감"
                 category="엔터테인먼트"
                 participants={5}
                 categoryColor="bg-[#F472B6]"
-                image="https://www.mirae-biz.com/news/photo/202411/97117_96810_4237.jpg"
+                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/popup_wcwq04.avif"
               />
             </div>
 
@@ -262,7 +266,7 @@ export default async function MainPage() {
               <div className="flex gap-3">
                 <a href="https://www.github.com/window-ook/meet-meet" target="_blank" className="hover:text-white transition-colors">
                   <div className="w-8 h-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                    <Image src="/icons/github.svg" alt="Instagram" width={500} height={500} className="w-full h-full" />
+                    <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713865/github_xnloon.svg" alt="Instagram" width={500} height={500} className="w-full h-full" />
                   </div>
                 </a>
               </div>
