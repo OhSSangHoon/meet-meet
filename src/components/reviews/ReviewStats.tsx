@@ -19,7 +19,7 @@ export default function ReviewsStats({ reviews }: ReviewsStatsProps) {
         2: reviews.filter((r) => r.score === 2).length,
         1: reviews.filter((r) => r.score === 1).length,
     };
-    
+
     // 전체 리뷰 개수를 100% 기준으로 사용
     const totalReviews = reviews.length;
 
@@ -28,7 +28,7 @@ export default function ReviewsStats({ reviews }: ReviewsStatsProps) {
             <div className="flex items-center gap-6">
                 {/* 평균 점수 */}
                 <div className="w-40 flex flex-col items-center">
-                    <h2 className="text-2xl font-bold text-gray-900">
+                    <h2 className="text-2xl font-bold">
                         {average.toFixed(1)}<span className="text-gray-500 text-lg"> / 5</span>
                     </h2>
                     {average > 0 ? (

@@ -140,7 +140,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
         {/* 달력 날짜들 */}
         <div className="grid grid-cols-7 gap-1 mb-4">
           {calendarDays.map((date) => {
-            const isCurrentMonth = date.getMonth() === currentDate.getMonth();
             const isSelected = selectedDate &&
               date.getFullYear() === selectedDate.getFullYear() &&
               date.getMonth() === selectedDate.getMonth() &&
@@ -157,7 +156,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                 }}
                 className={`
                   w-8 h-8 text-sm rounded flex items-center justify-center
-                  ${isCurrentMonth ? 'text-gray-900' : 'text-gray-300'}
                   ${isSelected ? 'bg-main-500 text-white' : 'hover:bg-gray-100'}
                 `}
               >

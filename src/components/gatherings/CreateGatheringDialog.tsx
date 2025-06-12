@@ -55,11 +55,11 @@ const handleAxiosError = (error: unknown): string => {
         const serverError = error?.response?.data?.error;
         return serverError?.message ?? '서버 처리 중 오류가 발생했습니다.';
     }
-    
+
     if (error instanceof Error) {
         return error.message;
     }
-    
+
     return '알 수 없는 에러가 발생했습니다';
 };
 
@@ -70,7 +70,7 @@ const createApiFormData = (
     imageFile: File | null
 ): FormData => {
     const apiFormData = new FormData();
-    
+
     apiFormData.append('name', formData.name);
     apiFormData.append('location', formData.location);
     apiFormData.append('type', formData.type);
@@ -95,6 +95,7 @@ const createApiFormData = (
 
 export default function CreateGatheringDialog({ onClose }: CreateGatheringDialogProps) {
     const { token } = useContext(AuthContext);
+
     const queryClient = useQueryClient();
 
     // 상태 관리 (스키마 타입에 맞춰 정리)
@@ -108,7 +109,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({ isOpen: false, text: '' });
-    
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { createGathering } = useCreateGathering({
@@ -127,7 +128,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
 
         setFormData(prev => ({
             ...prev,
-            [name]: name === 'capacity' 
+            [name]: name === 'capacity'
                 ? (isNaN(parseInt(value)) ? 5 : parseInt(value))
                 : value
         }));
@@ -197,7 +198,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
             onError: (error: unknown) => {
                 console.error('모임 생성 실패:', error);
                 setIsSubmitting(false);
-                
+
                 const errorMessage = handleAxiosError(error);
                 openConfirmDialog(setConfirmDialog, errorMessage);
             }
@@ -215,7 +216,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                         {/* 헤더 */}
                         <header className="w-full h-[60px] bg-white md:rounded-t-lg flex flex-row justify-between items-center px-5 border-b border-gray-100 flex-shrink-0">
                             <h1 className="text-lg font-bold text-gray-800">모임 만들기</h1>
-                            <button type="button" onClick={handleNormalClose}>
+                            <button type="button" onClick={handleNormalClose} className='cursor-pointer'>
                                 <XIcon className="w-7 h-7 text-gray-500" />
                             </button>
                         </header>
@@ -287,9 +288,9 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                             </div>
 
                             {/* 서비스 선택 */}
-                            <SelectionService 
-                                selectedType={formData.type} 
-                                onSelect={handleServiceTypeSelect} 
+                            <SelectionService
+                                selectedType={formData.type}
+                                onSelect={handleServiceTypeSelect}
                             />
 
                             {/* 날짜/시간 선택 */}
@@ -339,7 +340,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                         <footer className="w-full p-5 bg-white md:rounded-b-lg flex-shrink-0">
                             <button
                                 type="submit"
-                                className="w-full bg-main-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-main-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                className="w-full bg-main-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-main-600 cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? '처리 중...' : '확인'}
