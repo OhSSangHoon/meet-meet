@@ -84,7 +84,6 @@ export const useToggleSavedGatherings = () => {
     queryFn: cleanupExpiredGatherings,
     refetchInterval: 60000,
     refetchOnWindowFocus: true,
-    staleTime: 30000,
   });
 
   // 자연스러운 찜하기 토글 mutation

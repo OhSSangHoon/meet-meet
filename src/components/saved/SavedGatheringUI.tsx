@@ -42,7 +42,6 @@ export default function SavedGatheringsClient() {
         enabled: savedIds.length > 0,
         retry: 2,
         refetchOnWindowFocus: false,
-        staleTime: 30000,
         placeholderData: (previousData) => previousData,
     });
 
