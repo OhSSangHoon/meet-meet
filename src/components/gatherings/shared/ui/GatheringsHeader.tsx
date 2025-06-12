@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 // 모임 목록 헤더 타입
 interface GatheringsHeaderProps {
   type: 'search' | 'saved' | 'review';
@@ -25,19 +23,11 @@ export default function GatheringsHeader({ type }: GatheringsHeaderProps) {
   return (
     <div className="w-full flex flex-col">
       <div className="w-full flex flex-row justify-between items-center">
-        <Image 
-          src="/images/logo.avif" 
-          alt="logo" 
-          width={70} 
-          height={70} 
-          className="rounded-full border-2 border-black mr-1" 
-          priority 
-        />
-        <div className="w-full flex flex-col justify-start px-4 gap-2">
-          <p className="text-[#374151] text-sm font-medium">
+        <div className="w-full flex flex-col justify-start gap-2">
+          <p className="text-[#374151] text-base font-medium">
             {content[type].subtitle}
           </p>
-          <p className="text-gray-900 text-lg font-semibold">
+          <p className="text-2xl font-semibold">
             {content[type].title}
           </p>
         </div>

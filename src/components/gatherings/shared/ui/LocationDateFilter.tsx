@@ -62,7 +62,7 @@ export default function LocationDateFilter({
         },
         {
             value: 'registrationEnd_asc',
-            label: '마감 임박순', 
+            label: '마감 임박순',
             icon: Timer,
             sortBy: 'registrationEnd',
             sortOrder: 'asc'
@@ -78,7 +78,7 @@ export default function LocationDateFilter({
         {
             value: 'score_desc',
             label: '평점 높은순',
-            icon: Star, 
+            icon: Star,
             sortBy: 'score',
             sortOrder: 'desc'
         },
@@ -119,12 +119,12 @@ export default function LocationDateFilter({
         if (option && onSortChange) {
             setCurrentSort(optionValue);
             setIsSortOpen(false);
-            
+
             const sort: Sort = {
                 sortBy: option.sortBy,
                 sortOrder: option.sortOrder
             };
-            
+
             onSortChange(sort);
         }
     };
@@ -173,10 +173,9 @@ export default function LocationDateFilter({
                             className="flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500 transition-gathering-item justify-between"
                         >
                             <span>{currentLocation?.label || '지역 선택'}</span>
-                            <ChevronDown 
-                                className={`w-4 h-4 transition-transform duration-200 ${
-                                    isLocationOpen ? 'rotate-180' : ''
-                                }`} 
+                            <ChevronDown
+                                className={`w-4 h-4 transition-transform duration-200 ${isLocationOpen ? 'rotate-180' : ''
+                                    }`}
                             />
                         </button>
 
@@ -185,7 +184,7 @@ export default function LocationDateFilter({
                             <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                                 {locations.map((location, index) => {
                                     const isSelected = selectedLocation === location.value;
-                                    
+
                                     return (
                                         <button
                                             key={location.value}
@@ -198,9 +197,7 @@ export default function LocationDateFilter({
                                             `}
                                         >
                                             <div className="flex-1">
-                                                <div className={`text-sm font-medium ${
-                                                    isSelected ? 'text-main-600' : 'text-gray-900'
-                                                }`}>
+                                                <div className={`text-sm font-medium ${isSelected && 'text-main-600'}`}>
                                                     {location.label}
                                                 </div>
                                             </div>
@@ -215,8 +212,8 @@ export default function LocationDateFilter({
 
                         {/* 위치 드롭다운 외부 클릭 감지 */}
                         {isLocationOpen && (
-                            <div 
-                                className="fixed inset-0 z-40" 
+                            <div
+                                className="fixed inset-0 z-40"
                                 onClick={() => setIsLocationOpen(false)}
                             />
                         )}
@@ -264,10 +261,9 @@ export default function LocationDateFilter({
                                 >
                                     <CurrentIcon className="w-4 h-4" />
                                     <span className="hidden sm:inline">{currentOption?.label}</span>
-                                    <ChevronDown 
-                                        className={`w-4 h-4 transition-transform duration-200 ${
-                                            isSortOpen ? 'rotate-180' : ''
-                                        }`} 
+                                    <ChevronDown
+                                        className={`w-4 h-4 transition-transform duration-200 ${isSortOpen ? 'rotate-180' : ''
+                                            }`}
                                     />
                                 </button>
 
@@ -277,7 +273,7 @@ export default function LocationDateFilter({
                                         {sortOptions.map((option) => {
                                             const Icon = option.icon;
                                             const isSelected = currentSort === option.value;
-                                            
+
                                             return (
                                                 <button
                                                     key={option.value}
@@ -289,13 +285,10 @@ export default function LocationDateFilter({
                                                         ${option.value === sortOptions[sortOptions.length - 1].value ? 'rounded-b-lg' : ''}
                                                     `}
                                                 >
-                                                    <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                                                        isSelected ? 'text-main-600' : 'text-gray-400'
-                                                    }`} />
+                                                    <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${isSelected ? 'text-main-600' : 'text-gray-400'
+                                                        }`} />
                                                     <div className="flex-1 hidden sm:block">
-                                                        <div className={`text-sm font-medium ${
-                                                            isSelected ? 'text-main-600' : 'text-gray-900'
-                                                        }`}>
+                                                        <div className={`text-sm font-medium ${isSelected && 'text-main-600'}`}>
                                                             {option.label}
                                                         </div>
                                                     </div>
@@ -310,8 +303,8 @@ export default function LocationDateFilter({
 
                                 {/* 정렬 드롭다운 외부 클릭 감지 */}
                                 {isSortOpen && (
-                                    <div 
-                                        className="fixed inset-0 z-40" 
+                                    <div
+                                        className="fixed inset-0 z-40"
                                         onClick={() => setIsSortOpen(false)}
                                     />
                                 )}

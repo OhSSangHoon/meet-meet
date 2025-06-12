@@ -108,7 +108,7 @@ export default function SignUpForm() {
                 <div className='w-full flex flex-col gap-2'>
                     <label
                         htmlFor="password-check"
-                        className="block text-sm text-gray-900 font-bold"
+                        className="block text-sm font-bold"
                     >
                         비밀번호 확인
                     </label>
@@ -116,7 +116,7 @@ export default function SignUpForm() {
                         <input
                             type={isPasswordCheckVisible ? 'text' : 'password'}
                             id="password-check"
-                            className={`w-full rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 border-2 focus:outline-none ${!isPasswordMatch || !passwordCheck ? 'border-red-600' : 'focus:border-main-300'}`}
+                            className={`w-full rounded-lg bg-gray-50 p-2.5 text-sm border-2 focus:outline-none ${!isPasswordMatch || !passwordCheck ? 'border-red-600' : 'focus:border-main-300'}`}
                             placeholder="비밀번호를 다시 한 번 입력해 주세요"
                             onChange={(e) => setPasswordCheck(e.target.value)}
                         />

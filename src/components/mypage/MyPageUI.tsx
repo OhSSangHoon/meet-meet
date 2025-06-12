@@ -23,7 +23,7 @@ export default function MyPageUI() {
         {/* 프로필 카드 */}
         <ProfileCard />
 
-        <section className=" border-t-[3px] border-gray-800">
+        <section>
           {/* 탭 네비게이션 */}
           <section className="sm:px-4 py-4 flex gap-4 justify-between sm:justify-start text-sm sm:text-lg font-bold">
             {[
@@ -63,12 +63,14 @@ export default function MyPageUI() {
         </section>
       </section>
 
-      {reviewableGathering && (
-        <CreateReviewDialog
-          reviewFormData={reviewableGathering}
-          onClose={() => setReviewableGathering(null)}
-        />
-      )}
-    </main>
+      {
+        reviewableGathering && (
+          <CreateReviewDialog
+            reviewFormData={reviewableGathering}
+            onClose={() => setReviewableGathering(null)}
+          />
+        )
+      }
+    </main >
   );
 }

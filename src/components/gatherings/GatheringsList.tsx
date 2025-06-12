@@ -52,7 +52,7 @@ const filterGatheringsByType = (
     selectedMainType: string,
     selectedSubType: string
 ): Gathering[] => {
-    
+
     if (selectedMainType === 'DORANDORAN') {
         const result = gatheringsList.filter(gathering => gathering.type === 'WORKATION');
         return result;
@@ -62,7 +62,7 @@ const filterGatheringsByType = (
                 gathering.type === 'OFFICE_STRETCHING' ||
                 gathering.type === 'MINDFULNESS'
             );
-            
+
             return result;
         } else {
             const result = gatheringsList.filter(gathering => gathering.type === selectedSubType);
@@ -79,7 +79,7 @@ const filterGatheringsByType = (
 const removeDuplicateGatherings = (gatherings: Gathering[]): Gathering[] => {
     const seen = new Set<number>();
     const duplicates: Gathering[] = [];
-    
+
     const result = gatherings.filter(gathering => {
         if (seen.has(gathering.id)) {
             duplicates.push(gathering);
@@ -98,7 +98,7 @@ const removeDuplicateGatherings = (gatherings: Gathering[]): Gathering[] => {
  */
 const isGatheringClosed = (gathering: Gathering): boolean => {
     if (!gathering.registrationEnd) return false;
-    
+
     const timeRemaining = getTimeRemaining(gathering.registrationEnd);
     return timeRemaining === '마감됨';
 };
@@ -133,7 +133,7 @@ export default function GatheringsList({
     // SSR 데이터 타입
     const filteredSSRGatherings = useMemo(() => {
         const result = filterGatheringsByType(ssrGatherings, selectedMainType, selectedSubType);
-        
+
         return result;
     }, [ssrGatherings, selectedMainType, selectedSubType]);
 
@@ -142,9 +142,9 @@ export default function GatheringsList({
         if (isSavedPage) {
             return [];
         }
-    
+
         const result = filterGatheringsByType(infiniteGatherings, selectedMainType, selectedSubType);
-        
+
         return result;
     }, [infiniteGatherings, selectedMainType, selectedSubType, isSavedPage]);
 
@@ -152,7 +152,7 @@ export default function GatheringsList({
     const allGatherings = useMemo(() => {
         const combined = [...filteredSSRGatherings, ...filteredCSRGatherings];
         const deduplicated = removeDuplicateGatherings(combined);
-    
+
         return deduplicated;
     }, [filteredSSRGatherings, filteredCSRGatherings]);
 
@@ -175,11 +175,10 @@ export default function GatheringsList({
                         key={`${gathering.teamId || 'unknown'}-${gathering.id}-${index}`}
                         onClick={() => !isClosed && router.push(`/gatherings/detail/${gathering.id}`)}
                         ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll && !isSavedPage ? lastItemRef : undefined}
-                        className={`w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white transition-all duration-300 overflow-hidden relative ${
-                            isClosed 
-                                ? 'cursor-not-allowed opacity-75' 
+                        className={`w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white transition-all duration-300 overflow-hidden relative ${isClosed
+                                ? 'cursor-not-allowed opacity-75'
                                 : 'hover:border-main-300 hover:shadow-lg cursor-pointer'
-                        }`}
+                            }`}
                     >
                         {/* 이미지 영역 */}
                         <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
@@ -201,7 +200,7 @@ export default function GatheringsList({
                                 {/* 제목과 위치 */}
                                 <div className="flex flex-row md:justify-between gap-3">
                                     <div className="flex-1 flex flex-row gap-2 items-center">
-                                        <h1 className="text-lg font-semibold -mt-6 text-gray-900">
+                                        <h1 className="text-lg font-semibold -mt-6">
                                             {truncateTitle(gathering.name)}
                                         </h1>
                                         <div className="hidden sm:block w-[2px] h-[16px] -mt-6 bg-gray-900"></div>
