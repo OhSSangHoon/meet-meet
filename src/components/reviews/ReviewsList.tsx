@@ -1,6 +1,6 @@
 "use client"
 
-import Image from 'next/image';
+import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
 import HeartRating from '@/components/reviews/HeartRating';
 import { ReviewItem } from '@/types/reviews';
 import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteReviews';
@@ -189,13 +189,13 @@ export default function ReviewsList({
                         >
                             {/* 이미지 영역 */}
                             <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
-                                <Image
-                                    src={review.Gathering.image || '/images/placeholder.jpg'}
+                                <ImageWithFallback
+                                    src={review.Gathering.image || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'}
+                                    fallbackSrc={review.Gathering.image || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'}
                                     alt="review image"
-                                    fill
+                                    width={320}
+                                    height={180}
                                     className="rounded-t-lg md:rounded-l-lg md:rounded-t-none object-cover pointer-events-none"
-                                    priority={index === 0}
-                                    sizes="(max-width: 768px) 100vw, 320px"
                                 />
                             </div>
 

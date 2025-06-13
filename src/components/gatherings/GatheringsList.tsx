@@ -6,13 +6,14 @@ import { useMemo } from 'react';
 import { formatDate, formatTime } from '@/components/shared/utils/dateFormats';
 import { Gathering } from "@/types/gatherings";
 import { UserRoundCheck } from "lucide-react";
-import Image from "next/image";
 import dynamic from 'next/dynamic';
 import { filterGatheringsByType, getUniqueGatherings } from '@/components/gatherings/shared/utils/gatheringsUtils';
+import ImageWithFallback from "@/components/shared/ui/ImageWithFallback";
 
 const JoinedCountsProgressBar = dynamic(() => import('@/components/gatherings/shared/ui/JoinedCountsProgressBar'), { ssr: false });
 const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
 const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
+
 
 // 스타일 상수
 const BADGE_BASE_STYLES = "inline-flex items-center px-3 py-1 text-sm font-medium rounded-md";
@@ -115,15 +116,15 @@ export default function GatheringsList({
                         className="w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative cursor-pointer"
                     >
                         <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
-                            <Image
-                                src={gathering.image}
-                                alt="모임 이미지"
-                                fill
-                                className="rounded-t-lg md:rounded-l-lg md:rounded-t-none object-cover pointer-events-none"
-                                priority={index === 0}
-                                sizes="(max-width: 768px) 100vw, 320px"
-                            />
                             <DateReminder registrationEnd={gathering.registrationEnd} />
+                            <ImageWithFallback
+                                src={gathering.image || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'}
+                                fallbackSrc={gathering.image}
+                                alt="모임 이미지"
+                                className="rounded-t-lg md:rounded-l-lg md:rounded-t-none object-cover pointer-events-none"
+                                width={320}
+                                height={180}
+                            />
                         </div>
 
                         <div className="flex-1 flex flex-col justify-between p-4 md:p-6 min-h-0">
