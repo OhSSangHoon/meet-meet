@@ -1,17 +1,18 @@
 import HeartRating from '@/components/reviews/HeartRating';
 import { ReviewItem } from '@/types/reviews';
 
+// 매직넘버 상수
+const MAX_RATING = 5; // 최대 평점
+
 interface ReviewsStatsProps {
     reviews: ReviewItem[];
 }
 
-export default function ReviewsStats({ reviews }: ReviewsStatsProps) {
-    // 평균 평점 계산
+export default function ReviewStats({ reviews }: ReviewsStatsProps) {
     const average = reviews.length > 0
         ? reviews.reduce((sum, r) => sum + r.score, 0) / reviews.length
         : 0;
 
-    // 평점별 개수 계산
     const ratingCounts = {
         5: reviews.filter((r) => r.score === 5).length,
         4: reviews.filter((r) => r.score === 4).length,
@@ -20,16 +21,17 @@ export default function ReviewsStats({ reviews }: ReviewsStatsProps) {
         1: reviews.filter((r) => r.score === 1).length,
     };
 
-    // 전체 리뷰 개수를 100% 기준으로 사용
     const totalReviews = reviews.length;
 
     return (
         <section className="bg-white border border-gray-200 px-6 py-6 rounded-lg mb-10">
             <div className="flex items-center gap-6">
-                {/* 평균 점수 */}
                 <div className="w-40 flex flex-col items-center">
                     <h2 className="text-2xl font-bold">
-                        {average.toFixed(1)}<span className="text-gray-500 text-lg"> / 5</span>
+                        {average.toFixed(1)}
+                        <span className="text-gray-500 text-lg">
+                            {" / "}{MAX_RATING}
+                        </span>
                     </h2>
                     {average > 0 ? (
                         <HeartRating score={Math.round(average)} />
@@ -41,7 +43,6 @@ export default function ReviewsStats({ reviews }: ReviewsStatsProps) {
                     )}
                 </div>
 
-                {/* 점수 분포 */}
                 <div className="flex-1 max-w-[20rem]">
                     {[5, 4, 3, 2, 1].map((rating) => (
                         <div key={rating} className="flex items-center mb-1">

@@ -4,6 +4,10 @@ import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { ReviewItem, Reviews } from "@/types/reviews";
 import ReviewsUI from "@/components/reviews/ReviewsUI";
 
+// 매직넘버 상수
+const SSR_REVIEW_LIMIT = 3;
+const DATE_REGEX_PATTERN = /^\d{4}-\d{2}-\d{2}$/; // 날짜 패턴
+
 export const metadata: Metadata = {
     title: `모든 리뷰 | Meet Meet`,
     description: `모임 리뷰 페이지입니다`,
@@ -37,7 +41,7 @@ async function getFilteredReviews(searchParams: {
 
         // 쿼리 파라미터 구성
         const params = new URLSearchParams({
-            limit: '3',
+            limit: SSR_REVIEW_LIMIT.toString(),
             offset: '0',
             sortBy,
             sortOrder
@@ -56,7 +60,7 @@ async function getFilteredReviews(searchParams: {
         }
 
         // 날짜 필터
-        if (date?.trim() && /^\d{4}-\d{2}-\d{2}$/.test(date.trim())) {
+        if (date?.trim() && DATE_REGEX_PATTERN.test(date.trim())) {
             params.set('date', date.trim());
         }
 
@@ -97,8 +101,6 @@ async function getFilteredReviews(searchParams: {
 
 /**
  * 리뷰 페이지 컴포넌트
- * @param searchParams URL 파라미터
- * @returns 리뷰 페이지 컴포넌트
  */
 export default async function ReviewsPage({
     searchParams
@@ -111,7 +113,6 @@ export default async function ReviewsPage({
         sortOrder?: string;
     }>
 }) {
-    // searchParams를 await로 처리
     const params = await searchParams;
     const ssrReviews = await getFilteredReviews(params);
 

@@ -1,6 +1,15 @@
 import { TIME_OPTIONS, DateTimeValue } from '@/components/shared/utils/dateFormats';
 import { useState } from 'react';
 
+// 매직넘버 상수
+const CALENDAR_DAYS_COUNT = 42; // 달력 표시를 위한 총 날짜 수 (6주 * 7일)
+
+/**
+ * 날짜 선택 컴포넌트 속성
+ * @param value 선택된 날짜 및 시간
+ * @param onChange 날짜 및 시간 변경 핸들러
+ * @param label 라벨
+ */
 interface DateTimePickerProps {
   value: DateTimeValue | null;
   onChange: (value: DateTimeValue) => void;
@@ -8,17 +17,12 @@ interface DateTimePickerProps {
 }
 
 const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
-  // 현재 달력에서 보여줄 년/월 상태
   const [currentDate, setCurrentDate] = useState(new Date());
-
-  // 드롭다운 열림/닫힘 상태
   const [hourDropdownOpen, setHourDropdownOpen] = useState(false);
   const [minuteDropdownOpen, setMinuteDropdownOpen] = useState(false);
 
-  // 선택된 날짜
   const selectedDate = value ? new Date(value.year, value.month - 1, value.day) : null;
 
-  // 달력 네비게이션
   const goToPrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
   };
@@ -27,7 +31,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
 
-  // 달력 날짜들 생성
   const generateCalendarDays = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -38,8 +41,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
 
     const days = [];
 
-    // 달력 날짜 생성
-    for (let i = 0; i < 42; i++) {
+    for (let i = 0; i < CALENDAR_DAYS_COUNT; i++) {
       const date = new Date(startDate.getTime() + (i * 24 * 60 * 60 * 1000));
       days.push(date);
     }
@@ -47,7 +49,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
     return days;
   };
 
-  // 날짜 선택 핸들러
   const handleDateSelect = (date: Date) => {
     const newValue: DateTimeValue = {
       year: date.getFullYear(),
@@ -60,7 +61,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
     onChange(newValue);
   };
 
-  // 시간 변경 핸들러
   const handleTimeChange = (field: 'hour' | 'minute' | 'period', newValue: number | string) => {
     if (!value) {
       const today = new Date();
@@ -81,13 +81,11 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
     }
   };
 
-  // 시간 선택 핸들러
   const handleHourSelect = (hour: number) => {
     handleTimeChange('hour', hour);
     setHourDropdownOpen(false);
   };
 
-  // 분 선택 핸들러
   const handleMinuteSelect = (minute: number) => {
     handleTimeChange('minute', minute);
     setMinuteDropdownOpen(false);
@@ -101,7 +99,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
       <h1 className="font-bold text-gray-800 mb-3">{label}</h1>
 
       <div className="border border-gray-200 rounded-lg p-4 bg-white">
-        {/* 달력 헤더 */}
         <div className="flex items-center justify-between mb-4">
           <button
             type="button"
@@ -128,7 +125,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
           </button>
         </div>
 
-        {/* 요일 헤더 */}
         <div className="grid grid-cols-7 gap-1 mb-2">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
             <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
@@ -137,7 +133,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
           ))}
         </div>
 
-        {/* 달력 날짜들 */}
         <div className="grid grid-cols-7 gap-1 mb-4">
           {calendarDays.map((date) => {
             const isSelected = selectedDate &&
@@ -165,9 +160,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
           })}
         </div>
 
-        {/* 시간 선택 (커스텀 드롭다운) */}
         <div className="flex gap-2 items-center justify-center">
-          {/* 시간 드롭다운 */}
           <div className="relative">
             <button
               type="button"
@@ -193,7 +186,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                       e.stopPropagation();
                       handleHourSelect(hour);
                     }}
-                    className={" w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center"}>
+                    className="w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center">
                     {hour}
                   </button>
                 ))}
@@ -203,7 +196,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
 
           <span className="text-gray-500">:</span>
 
-          {/* 분 드롭다운 */}
           <div className="relative">
             <button
               type="button"
@@ -229,7 +221,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                       e.stopPropagation();
                       handleMinuteSelect(minute);
                     }}
-                    className={"w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center"}>
+                    className="w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center">
                     {minute.toString().padStart(2, '0')}
                   </button>
                 ))}
@@ -237,7 +229,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
             )}
           </div>
 
-          {/* AM/PM 토글 버튼 */}
           <div className="flex gap-1">
             <button
               type="button"
@@ -279,7 +270,6 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
         </div>
       </div>
 
-      {/* 드롭다운 외부 클릭 시 닫기 */}
       {(hourDropdownOpen || minuteDropdownOpen) && (
         <div
           className="fixed inset-0 z-0"

@@ -2,6 +2,9 @@ import { internalClient } from "@/lib/api/clientFetchers";
 import { ReviewItem } from "@/types/reviews";
 import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
 
+// 매직넘버 상수
+const ITEMS_PER_PAGE = 3; // 페이지당 리뷰 개수
+
 /**
  * 페이지네이션된 리뷰 목록 조회
  * @param page 페이지 번호
@@ -30,8 +33,8 @@ export async function fetchReviewsPaginated(
 
         // 서버 요청 파라미터
         const params: Record<string, string | number> = {
-            offset: page * 3,
-            limit: 3,
+            offset: page * ITEMS_PER_PAGE,
+            limit: ITEMS_PER_PAGE,
             type,
             sortBy,
             sortOrder

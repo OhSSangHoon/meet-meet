@@ -8,6 +8,9 @@ import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
 import ReviewStats from './ReviewStats';
 import { useMemo } from 'react';
 
+// 스타일 상수
+const TEXT_GRAY_XS_STYLES = "text-xs text-gray-400";
+
 /**
  * 리뷰 목록 프로퍼티
  * @param ssrReviews 서버 렌더링 리뷰 목록
@@ -205,13 +208,13 @@ export default function ReviewsList({
                                     <p className="text-sm text-gray-700 mt-2 mb-3">{review.comment}</p>
                                     {/* 모임 정보 */}
                                     <div className="space-y-1">
-                                        <p className="text-xs text-gray-400">
+                                        <p className={TEXT_GRAY_XS_STYLES}>
                                             {review.Gathering.name} · {review.Gathering.location}
                                         </p>
-                                        <p className="text-xs text-gray-400">
+                                        <p className={TEXT_GRAY_XS_STYLES}>
                                             {review.User.name} | 리뷰작성: {new Date(review.createdAt).toLocaleDateString()}
                                         </p>
-                                        <p className="text-xs text-gray-400">
+                                        <p className={TEXT_GRAY_XS_STYLES}>
                                             모임개최: {new Date(review.Gathering.dateTime).toLocaleDateString()}
                                         </p>
                                     </div>

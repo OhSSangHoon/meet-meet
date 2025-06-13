@@ -6,6 +6,18 @@ import { AuthContext } from "@/providers/AuthProvider";
 
 const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
 
+// 스타일 상수
+const MAIN_TYPE_BUTTON_STYLES = "text-lg font-semibold py-1 cursor-pointer";
+const SUB_TYPE_BUTTON_STYLES = "shadow-sm text-sm font-medium px-3 py-2 rounded-lg cursor-pointer";
+
+/**
+ * 모임 필터 속성
+ * @param onTypeChange 메인 타입 변경 핸들러
+ * @param showCreateButton 모임 생성 버튼 표시 여부
+ * @param onCreateClick 모임 생성 클릭 핸들러
+ * @param initialMainType 초기 메인 타입
+ * @param initialSubType 초기 서브 타입
+ */
 interface GatheringFiltersProps {
     onTypeChange?: (mainType: string, subType: string) => void;
     showCreateButton?: boolean;
@@ -26,7 +38,6 @@ export default function GatheringFilters({
 
     const isLoggedIn = useContext(AuthContext);
 
-    // 초기값이 변경되면 상태 업데이트
     useEffect(() => {
         setSelectedMainType(initialMainType);
         setSelectedSubType(initialSubType);
@@ -51,60 +62,56 @@ export default function GatheringFilters({
 
     return (
         <div className="w-full h-[160px] flex flex-col justify-start gap-4 py-5 whitespace-nowrap">
-            {/* 대분류 선택 */}
             <div className="flex flex-row relative gap-6">
                 <div className={`absolute bottom-0 h-1 rounded-full bg-main-apricot transition-all duration-300 ease-in-out w-15 ${selectedMainType === 'DALLAEMFIT' ? 'translate-x-0' : 'translate-x-22'}`} />
                 <button
                     onClick={() => handleMainTypeChange('DALLAEMFIT')}
-                    title='외향인인 당신에게 추천하는 모임!'
-                    className='text-lg font-semibold py-1 cursor-pointer'
+                    title="외향인인 당신에게 추천하는 모임!"
+                    className={MAIN_TYPE_BUTTON_STYLES}
                 >
                     북적북적
                 </button>
                 <button
                     onClick={() => handleMainTypeChange('DORANDORAN')}
-                    title='내향인인 당신에게 추천하는 모임!'
-                    className='text-lg font-semibold py-1 cursor-pointer'
+                    title="내향인인 당신에게 추천하는 모임!"
+                    className={MAIN_TYPE_BUTTON_STYLES}
                 >
                     도란도란
                 </button>
             </div>
 
-            <div className='flex items-center'>
-                {/* 북적북적 소분류 선택 */}
+            <div className="flex items-center">
                 {selectedMainType === 'DALLAEMFIT' && (
                     <div className="w-full flex items-center py-5">
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => handleSubTypeChange('ALL')}
-                                className={`${selectedSubType === 'ALL' ? 'bg-main-apricot' : 'bg-slate-100'} shadow-sm text-sm font-medium px-3 py-2 rounded-lg cursor-pointer`}
+                                className={`${selectedSubType === 'ALL' ? 'bg-main-apricot' : 'bg-slate-100'} ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 전체
                             </button>
                             <button
                                 onClick={() => handleSubTypeChange('OFFICE_STRETCHING')}
-                                className={`${selectedSubType === 'OFFICE_STRETCHING' ? 'bg-main-apricot' : 'bg-slate-100'} shadow-sm text-sm font-medium px-3 py-2 rounded-lg cursor-pointer`}
+                                className={`${selectedSubType === 'OFFICE_STRETCHING' ? 'bg-main-apricot' : 'bg-slate-100'} ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 엔터테인먼트
                             </button>
                             <button
                                 onClick={() => handleSubTypeChange('MINDFULNESS')}
-                                className={`${selectedSubType === 'MINDFULNESS' ? 'bg-main-apricot' : 'bg-slate-100'} shadow-sm text-sm font-medium px-3 py-2 rounded-lg cursor-pointer`}
+                                className={`${selectedSubType === 'MINDFULNESS' ? 'bg-main-apricot' : 'bg-slate-100'} ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 액티비티
                             </button>
                         </div>
-
                     </div>
                 )}
 
-                {/* 선택된 모임 타입에 따라 필터 표시 */}
                 {selectedMainType === 'DORANDORAN' && (
-                    <div className="w-full flex flex-col justify-start py-5" >
+                    <div className="w-full flex flex-col justify-start py-5">
                         <div className="flex flex-row items-center gap-2">
                             <button
                                 onClick={() => handleSubTypeChange('ALL')}
-                                className="bg-main-apricot text-sm shadow-sm font-medium px-3 py-2 rounded-lg cursor-pointer"
+                                className={`bg-main-apricot ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 전체
                             </button>
@@ -114,10 +121,10 @@ export default function GatheringFilters({
 
                 {showCreateButton && isLoggedIn?.token && (
                     <Button
-                        variant='default'
-                        text='모임 만들기'
+                        variant="default"
+                        text="모임 만들기"
                         onClick={onCreateClick}
-                        customClassName='h-[55%] items-center shadow-md'
+                        customClassName="h-[55%] items-center shadow-md"
                     />
                 )}
             </div>
