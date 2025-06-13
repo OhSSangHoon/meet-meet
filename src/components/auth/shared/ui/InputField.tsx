@@ -2,8 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    label: string;
     disabled: boolean;
+    label: string;
+    labelSize?: 'text-sm' | 'text-base';
     isError?: string;
     errorResponseMessage?: string | null;
     isPasswordVisible?: boolean;
@@ -12,9 +13,9 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 /** 로그인 폼, 회원가입 폼 Input Field */
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
-    ({ label, id, type, placeholder, isError, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
+    ({ label, labelSize = 'text-sm', id, type, placeholder, isError, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
         <div className="w-full flex flex-col gap-2">
-            <label htmlFor={id} className="block text-sm font-bold">{label}</label>
+            <label htmlFor={id} className={`block ${labelSize} font-bold`}>{label}</label>
             <div className='relative'>
                 <input
                     ref={ref}
