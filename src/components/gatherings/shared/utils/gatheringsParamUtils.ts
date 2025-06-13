@@ -1,5 +1,5 @@
 import { getApiTypeFromMainType } from '@/components/gatherings/shared/utils/gatheringsTypeUtils';
-import { GATHERING_CONSTANTS } from '@/components/gatherings/shared/constans/gatheringsConstants';
+import { GATHERING_CONSTANTS } from '@/components/gatherings/shared/constants/gatheringsConstants';
 
 /**
  * 모임 API 파라미터 옵션

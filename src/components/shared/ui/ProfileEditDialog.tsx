@@ -125,7 +125,7 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
                             onClick={handleFileClick}
                             customClassName='size-16'
                         >
-                            <Upload className='w-full h-full' />
+                            <Upload className='size-full' />
                         </Button>
                         <input
                             type="file"

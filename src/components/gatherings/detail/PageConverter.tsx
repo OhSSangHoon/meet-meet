@@ -5,9 +5,10 @@ interface PageConverterProps {
     totalPages: number;
 }
 
+const ARROW_BUTTON_STYLE = 'size-8 flex items-center justify-center text-gray-500 transition';
+
 /** 모임 상세 페이지 리뷰 페이지 변환 버튼 */
 export default function PageConverter({ page, setPage, totalPages }: PageConverterProps) {
-    const ARROW_BUTTON_STYLE = 'size-8 flex items-center justify-center text-gray-500 transition';
 
     return (
         <div className="flex justify-center items-center gap-2 mt-4">

@@ -49,7 +49,7 @@ const GatheringCard = ({
 }: GatheringCardProps) => (
   <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all">
     <div className="space-y-4">
-      {/* 모임 이미지 위치 */}
+      {/* 모임 썸네일 위치 */}
       <Image src={image} alt={title} width={300} height={128} className="w-full h-32 object-cover rounded-xl" />
       <div className="space-y-2">
         <h3 className="font-semibold text-gray-800">{title}</h3>
@@ -235,7 +235,7 @@ export default async function MainPage() {
               <div className="flex items-center gap-3">
                 {/* 로고 이미지 위치 */}
                 <div className='w-10 h-10 bg-gray-50 rounded-lg hover:scale-110 transition-transform cursor-pointer'>
-                  <Image src="/images/logo_hero.avif" alt="Meet Meet App" width={1000} height={1000} className="w-full h-full" />
+                  <Image src="/images/logo_hero.avif" alt="로고 이미지" width={1000} height={1000} className="w-full h-full" />
                 </div>
                 <span className="text-xl font-bold">Meet Meet</span>
               </div>
@@ -266,7 +266,7 @@ export default async function MainPage() {
               <div className="flex gap-3">
                 <a href="https://www.github.com/window-ook/meet-meet" target="_blank" className="hover:text-white transition-colors">
                   <div className="w-8 h-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                    <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713865/github_xnloon.svg" alt="Instagram" width={500} height={500} className="w-full h-full" />
+                    <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713865/github_xnloon.svg" alt="인스타그램 로고" width={500} height={500} className="w-full h-full" />
                   </div>
                 </a>
               </div>

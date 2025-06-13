@@ -2,21 +2,23 @@
 
 import { useContext } from 'react';
 import { usePathname } from 'next/navigation';
+import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import { AuthContext } from '@/providers/AuthProvider';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
 import Link from 'next/link';
-import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 
-// 스타일 상수
-const FALLBACK_IMAGE_URL = "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif";
+const FALLBACK_IMAGE_URL = "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif";
 const HOVER_TRANSITION_STYLES = "hover:opacity-50 duration-300 ease-in-out";
 
 export default function Navbar() {
     const { token, signOut, userName, userImage } = useContext(AuthContext);
+
     const pathname = usePathname();
+
     const { savedIds } = useToggleSavedGatherings();
+
     const savedCounts = savedIds.length;
 
     const navLinks = [
@@ -32,7 +34,7 @@ export default function Navbar() {
                     <ImageWithFallback
                         src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713224/logo_krdgww.avif"
                         fallbackSrc={FALLBACK_IMAGE_URL}
-                        alt="logo image"
+                        alt="로고 이미지"
                         width={100}
                         height={100}
                         className='w-[3rem] h-[3rem] md:w-[6rem] md:h-[6rem] pointer-events-none'
@@ -54,11 +56,11 @@ export default function Navbar() {
                     {token && (
                         <DropdownMenu>
                             <DropdownMenuTrigger>
-                                <div className='w-8 h-8 rounded-full border border-gray-300 overflow-hidden cursor-pointer'>
-                                    <ImageWithFallback  
+                                <div className='size-8 rounded-full border border-gray-300 overflow-hidden cursor-pointer'>
+                                    <ImageWithFallback
                                         src={userImage && userImage !== 'null' && userImage !== '' ? userImage : FALLBACK_IMAGE_URL}
                                         fallbackSrc={FALLBACK_IMAGE_URL}
-                                        alt='profile image'
+                                        alt='네비게이션바 프로필 이미지'
                                         width={32}
                                         height={32}
                                         className='size-full rounded-full'

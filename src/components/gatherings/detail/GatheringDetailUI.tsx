@@ -105,7 +105,7 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                     </section>
                 )}
                 {/* 모임 리뷰 목록 */}
-                <section className='w-full h-full px-4 py-4 flex flex-col gap-4 bg-white rounded-lg'>
+                <section className='w-full h-full p-4 flex flex-col gap-4 bg-white rounded-lg'>
                     <h1 className='text-lg font-semibold'>다른 참여자들은 이렇게 느꼈어요!</h1>
                     {reviewsLoading ? (
                         <ReviewLoading width='w-full' height='h-32' />

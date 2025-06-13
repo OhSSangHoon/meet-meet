@@ -15,7 +15,7 @@ export default function Thumbnail({ detail, id }: { detail: Gathering, id: strin
             <ImageWithFallback
                 src={detail?.image}
                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
-                alt='모임 이미지'
+                alt='모임 썸네일'
                 width={1000}
                 height={1000}
                 className='w-full h-full object-cover rounded-lg'

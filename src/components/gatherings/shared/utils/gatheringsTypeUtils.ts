@@ -1,5 +1,5 @@
 import { Gathering } from '@/types/gatherings';
-import { GATHERING_TYPES } from '@/components/gatherings/shared/constans/gatheringsConstants';
+import { GATHERING_TYPES } from '@/components/gatherings/shared/constants/gatheringsConstants';
 
 /**
  * 메인타입을 API 타입으로 변환
@@ -7,8 +7,8 @@ import { GATHERING_TYPES } from '@/components/gatherings/shared/constans/gatheri
  * @returns API 타입 (DALLAEMFIT | WORKATION)
  */
 export const getApiTypeFromMainType = (mainType: string): string => {
-    return mainType === GATHERING_TYPES.MAIN.DORANDORAN 
-        ? GATHERING_TYPES.API.WORKATION 
+    return mainType === GATHERING_TYPES.MAIN.DORANDORAN
+        ? GATHERING_TYPES.API.WORKATION
         : GATHERING_TYPES.API.DALLAEMFIT;
 };
 
@@ -19,11 +19,11 @@ export const getApiTypeFromMainType = (mainType: string): string => {
  * @returns 필터링된 모임 목록
  */
 export const filterGatheringsByMainType = (
-    gatherings: Gathering[], 
+    gatherings: Gathering[],
     mainType: string
 ): Gathering[] => {
     if (mainType === GATHERING_TYPES.MAIN.DORANDORAN) {
-        return gatherings.filter(gathering => 
+        return gatherings.filter(gathering =>
             gathering.type === GATHERING_TYPES.API.WORKATION
         );
     } else {
@@ -48,12 +48,12 @@ export const filterGatheringsByType = (
 ): Gathering[] => {
     // 먼저 메인타입으로 필터링
     const mainTypeFiltered = filterGatheringsByMainType(gatheringsList, selectedMainType);
-    
+
     // 달램핏이고 서브타입이 ALL이 아닌 경우만 추가 필터링
-    if (selectedMainType === GATHERING_TYPES.MAIN.DALLAEMFIT && 
+    if (selectedMainType === GATHERING_TYPES.MAIN.DALLAEMFIT &&
         selectedSubType !== GATHERING_TYPES.SUB.ALL) {
         return mainTypeFiltered.filter(gathering => gathering.type === selectedSubType);
     }
-    
+
     return mainTypeFiltered;
 };

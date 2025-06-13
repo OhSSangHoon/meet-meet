@@ -29,4 +29,4 @@ export {
 } from '@/components/gatherings/shared/utils/gatheringsResponseUtils';
 
 // 상수
-export { GATHERING_CONSTANTS, GATHERING_TYPES } from '@/components/gatherings/shared/constans/gatheringsConstants';
+export { GATHERING_CONSTANTS, GATHERING_TYPES } from '@/components/gatherings/shared/constants/gatheringsConstants';

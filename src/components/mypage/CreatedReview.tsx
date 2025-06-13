@@ -9,9 +9,9 @@ export default function CreatedReview({ review }: { review: ReviewItem }) {
         <section className='flex flex-col sm:flex-row gap-4'>
             <div className="flex-shrink-0">
                 <ImageWithFallback
-                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'
                     src={review.Gathering.image!}
-                    alt="모임 이미지"
+                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
+                    alt="모임 썸네일"
                     width={1000}
                     height={1000}
                     className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
@@ -20,7 +20,7 @@ export default function CreatedReview({ review }: { review: ReviewItem }) {
             <div className="flex flex-col gap-1">
                 <div className='flex items-center gap-1'>
                     {Array.from({ length: review.score }).map((_, index) => (
-                        <Heart key={index} className="w-4 h-4 text-main-500 fill-main-500" />
+                        <Heart key={index} className="size-4 text-main-500 fill-main-500" />
                     ))}
                 </div>
                 <p className='text-sm sm:text-base'>{review.comment}</p>

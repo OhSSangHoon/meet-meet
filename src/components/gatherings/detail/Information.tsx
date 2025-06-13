@@ -52,7 +52,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
                 <div className="flex justify-between text-sm">
                     <div className="flex items-center gap-2">
                         <div className='flex items-center gap-1'>
-                            <UserRoundCheck className='w-4 h-4 text-main-500' />
+                            <UserRoundCheck className='size-4 text-main-500' />
                             <span>{detail?.participantCount}명 참여 중</span>
                         </div>
                         {/* 참여자들의 프로필 이미지 */}
@@ -101,7 +101,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
                     {detail && detail?.participantCount >= 5 ? (
                         <div className='flex items-center gap-2'>
                             <div className='p-1 bg-main-300 rounded-full'>
-                                <Check className='text-white w-3 h-3' />
+                                <Check className='text-white size-3' />
                             </div>
                             <span>개설확정</span>
                         </div>
