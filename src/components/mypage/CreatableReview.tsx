@@ -1,7 +1,7 @@
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering } from '@/types/gatherings';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import ImageWithFallback from '../shared/ui/ImageWithFallback';
 
 const GatheringInformation = dynamic(() => import('@/components/mypage/shared/ui/GatheringInformation'), { ssr: false });
 const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
@@ -17,12 +17,13 @@ export default function CreatableReview({ gathering, myReviewsTab, userId, onOpe
         >
             {/* 이미지 */}
             <div className="flex-shrink-0">
-                <Image
-                    src={gathering.image ?? ''}
+                <ImageWithFallback
+                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'
+                    src={gathering.image}
                     alt="모임 이미지"
                     width={1000}
                     height={1000}
-                    className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
+                    className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
                 />
             </div>
             {/* 정보 */}
@@ -30,7 +31,7 @@ export default function CreatableReview({ gathering, myReviewsTab, userId, onOpe
                 {myReviewsTab === 0 && (
                     <Button
                         variant='default'
-                        text='리뷰 작성하기'
+                        text='리뷰 남기기'
                         onClick={() => {
                             setCurrentGatheringId(Number(gathering.id))
                             onOpenReviewDialog({ userId, gatheringId: Number(gathering.id) })

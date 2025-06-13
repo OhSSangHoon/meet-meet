@@ -31,4 +31,3 @@ export default function GatheringInformation({ data, children }: { data: Gatheri
         </div>
     );
 }
-

@@ -67,18 +67,6 @@ html {
   --color-button-text: var(--color-white);
   --color-button-disabled: var(--color-gray-400);
   --color-button-hover: var(--color-main-600);
-
-  /* ---- 달램핏, 워케이션 대분류 버튼 텍스트 */
-  --color-button-categories-active: var(--color-gray-900);
-  --color-button-categories: var(--color-gray-400);
-
-  /* ---- 달램핏 소분류 버튼 텍스트, 배경색 */
-  --color-button-type-text: var(--color-white);
-  --color-button-type-bg: var(--color-gray-900);
-
-  /* --- 페이지별 헤딩 */
-  --color-heading: var(--color-gray-900);
-  --color-heading-description: var(--color-gray-700);
 }
 
 @theme inline {

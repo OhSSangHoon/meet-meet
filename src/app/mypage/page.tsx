@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import MyPageUI from '@/components/mypage/MyPageUI';
+import ProfileCard from '@/components/mypage/ProfileCard';
 
 export const metadata: Metadata = {
   title: `마이페이지 | Meet Meet`,
@@ -7,5 +8,15 @@ export const metadata: Metadata = {
 };
 
 export default function MyPage() {
-  return <MyPageUI />;
+  return (
+    <main className="contents-container">
+      <section className="flex flex-col gap-2">
+        <h1 className="pt-10 pb-2 text-2xl font-bold text-gray-700">마이 페이지</h1>
+        <section className="overflow-hidden border-2 border-gray-200 rounded-lg">
+          <ProfileCard />
+        </section>
+        <MyPageUI />
+      </section>
+    </main>
+  );
 }

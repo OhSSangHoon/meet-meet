@@ -34,25 +34,25 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
   // 작성한 리뷰 (작성한 모임의 ID와 유저 ID를 통해 조회)
   const { data: createdReviews } = useFetchMyCreatedReviews(token!, reviewedGatherings.map(gathering => gathering.id), userId);
 
+  const FILTER_BUTTON_STYLE = 'shadow-sm text-gray-700 text-sm hover:bg-main-apricot'
+
   return (
-    <section className="px-4 flex w-full flex-col justify-start gap-5">
+    <section className="flex w-full flex-col justify-start gap-4">
       <div className="flex justify-center sm:justify-start items-center gap-2">
-        {/* 작성 가능한 리뷰, 작성한 리뷰 버튼 */}
         <Button
           variant='default'
           text='작성 가능한 리뷰'
           onClick={() => setMyReviewsTab(0)}
-          customClassName={`rounded-lg px-4 py-2 text-sm ${myReviewsTab === 0 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} hover:text-white`}
+          customClassName={`${myReviewsTab === 0 ? 'bg-main-apricot' : 'bg-slate-100'} ${FILTER_BUTTON_STYLE}`}
         />
         <Button
           variant='default'
           text='작성한 리뷰'
           onClick={() => setMyReviewsTab(1)}
-          customClassName={`rounded-lg px-4 py-2 text-sm ${myReviewsTab === 1 ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-700'} hover:text-white`}
+          customClassName={`${myReviewsTab === 1 ? 'bg-main-apricot' : 'bg-slate-100'} ${FILTER_BUTTON_STYLE}`}
         />
       </div>
 
-      {/* 리뷰 */}
       {myReviewsTab === 0 ? (
         !reviewableGatherings || reviewableGatherings.length === 0 ?
           <span className="text-gray-500 text-center">작성 가능한 리뷰가 없어요</span>

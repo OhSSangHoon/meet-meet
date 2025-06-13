@@ -7,7 +7,7 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { getTimeRemaining, toKoreanTime } from '@/components/shared/utils/dateFormats';
 import { CheckCircle } from "lucide-react"
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import ImageWithFallback from '../shared/ui/ImageWithFallback';
 
 const LoadingUI = dynamic(() => import('@/components/mypage/shared/ui/LoadingUI'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
@@ -59,16 +59,18 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
       const bRegistrationEnd = b.registrationEnd ? toKoreanTime(b.registrationEnd).getTime() : 0;
       return bRegistrationEnd - aRegistrationEnd;
     }
-    // 완료되지 않은 모임을 먼저 표시
     return a.isCompleted ? 1 : -1;
   });
+
+  const DEACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-slate-200 self-start text-gray-500 text-xs';
+  const ACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-main-200 self-start text-white text-xs'
 
   if (isLoading) return <LoadingUI />;
   if (error && !fetchErrorMessage) return <div className="text-red-500">에러: {error.message}</div>;
   if (gatherings.length === 0 && !error) return <div className="text-gray-500 text-center">참여한 모임이 없습니다</div>;
 
   return (
-    <section className='px-4 flex flex-col gap-2'>
+    <section className='flex flex-col gap-2'>
       {sortedGatherings.map(data => (
         <div
           key={data.id}
@@ -84,11 +86,12 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
           {/* 좌측 */}
           <article className='relative'>
             <DateReminder registrationEnd={data?.registrationEnd} />
-            <Image src={data?.image}
+            <ImageWithFallback src={data?.image}
+              fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'
               alt='모임 이미지'
               width={1000}
               height={1000}
-              className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
+              className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
             />
           </article>
 
@@ -99,22 +102,22 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
               <div className='flex items-center gap-1'>
                 {/* 마감 완료 및 5명 이상 모집 및 모임 후 '이용 완료' */}
                 {getTimeRemaining(data?.registrationEnd) === '마감됨' && data?.participantCount >= 5 && data?.isCompleted && (
-                  <div className="px-3 py-1 rounded-full bg-gray-200 self-start text-gray-500 text-xs">이용 완료</div>)}
+                  <div className={DEACTIVATED_STYLE}>이용 완료</div>)}
 
                 {/* 마감 미완료 및 모임 전 '이용 예정' */}
                 {getTimeRemaining(data?.registrationEnd) !== '마감됨' && !data?.isCompleted && (
-                  <div className="px-3 py-1 rounded-full bg-main-200 self-start text-white text-xs">이용 예정</div>)}
+                  <div className={ACTIVATED_STYLE}>이용 예정</div>)}
 
                 {/* 마감 미완료 및 5명 이상 모집 '개설 확정'  */}
                 {getTimeRemaining(data?.registrationEnd) !== '마감됨' && data?.participantCount >= 5 && (
-                  <div className="px-3 py-1 rounded-full bg-main-200 self-start text-white text-xs flex items-center gap-1">
+                  <div className={`${ACTIVATED_STYLE} flex items-center gap-1`}>
                     <CheckCircle className="w-4 h-4 text-white" />
                     개설 확정
                   </div>)}
 
                 {/* 마감 미완료 및 5명 미만 시 '개설 대기' */}
                 {getTimeRemaining(data?.registrationEnd) !== '마감됨' && data?.participantCount < 5 && (
-                  <div className="px-3 py-1 rounded-full bg-gray-200 self-start text-gray-500 text-xs">개설 대기</div>)}
+                  <div className={DEACTIVATED_STYLE}>개설 대기</div>)}
               </div>
               <GatheringInformation data={data} />
             </div>

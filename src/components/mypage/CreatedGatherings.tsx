@@ -4,8 +4,8 @@ import { useFetchCreatedGatherings } from '@/hooks/api/mypage/useFetchCreatedGat
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { getTimeRemaining } from '@/components/shared/utils/dateFormats';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import ImageWithFallback from '../shared/ui/ImageWithFallback';
 
 const LoadingUI = dynamic(() => import('@/components/mypage/shared/ui/LoadingUI'), { ssr: false });
 const GatheringInformation = dynamic(() => import('@/components/mypage/shared/ui/GatheringInformation'), { ssr: false });
@@ -21,12 +21,13 @@ export default function CreatedGatherings() {
     return getTimeRemaining(gathering.registrationEnd) !== '마감됨';
   });
 
+
   if (isLoading) return <LoadingUI />;
   if (error) return <p className="text-center text-red-500">에러: {(error as Error).message}</p>;
   if (!isLoading && !error && gatherings.length === 0) return <p className="text-center text-gray-500">내가 만든 모임이 없어요</p>;
 
   return (
-    <section className='px-4 flex flex-col gap-2'>
+    <section className='flex flex-col gap-2'>
       <div className="flex w-full flex-col gap-4">
         {!isLoading && !error && gatherings.map(gathering => {
           return (
@@ -37,11 +38,12 @@ export default function CreatedGatherings() {
               {/* 좌측 이미지 */}
               <article className='relative'>
                 <DateReminder registrationEnd={gathering?.registrationEnd} />
-                <Image src={gathering?.image}
+                <ImageWithFallback src={gathering?.image}
+                  fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'
                   alt='모임 이미지'
                   width={1000}
                   height={1000}
-                  className="w-[17.5rem] h-[10rem] rounded-xl object-cover"
+                  className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
                 />
               </article>
 

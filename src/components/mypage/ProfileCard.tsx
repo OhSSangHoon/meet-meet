@@ -15,10 +15,10 @@ export default function ProfileCard() {
   const [isProfileEditDialogOpen, setIsProfileEditDialogOpen] = useState(false);
 
   return (
-    <section className="overflow-hidden border-2 border-gray-200 rounded-lg">
+    <>
       {/* 배경 헤더 */}
       <section className="bg-main-350 relative px-4 py-6">
-        <div className="mb-1 text-sm sm:text-base md:text-lg font-bold text-white">내 프로필</div>
+        <div className="mb-1 text-sm sm:text-base md:text-lg font-bold text-white">PROFILE</div>
         <div className="absolute top-4 right-4">
           <button type="button" onClick={() => setIsProfileEditDialogOpen(true)} className='size-8 sm:size-10 rounded-full flex items-center justify-center hover-button'>
             <SquarePen className="text-white" />
@@ -40,19 +40,19 @@ export default function ProfileCard() {
         </div>
         {/* 스펙 */}
         <div>
-          <div className="text-sm sm:text-md font-bold text-main-500">{userName}</div>
+          <span className="text-sm sm:text-md font-bold text-main-500">{userName}</span>
           <div className="flex gap-2 text-sm text-gray-800">
-            <div className="text-xs sm:text-base font-bold">COMPANY</div>
-            <div className='text-xs sm:text-base'>{userCompanyName}</div>
+            <span className="text-xs sm:text-base font-bold">COMPANY</span>
+            <span className='text-xs sm:text-base'>{userCompanyName}</span>
           </div>
           <div className="flex gap-2 text-gray-800 text-xs sm:text-base">
-            <div className="font-bold">E-MAIL</div>
-            <div>{userEmail}</div>
+            <span className="font-bold">E-MAIL</span>
+            <span>{userEmail}</span>
           </div>
         </div>
       </section>
 
       {isProfileEditDialogOpen && <ProfileEditDialog setIsProfileEditDialogOpen={setIsProfileEditDialogOpen} />}
-    </section>
+    </>
   );
 }

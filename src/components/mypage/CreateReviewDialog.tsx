@@ -24,7 +24,7 @@ export default function CreateReviewDialog({
 }: ReviewDialogProps) {
   const { token } = useContext(AuthContext);
 
-  const [score, setScore] = useState(1);
+  const [score, setScore] = useState(5);
   const [comment, setComment] = useState('');
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
@@ -42,51 +42,58 @@ export default function CreateReviewDialog({
 
   const openConfirmDialog = (text: string, onConfirm?: () => void) => setConfirmDialog({ open: true, text, onConfirm });
 
-  const handleSubmit = () => createReview({ gatheringId: reviewFormData.gatheringId, score, comment, });
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    createReview({ gatheringId: reviewFormData.gatheringId, score, comment });
+  };
 
   return (
-    <div className="dialog-background">
+    <section className="dialog-background">
       <div className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4">
         <h2 className="text-xl font-semibold">리뷰 남기기</h2>
-        <label className="block">만족스러운 경험이었나요?</label>
-        <div className="flex gap-2">
-          {[1, 2, 3, 4, 5].map((val) => (
-            <button
-              key={val}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <label className="block">만족스러운 경험이었나요?</label>
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((val) => (
+              <button
+                key={val}
+                type="button"
+                onClick={() => setScore(val)}
+                className="focus:outline-none cursor-pointer"
+                aria-label={`${val}점`}
+              >
+                <Heart
+                  className={`w-8 h-8 transition-colors ${score >= val ? "text-main-500 fill-main-500" : "text-gray-300"}`}
+                />
+              </button>
+            ))}
+          </div>
+          <label className="block">다른 사람들에게 알려주세요😄</label>
+          <textarea
+            value={comment}
+            onChange={e => setComment(e.target.value)}
+            className="w-full border p-2"
+            required={true}
+          />
+
+          <div className="flex gap-2">
+            <Button
               type="button"
-              onClick={() => setScore(val)}
-              className="focus:outline-none cursor-pointer"
-              aria-label={`${val}점`}
-            >
-              <Heart
-                className={`w-8 h-8 transition-colors ${score >= val ? "text-main-500 fill-main-500" : "text-gray-300"}`}
-              />
-            </button>
-          ))}
-        </div>
-
-        <label className="block">경험에 대해 알려주세요!</label>
-        <textarea
-          value={comment}
-          onChange={e => setComment(e.target.value)}
-          className="w-full border p-2"
-        />
-
-        <div className="flex gap-2">
-          <Button
-            variant='cancel'
-            text='취소'
-            onClick={onClose}
-            customClassName="w-full"
-          />
-          <Button
-            variant='default'
-            text='제출'
-            onClick={handleSubmit}
-            customClassName="w-full"
-          />
-        </div>
+              variant='cancel'
+              text='취소'
+              onClick={onClose}
+              customClassName="w-full"
+            />
+            <Button
+              type="submit"
+              variant='default'
+              text='제출'
+              customClassName="w-full"
+            />
+          </div>
+        </form>
       </div>
+
       <ConfirmDialog
         isOpen={confirmDialog.open}
         text={confirmDialog.text}
@@ -94,6 +101,6 @@ export default function CreateReviewDialog({
         onConfirm={confirmDialog.onConfirm}
         onCallback={() => onClose()}
       />
-    </div>
+    </section>
   );
 }
