@@ -61,13 +61,13 @@ export default function GatheringFilters({
     };
 
     return (
-        <div className="w-full h-[160px] flex flex-col justify-start gap-4 py-5 whitespace-nowrap">
+        <div className="w-full h-[160px] flex flex-col justify-start gap-4 py-5 whitespace-nowrap dark:text-white">
             <div className="flex flex-row relative gap-6">
                 <div className={`absolute bottom-0 h-1 rounded-full bg-main-apricot transition-all duration-300 ease-in-out w-15 ${selectedMainType === 'DALLAEMFIT' ? 'translate-x-0' : 'translate-x-22'}`} />
                 <button
                     onClick={() => handleMainTypeChange('DALLAEMFIT')}
                     title="외향인인 당신에게 추천하는 모임!"
-                    className={MAIN_TYPE_BUTTON_STYLES}
+                    className={`${MAIN_TYPE_BUTTON_STYLES}`}
                 >
                     북적북적
                 </button>
@@ -86,19 +86,19 @@ export default function GatheringFilters({
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => handleSubTypeChange('ALL')}
-                                className={`${selectedSubType === 'ALL' ? 'bg-main-apricot' : 'bg-slate-100'} ${SUB_TYPE_BUTTON_STYLES}`}
+                                className={`${selectedSubType === 'ALL' ? 'bg-main-apricot dark:text-dark' : 'bg-slate-100 dark:bg-gray-700'} ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 전체
                             </button>
                             <button
                                 onClick={() => handleSubTypeChange('OFFICE_STRETCHING')}
-                                className={`${selectedSubType === 'OFFICE_STRETCHING' ? 'bg-main-apricot' : 'bg-slate-100'} ${SUB_TYPE_BUTTON_STYLES}`}
+                                className={`${selectedSubType === 'OFFICE_STRETCHING' ? 'bg-main-apricot dark:text-dark' : 'bg-slate-100 dark:bg-gray-700'} ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 엔터테인먼트
                             </button>
                             <button
                                 onClick={() => handleSubTypeChange('MINDFULNESS')}
-                                className={`${selectedSubType === 'MINDFULNESS' ? 'bg-main-apricot' : 'bg-slate-100'} ${SUB_TYPE_BUTTON_STYLES}`}
+                                className={`${selectedSubType === 'MINDFULNESS' ? 'bg-main-apricot dark:text-dark' : 'bg-slate-100 dark:bg-gray-700'} ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 액티비티
                             </button>
@@ -111,7 +111,7 @@ export default function GatheringFilters({
                         <div className="flex flex-row items-center gap-2">
                             <button
                                 onClick={() => handleSubTypeChange('ALL')}
-                                className={`bg-main-apricot ${SUB_TYPE_BUTTON_STYLES}`}
+                                className={`bg-main-apricot dark:text-dark ${SUB_TYPE_BUTTON_STYLES}`}
                             >
                                 전체
                             </button>

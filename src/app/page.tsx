@@ -25,14 +25,14 @@ interface GatheringCardProps {
 
 /** 피처 카드 */
 const FeatureCard = ({ icon, title, description, gradient }: FeatureCardProps) => (
-  <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group">
+  <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group dark:bg-dark-2 dark:text-white">
     <div className="space-y-6">
       <div className={`w-16 h-16 ${gradient} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
         <span className="text-2xl text-white">{icon}</span>
       </div>
       <div className="space-y-3">
-        <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
-        <p className="text-gray-600 leading-relaxed">{description}</p>
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{title}</h3>
+        <p className="text-gray-600 leading-relaxed dark:text-white">{description}</p>
       </div>
     </div>
   </div>
@@ -67,17 +67,17 @@ const GatheringCard = ({
 
 export default async function MainPage() {
   return (
-    <div className="min-h-screen">
-      <div className="bg-white contents-container">
+    <div className="min-h-screen dark:bg-dark ">
+      <div className="bg-white contents-container dark:bg-dark dark:text-white">
         {/* Hero Section */}
         <section className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
           <div className="flex-1 space-y-8">
             <div className="space-y-4">
               <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-                <span className="text-gray-800">가볍게 시작하는</span><br />
+                <span className="text-gray-800 dark:text-white">가볍게 시작하는</span><br />
                 특별한<span className="bg-gradient-to-r from-[#8B5CF6] to-[#F472B6] bg-clip-text text-transparent"> 만남</span><br />
               </h1>
-              <p className="text-sm sm:text-xl text-gray-600 leading-relaxed max-w-md whitespace-nowrap">
+              <p className="text-sm sm:text-xl text-gray-600 dark:text-white leading-relaxed max-w-md whitespace-nowrap">
                 서울의 2030이라면 <strong className="text-[#8B5CF6]">Meet Meet</strong>에서 모임을 만들고<br />
                 새로운 친구를 만들어보세요!
               </p>
@@ -105,7 +105,7 @@ export default async function MainPage() {
                   <span className="text-xs font-bold text-gray-600">+99</span>
                 </div>
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-white">
                 <strong className="text-[#8B5CF6]">12,000+</strong> 명이 이미 만남을 시작했어요
               </div>
             </div>
@@ -136,10 +136,10 @@ export default async function MainPage() {
           className="px-6 py-16 space-y-16"
         >
           <div className="text-center space-y-4">
-            <h2 className="text-2xl sm:text-4xl font-bold text-gray-800">
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-800 dark:text-white">
               왜 <span className="bg-gradient-to-r from-[#8B5CF6] to-[#F472B6] bg-clip-text text-transparent">Meet Meet</span>일까요?
             </h2>
-            <p className="text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-lg text-gray-600 dark:text-white max-w-2xl mx-auto">
               내가 찾는 모임을 쉽게 조건에 따라 찾을 수 있어요
             </p>
           </div>
@@ -170,14 +170,14 @@ export default async function MainPage() {
         {/* Mock Community Section */}
         <section
           id="community"
-          className="px-6 py-16 bg-gradient-to-r from-purple-50 to-pink-50 rounded-3xl"
+          className="px-6 py-16 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-dark-2 dark:to-dark-2 rounded-3xl"
         >
           <div className="space-y-12">
             <div className="text-center space-y-4">
-              <h2 className="text-4xl font-bold text-gray-800">
+              <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
                 지금 <span className="bg-gradient-to-r from-main-apricot to-[#F472B6] bg-clip-text text-transparent">핫한</span> 모임들
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-gray-600 dark:text-white">
                 다양한 사람들이 만나고 있는 인기 모임을 확인해보세요
               </p>
             </div>

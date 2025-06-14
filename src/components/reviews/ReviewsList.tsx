@@ -184,7 +184,7 @@ export default function ReviewsList({
                     return (
                         <section
                             key={`${review.id}-${index}`}
-                            className="w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative"
+                            className="w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative dark:border-gray-700 dark:bg-dark-2 dark:text-white"
                             ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll ? lastItemRef : undefined}
                         >
                             {/* 이미지 영역 */}
@@ -205,7 +205,7 @@ export default function ReviewsList({
                                     {/* 평점 */}
                                     <HeartRating score={review.score} />
                                     {/* 리뷰 내용 */}
-                                    <p className="text-sm text-gray-700 mt-2 mb-3">{review.comment}</p>
+                                    <p className="text-sm text-gray-700 mt-2 mb-3 dark:text-white">{review.comment}</p>
                                     {/* 모임 정보 */}
                                     <div className="space-y-1">
                                         <p className={TEXT_GRAY_XS_STYLES}>

@@ -74,7 +74,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
       {sortedGatherings.map(data => (
         <div
           key={data.id}
-          className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
+          className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item dark:bg-dark-2 dark:text-white"
         >
           {/* 마감 완료 및 5명 미만 */}
           <OverlayForDisabled
@@ -106,11 +106,11 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
 
                 {/* 마감 미완료 및 모임 전 '이용 예정' */}
                 {getTimeRemaining(data?.registrationEnd) !== '마감됨' && !data?.isCompleted && (
-                  <div className={ACTIVATED_STYLE}>이용 예정</div>)}
+                  <div className={`${ACTIVATED_STYLE} dark:bg-main-500`}>이용 예정</div>)}
 
                 {/* 마감 미완료 및 5명 이상 모집 '개설 확정'  */}
                 {getTimeRemaining(data?.registrationEnd) !== '마감됨' && data?.participantCount >= 5 && (
-                  <div className={`${ACTIVATED_STYLE} flex items-center gap-1`}>
+                  <div className={`${ACTIVATED_STYLE} flex items-center gap-1 dark:bg-main-500`}>
                     <CheckCircle className="w-4 h-4 text-white" />
                     개설 확정
                   </div>)}

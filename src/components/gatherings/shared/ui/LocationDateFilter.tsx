@@ -6,7 +6,7 @@ import { ChevronDown, Clock, Timer, Star, Users } from 'lucide-react';
 // 스타일 상수
 const BUTTON_BASE_STYLES = "flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500";
 const DROPDOWN_CONTAINER_STYLES = "absolute top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50";
-const DROPDOWN_ITEM_BASE_STYLES = "w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150";
+const DROPDOWN_ITEM_BASE_STYLES = "w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150";
 const SELECTED_INDICATOR_STYLES = "w-2 h-2 bg-main-600 rounded-full mt-1.5 flex-shrink-0";
 
 // 매직넘버 상수
@@ -173,7 +173,7 @@ export default function LocationDateFilter({
                     <div className="relative">
                         <button
                             onClick={() => setIsLocationOpen(!isLocationOpen)}
-                            className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-gathering-item justify-between`}
+                            className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-gathering-item justify-between dark:bg-dark-2 dark:text-gray-200`}
                         >
                             <span>{currentLocation?.label || '지역 선택'}</span>
                             <ChevronDown
@@ -221,12 +221,13 @@ export default function LocationDateFilter({
                         )}
                     </div>
 
+                    {/* 날짜 선택 */}
                     <input
                         type="date"
                         value={selectedDate}
                         min={pageType === 'search' ? today : undefined}
                         onChange={(e) => handleDateChange(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500"
+                        className="px-3 py-2 border border-gray-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500 dark:bg-dark-2 dark:text-gray-200"
                     />
 
                     {(selectedLocation || selectedDate) && (
@@ -235,7 +236,7 @@ export default function LocationDateFilter({
                                 setSelectedLocation('');
                                 setSelectedDate('');
                             }}
-                            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm transition-colors duration-200"
+                            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm transition-colors duration-200 dark:bg-dark-2 dark:text-gray-200"
                         >
                             필터 초기화
                         </button>
@@ -244,18 +245,20 @@ export default function LocationDateFilter({
                 {onSortChange && (
                     <div className="flex items-center gap-3 ml-auto">
                         {pageType === 'search' ? (
+                            // 마감순 정렬
                             <button
                                 onClick={handleSearchToggle}
-                                className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-all duration-200`}
+                                className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-all duration-200 dark:bg-dark-2 dark:text-gray-200`}
                             >
-                                <CurrentIcon className="w-4 h-4" />
+                                <CurrentIcon className="w-4 h-4"/>
                                 <span className="hidden sm:inline">{currentOption?.label}</span>
                             </button>
                         ) : (
                             <div className="relative">
                                 <button
                                     onClick={() => setIsSortOpen(!isSortOpen)}
-                                    className={`${BUTTON_BASE_STYLES} transition-all duration-200`}
+                                    // 정렬 버튼
+                                    className={`${BUTTON_BASE_STYLES} transition-all duration-200 dark:bg-dark-2 dark:text-gray-200`}
                                 >
                                     <CurrentIcon className="w-4 h-4" />
                                     <span className="hidden sm:inline">{currentOption?.label}</span>
@@ -267,7 +270,7 @@ export default function LocationDateFilter({
                                 </button>
 
                                 {isSortOpen && (
-                                    <div className={`${DROPDOWN_CONTAINER_STYLES} right-0`}>
+                                    <div className={`${DROPDOWN_CONTAINER_STYLES} right-0 dark:bg-dark-2 dark:text-gray-200`}>
                                         {sortOptions.map((option) => {
                                             const Icon = option.icon;
                                             const isSelected = currentSort === option.value;
@@ -278,21 +281,21 @@ export default function LocationDateFilter({
                                                     onClick={() => handleSortChange(option.value)}
                                                     className={`
                                                         w-18 sm:w-full ${DROPDOWN_ITEM_BASE_STYLES} px-3 py-3
-                                                        ${isSelected ? 'bg-main-50 text-main-600' : 'text-gray-700'}
+                                                        ${isSelected ? 'bg-main-50 text-main-600 dark:bg-dark-2 dark:text-gray-200' : 'text-gray-700 dark:text-gray-200'}
                                                         ${option.value === sortOptions[0].value ? 'rounded-t-lg' : ''}
                                                         ${option.value === sortOptions[sortOptions.length - 1].value ? 'rounded-b-lg' : ''}
                                                     `}
                                                 >
                                                     <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                                                        isSelected ? 'text-main-600' : 'text-gray-400'
+                                                        isSelected ? 'text-main-600 dark:text-main-400' : 'text-gray-400 dark:text-gray-200'
                                                     }`} />
                                                     <div className="flex-1 hidden sm:block">
-                                                        <div className={`text-sm font-medium ${isSelected && 'text-main-600'}`}>
+                                                        <div className={`text-sm font-medium ${isSelected && 'text-main-600 dark:text-main-400'}`}>
                                                             {option.label}
                                                         </div>
                                                     </div>
                                                     {isSelected && (
-                                                        <div className={`${SELECTED_INDICATOR_STYLES} mt-1.5`}></div>
+                                                        <div className={`${SELECTED_INDICATOR_STYLES} mt-1.5 dark:bg-main-400`}></div>
                                                     )}
                                                 </button>
                                             );

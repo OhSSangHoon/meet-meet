@@ -160,18 +160,20 @@ export default async function GatheringsPage({
     const { gatherings: ssrGatherings, activeStartIndex } = await getActiveGatheringsWithSkip(params);
 
     return (
-        <div className="contents-container">
-            <Gatherings 
-                ssrGatherings={ssrGatherings}
-                activeStartIndex={activeStartIndex}
-                initialFilters={{
-                    mainType: params.mainType || 'DALLAEMFIT',
-                    location: params.location || '',
-                    date: params.date || '',
-                    sortBy: params.sortBy || 'registrationEnd',
-                    sortOrder: params.sortOrder || 'asc'
-                }}
-            />
+        <div>
+            <div className="contents-container bg-white dark:bg-dark min-h-screen transition-colors duration-200">
+                <Gatherings 
+                    ssrGatherings={ssrGatherings}
+                    activeStartIndex={activeStartIndex}
+                    initialFilters={{
+                        mainType: params.mainType || 'DALLAEMFIT',
+                        location: params.location || '',
+                        date: params.date || '',
+                        sortBy: params.sortBy || 'registrationEnd',
+                        sortOrder: params.sortOrder || 'asc'
+                    }}
+                />
+            </div>
         </div>
     );
 }

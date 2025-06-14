@@ -43,13 +43,13 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
           variant='default'
           text='작성 가능한 리뷰'
           onClick={() => setMyReviewsTab(0)}
-          customClassName={`${myReviewsTab === 0 ? 'bg-main-apricot' : 'bg-slate-100'} ${FILTER_BUTTON_STYLE}`}
+          customClassName={`${myReviewsTab === 0 ? 'bg-main-apricot' : 'bg-slate-100 dark:bg-gray-700 dark:text-white'} ${FILTER_BUTTON_STYLE}`}
         />
         <Button
           variant='default'
           text='작성한 리뷰'
           onClick={() => setMyReviewsTab(1)}
-          customClassName={`${myReviewsTab === 1 ? 'bg-main-apricot' : 'bg-slate-100'} ${FILTER_BUTTON_STYLE}`}
+          customClassName={`${myReviewsTab === 1 ? 'bg-main-apricot' : 'bg-slate-100 dark:bg-gray-700 dark:text-white'} ${FILTER_BUTTON_STYLE}`}
         />
       </div>
 

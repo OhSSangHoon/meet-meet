@@ -17,7 +17,7 @@ export default function ProfileCard() {
   return (
     <>
       {/* 배경 헤더 */}
-      <section className="bg-main-350 relative px-4 py-6">
+      <section className="bg-main-350 dark:bg-main-500 relative px-4 py-6">
         <div className="mb-1 text-sm sm:text-base md:text-lg font-bold text-white">PROFILE</div>
         <div className="absolute top-4 right-4">
           <button type="button" onClick={() => setIsProfileEditDialogOpen(true)} className='size-8 sm:size-10 rounded-full flex items-center justify-center hover-button'>
@@ -27,7 +27,7 @@ export default function ProfileCard() {
       </section>
 
       {/* 프로필 정보 */}
-      <section className="h-full flex items-center gap-4 bg-white p-4">
+      <section className="h-full flex items-center gap-4 bg-white p-4 dark:bg-dark-2">
         {/* 이미지 */}
         <div className="size-12 sm:size-18 z-1 -mt-20 rounded-full border border-gray-400">
           <Image
@@ -40,12 +40,12 @@ export default function ProfileCard() {
         </div>
         {/* 스펙 */}
         <div>
-          <span className="text-sm sm:text-md font-bold text-main-500">{userName}</span>
-          <div className="flex gap-2 text-sm text-gray-800">
+          <span className="text-sm sm:text-md font-bold text-main-500 dark:text-main-300">{userName}</span>
+          <div className="flex gap-2 text-sm text-gray-800 dark:text-white">
             <span className="text-xs sm:text-base font-bold">COMPANY</span>
             <span className='text-xs sm:text-base'>{userCompanyName}</span>
           </div>
-          <div className="flex gap-2 text-gray-800 text-xs sm:text-base">
+          <div className="flex gap-2 text-gray-800 dark:text-white text-xs sm:text-base">
             <span className="font-bold">E-MAIL</span>
             <span>{userEmail}</span>
           </div>

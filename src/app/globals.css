@@ -59,6 +59,9 @@ html {
   --color-main-jade: oklch(0.845 0.130 165.0);
   --color-main-pink: oklch(0.725 0.175 349.7);
 
+  --color-dark: #161618;
+  --color-dark-2: #1b1b1f;
+
   --color-global-text: var(--color-gray-900);
 
   /* 전 페이지 공통 UI */

@@ -24,10 +24,10 @@ const content = {
 
 export default function GatheringsHeader({ type }: GatheringsHeaderProps) {
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col dark:text-main-300">
       <div className="w-full flex flex-row justify-between items-center">
         <div className="w-full flex flex-col justify-start gap-2">
-          <p className="text-[#374151] text-base font-medium">
+          <p className="text-[#374151] dark:text-main-100 text-base font-medium">
             {content[type].subtitle}
           </p>
           <p className="text-2xl font-semibold">

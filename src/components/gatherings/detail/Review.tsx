@@ -9,7 +9,7 @@ const MAX_RATING = 5;
 /** 모임 상세 페이지 리뷰 목록 */
 export default function Review({ review }: { review: ReviewItem }) {
     return (
-        <div className='w-full border-dotted border-b-2 border-main-300 flex flex-col gap-2'>
+        <div className='w-full border-dotted border-b-2 border-main-300 flex flex-col gap-2 dark:border-main-400'>
             <div className='flex gap-1'>
                 {Array.from({ length: review.score }).map((_, index) => (
                     <Heart key={index} className="w-4 h-4 fill-main-500 text-main-500" />

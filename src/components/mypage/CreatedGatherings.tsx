@@ -27,7 +27,7 @@ export default function CreatedGatherings() {
   if (!isLoading && !error && gatherings.length === 0) return <p className="text-center text-gray-500">내가 만든 모임이 없어요</p>;
 
   return (
-    <section className='flex flex-col gap-2'>
+    <section className='flex flex-col gap-2 dark:bg-dark-2'>
       <div className="flex w-full flex-col gap-4">
         {!isLoading && !error && gatherings.map(gathering => {
           return (

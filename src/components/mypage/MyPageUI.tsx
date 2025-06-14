@@ -27,7 +27,7 @@ export default function MyPageUI() {
             key={value}
             type="button"
             onClick={() => setSelectedTab(value)}
-            className={`cursor-pointer transition-colors duration-150 ${selectedTab === value ? "text-gray-800" : "text-slate-400"}`}
+            className={`cursor-pointer transition-colors duration-150 ${selectedTab === value ? "text-gray-800 dark:text-main-400" : "text-slate-400 dark:text-gray-200"}`}
           >
             {label}
           </button>

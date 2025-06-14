@@ -40,11 +40,11 @@ export default function SaveToggleButton({ gatheringId }: SaveToggleButtonProps)
             className={`
                 flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200
                 ${isSaved 
-                    ? 'bg-main-500 text-white hover:bg-main-600' 
-                    : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-main-500'
+                    ? 'bg-main-500 text-white hover:bg-main-600 dark:bg-main-400 dark:hover:bg-main-300' 
+                    : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-main-500 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-main-400'
                 }
                 ${isToggling ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                hover:outline-none hover:ring-2 hover:ring-main-300 hover:ring-offset-2
+                hover:outline-none hover:ring-2 hover:ring-main-300 hover:ring-offset-2 dark:hover:ring-main-300
             `}
             aria-label={isSaved ? '찜 해제' : '찜하기'}
             type="button"

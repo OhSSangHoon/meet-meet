@@ -14,7 +14,6 @@ const JoinedCountsProgressBar = dynamic(() => import('@/components/gatherings/sh
 const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
 const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
 
-
 // 스타일 상수
 const BADGE_BASE_STYLES = "inline-flex items-center px-3 py-1 text-sm font-medium rounded-md";
 
@@ -113,7 +112,7 @@ export default function GatheringsList({
                         key={`${gathering.teamId || 'unknown'}-${gathering.id}-${index}`}
                         onClick={() => router.push(`/gatherings/detail/${gathering.id}`)}
                         ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll && !isSavedPage ? lastItemRef : undefined}
-                        className="w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative cursor-pointer"
+                        className="w-full flex flex-col md:flex-row justify-start border border-gray-200 dark:border-dark-2 dark:bg-dark-2 rounded-2xl bg-white hover:border-main-300 dark:hover:border-main-400 hover:shadow-lg dark:hover:shadow-dark-lg transition-all duration-300 overflow-hidden relative cursor-pointer"
                     >
                         <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
                             <DateReminder registrationEnd={gathering.registrationEnd} />
@@ -131,11 +130,11 @@ export default function GatheringsList({
                             <div className="flex-1 w-full">
                                 <div className="flex flex-row md:justify-between gap-3">
                                     <div className="flex-1 flex flex-row gap-2 items-center">
-                                        <h1 className="text-lg font-semibold -mt-6">
+                                        <h1 className="text-lg font-semibold -mt-6 text-gray-900 dark:text-gray-100 transition-colors duration-200">
                                             {truncateTitle(gathering.name)}
                                         </h1>
-                                        <div className="hidden sm:block w-[2px] h-[16px] -mt-6 bg-gray-900"></div>
-                                        <p className="text-sm font-medium -mt-6 text-gray-700">
+                                        <div className="hidden sm:block w-[2px] h-[16px] -mt-6 bg-gray-900 dark:bg-gray-300"></div>
+                                        <p className="text-sm font-medium -mt-6 text-gray-700 dark:text-gray-300 transition-colors duration-200">
                                             {gathering.location}
                                         </p>
                                     </div>
@@ -146,10 +145,10 @@ export default function GatheringsList({
 
                                 {gathering.dateTime && (
                                     <div className="flex flex-wrap gap-2 mb-3 -mt-3">
-                                        <span className={`${BADGE_BASE_STYLES} bg-main-500 text-white`}>
+                                        <span className={`${BADGE_BASE_STYLES} bg-main-500 text-white dark:bg-main-600 dark:text-gray-100`}>
                                             {formatDate(gathering.dateTime)}
                                         </span>
-                                        <span className={`${BADGE_BASE_STYLES} border-2 border-main-500 text-main-600`}>
+                                        <span className={`${BADGE_BASE_STYLES} border-2 border-main-500 text-main-600 dark:border-main-400 dark:text-main-400 dark:bg-none`}>
                                             {formatTime(gathering.dateTime)}
                                         </span>
                                     </div>
@@ -158,8 +157,8 @@ export default function GatheringsList({
 
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <UserRoundCheck className="w-4 h-4 text-main-500" />
-                                    <span className="text-sm font-medium text-gray-700">
+                                    <UserRoundCheck className="w-4 h-4 text-main-500 dark:text-main-400" />
+                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200">
                                         {gathering.participantCount}/{gathering.capacity}
                                     </span>
                                 </div>
@@ -178,14 +177,14 @@ export default function GatheringsList({
             {enableInfiniteScroll && isFetchingNextPage && (
                 <div className="w-full h-[80px] flex justify-center items-center">
                     <div className="flex items-center gap-3">
-                        <div className="w-4 h-4 border-3 border-main-500 border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-gray-600 font-medium">더 많은 모임을 불러오는 중...</span>
+                        <div className="w-4 h-4 border-3 border-main-500 dark:border-main-400 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-gray-600 dark:text-gray-400 font-medium transition-colors duration-200">더 많은 모임을 불러오는 중...</span>
                     </div>
                 </div>
             )}
 
             {!isLoading && allGatherings.length === 0 && (
-                <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">
+                <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 dark:text-gray-400 font-medium text-sm transition-colors duration-200">
                     <p className="text-lg font-semibold mb-2">아직 모임이 없어요</p>
                     <p>곧 새로운 모임이 열릴 예정이에요</p>
                 </div>

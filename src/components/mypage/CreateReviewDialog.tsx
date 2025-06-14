@@ -67,7 +67,7 @@ export default function CreateReviewDialog({
 
   return (
     <section className="dialog-background">
-      <div className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4">
+      <div className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4 dark:bg-dark-2">
         <h2 className="text-xl font-semibold">리뷰 남기기</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <label className="block">만족스러운 경험이었나요?</label>

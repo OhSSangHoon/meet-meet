@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function SavedPage() {
   return (
-    <div className="contents-container">
+    <div className="contents-container dark:bg-dark dark:text-white">
       <SavedGatheringsClient />
     </div>
   );

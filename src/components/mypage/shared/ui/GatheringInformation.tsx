@@ -9,7 +9,7 @@ export default function GatheringInformation({ data, children }: { data: Gatheri
                 {/* 모임 이름  */}
                 <span className="text-lg sm:text-xl font-semibold">{data?.name}</span>
                 {/* 장소  */}
-                <span className="text-sm sm:text-base text-gray-600">{data?.location}</span>
+                <span className="text-sm sm:text-base text-gray-600 dark:text-white">{data?.location}</span>
             </div>
             <div className='flex items-center gap-4 text-sm font-medium'>
                 {/* 참여자 수 */}

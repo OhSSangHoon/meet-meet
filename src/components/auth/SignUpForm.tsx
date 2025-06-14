@@ -108,7 +108,7 @@ export default function SignUpForm() {
             <div className='w-full flex flex-col gap-2'>
                 <label
                     htmlFor="password-check"
-                    className="block text-sm font-bold"
+                    className="block text-sm font-bold dark:text-white"
                 >
                     비밀번호 확인
                 </label>

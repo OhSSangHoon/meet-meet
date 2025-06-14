@@ -15,7 +15,7 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
     ({ label, labelSize = 'text-sm', id, type, placeholder, isError, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
         <div className="w-full flex flex-col gap-2">
-            <label htmlFor={id} className={`block ${labelSize} font-bold`}>{label}</label>
+            <label htmlFor={id} className={`block ${labelSize} font-bold dark:text-white`}>{label}</label>
             <div className='relative'>
                 <input
                     ref={ref}

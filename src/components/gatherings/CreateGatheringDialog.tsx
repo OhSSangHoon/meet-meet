@@ -221,14 +221,14 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
             <div className="relative w-full h-full flex items-center justify-center md:p-4">
                 <div className="w-full max-w-2xl max-h-full flex flex-col">
                     <form
-                        className="flex flex-col w-full h-full bg-white md:rounded-lg shadow-xl overflow-hidden"
+                        className="flex flex-col w-full h-full bg-white dark:bg-dark-2 md:rounded-lg shadow-xl overflow-hidden"
                         onSubmit={handleSubmit(onSubmit, onError)}
                     >
                         {/* 헤더 */}
-                        <header className="w-full h-[60px] bg-white md:rounded-t-lg flex flex-row justify-between items-center px-5 border-b border-gray-100 flex-shrink-0">
-                            <h1 className="text-xl font-bold text-gray-800">모임 만들기</h1>
+                        <header className="w-full h-[60px] bg-white dark:bg-dark-2 md:rounded-t-lg flex flex-row justify-between items-center px-5 border-b border-gray-100 flex-shrink-0">
+                            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200">모임 만들기</h1>
                             <button type="button" onClick={handleNormalClose} className='cursor-pointer'>
-                                <X className="w-7 h-7 text-gray-500" />
+                                <X className="w-7 h-7 text-gray-500 dark:text-gray-200" />
                             </button>
                         </header>
 
@@ -261,7 +261,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
 
                             {/* 장소 선택 */}
                             <div className="w-full flex flex-col gap-2">
-                                <label htmlFor="location" className="text-base font-bold text-gray-800">장소</label>
+                                <label htmlFor="location" className="text-base font-bold text-gray-800 dark:text-gray-200">장소</label>
                                 <select
                                     id="location"
                                     {...register('location')}
@@ -291,7 +291,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                                         readOnly
                                     />
                                     <div
-                                        className="w-[100px] h-[47px] border-2 border-main-500 text-main-500 font-semibold text-sm px-2 rounded-lg flex flex-row items-center justify-center cursor-pointer hover:bg-main-50 whitespace-nowrap"
+                                        className="w-[100px] h-[47px] border-2 border-main-500 text-main-500 font-semibold text-sm px-2 rounded-lg flex flex-row items-center justify-center cursor-pointer hover:bg-main-50 whitespace-nowrap transition-gathering-item"
                                         onClick={handleFileButtonClick}
                                     >
                                         <p className="text-base">파일 추가</p>
@@ -323,7 +323,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                             {/* 날짜/시간 선택 */}
                             <div className="flex flex-col md:flex-row gap-5">
                                 <div className="flex-1 flex flex-col gap-2">
-                                    <label htmlFor="meetingDateTime" className="font-bold text-gray-800">모임 일정</label>
+                                    <label htmlFor="meetingDateTime" className="font-bold text-gray-800 dark:text-gray-200">모임 일정</label>
                                     <input
                                         id="meetingDateTime"
                                         type="text"
@@ -356,7 +356,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
 
                             {/* 모집정원 */}
                             <div className="w-full flex flex-col gap-2">
-                                <label htmlFor="capacity" className="font-bold text-gray-800">모집 정원</label>
+                                <label htmlFor="capacity" className="font-bold text-gray-800 dark:text-gray-200">모집 정원</label>
                                 <Controller
                                     name="capacity"
                                     control={control}
@@ -380,10 +380,10 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                         </main>
 
                         {/* 제출 버튼 */}
-                        <footer className="w-full p-5 bg-white md:rounded-b-lg flex-shrink-0">
+                        <footer className="w-full p-5 bg-white dark:bg-dark-2 md:rounded-b-lg flex-shrink-0">
                             <button
                                 type="submit"
-                                className="w-full bg-main-500 text-white text-lg font-semibold py-3 px-6 rounded-lg hover:bg-main-600 cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                className="w-full bg-main-500 text-white text-lg font-semibold py-3 px-6 rounded-lg hover:bg-main-600 cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed transition-gathering-item"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? '처리 중...' : '확인'}

@@ -13,7 +13,7 @@ export default function CreatableReview({ gathering, myReviewsTab, userId, onOpe
     return (
         <div
             key={gathering.id}
-            className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item"
+            className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item dark:bg-dark-2"
         >
             {/* 이미지 */}
             <div className="flex-shrink-0">
