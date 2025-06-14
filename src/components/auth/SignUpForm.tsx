@@ -76,7 +76,7 @@ export default function SignUpForm() {
                 isError={errors.name?.message}
             />
             <InputField
-                label="아이디"
+                label="이메일"
                 id="email"
                 type="email"
                 placeholder="이메일을 입력해 주세요"

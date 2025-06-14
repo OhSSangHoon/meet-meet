@@ -61,12 +61,12 @@ export default function Information({ detail, id, participants }: { detail: Gath
                                 {participants?.slice(0, 4).map((participant: Participant, i: number) => (
                                     <ImageWithFallback
                                         key={participant?.User?.id}
-                                        src={participant?.User?.image}
+                                        src={!participant?.User?.image || participant?.User?.image === 'null' || participant?.User?.image.trim() === '' ? 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg' : participant?.User?.image}
                                         fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
                                         alt="프로필 이미지"
                                         width={100}
                                         height={100}
-                                        className={`size-8 rounded-full border border-gray-300 ${i === 0 ? 'ml-0' : '-ml-2'}`}
+                                        className={`size-8 rounded-full border border-gray-300 object-cover object-center ${i === 0 ? 'ml-0' : '-ml-2'}`}
                                     />
                                 ))}
                                 <Tooltip>

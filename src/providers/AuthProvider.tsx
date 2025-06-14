@@ -104,6 +104,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 localStorage.setItem('user_name', result.data.name);
                 localStorage.setItem('user_company_name', result.data.companyName);
                 localStorage.setItem('user_image', result.data.image);
+                localStorage.setItem('token_issued_at', Date.now().toString());
             }
         } catch (error) {
             throw error;
@@ -117,6 +118,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         localStorage.removeItem('user_email');
         localStorage.removeItem('user_company_name');
         localStorage.removeItem('user_image');
+        localStorage.removeItem('token_issued_at');
         setToken(null);
         setUserId(0);
         setUserName('');

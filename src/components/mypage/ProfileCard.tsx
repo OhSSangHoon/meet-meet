@@ -32,12 +32,12 @@ export default function ProfileCard() {
         {/* 이미지 */}
         <div className="size-12 sm:size-18 z-1 -mt-20 rounded-full border border-gray-400">
           <ImageWithFallback
-            src={userImage}
+            src={!userImage || userImage === 'null' || userImage.trim() === '' ? 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg' : userImage}
             fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
             alt="프로필 이미지"
             width={1000}
             height={1000}
-            className="size-12 sm:size-full border-gray-400 rounded-full pointer-events-none"
+            className="size-12 sm:size-full border-gray-400 rounded-full object-cover object-center pointer-events-none"
           />
         </div>
         {/* 스펙 */}

@@ -59,7 +59,7 @@ export default function SignInForm() {
             className='w-4/5 flex flex-col gap-8'
         >
             <InputField
-                label="아이디"
+                label="이메일"
                 id="email"
                 type="email"
                 placeholder="이메일을 입력해 주세요"

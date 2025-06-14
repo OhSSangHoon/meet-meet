@@ -97,19 +97,19 @@ const useThemeState = () => {
  * 테마 토글 버튼
  * @returns 테마 토글 버튼
  */
-export default function DarkModeToggle() {
+export default function DarkModeToggleButton() {
     const { handleToggle, currentThemeInfo, nextThemeInfo } = useThemeState();
     const CurrentIcon = currentThemeInfo.icon;
 
     return (
         <button
             onClick={handleToggle}
-            className={`absolute right-5 p-2 rounded-full border border-gray-300 dark:border-gray-600 hover:scale-105 transition-all duration-200 group ${currentThemeInfo.bgColor} cursor-pointer`}
+            className={`p-2.5 rounded-full border border-gray-300 dark:border-gray-600 flex justify-center items-center hover:scale-105 transition-all duration-200 group ${currentThemeInfo.bgColor} cursor-pointer`}
             aria-label={`현재: ${currentThemeInfo.fullLabel}. 클릭하여 ${nextThemeInfo.fullLabel}로 전환`}
             title={currentThemeInfo.fullLabel}
         >
-            <CurrentIcon 
-                size={18} 
+            <CurrentIcon
+                size={18}
                 className={`${currentThemeInfo.color} transition-all duration-300`}
             />
         </button>
@@ -124,11 +124,11 @@ export function DarkModeToggleWithLabel() {
     return (
         <button
             onClick={handleToggle}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:scale-105 transition-all duration-200 ${currentThemeInfo.bgColor}`}
+            className={`px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-200 ${currentThemeInfo.bgColor}`}
             aria-label={`현재: ${currentThemeInfo.description}. 클릭하여 전환`}
         >
-            <CurrentIcon 
-                size={16} 
+            <CurrentIcon
+                size={16}
                 className={`${currentThemeInfo.color} transition-all duration-300`}
             />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
