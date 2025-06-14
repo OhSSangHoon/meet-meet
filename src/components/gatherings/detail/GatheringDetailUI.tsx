@@ -90,8 +90,8 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
     };
 
     return (
-        <main>
-            <section className='contents-container'>
+        <>
+            <main className='contents-container'>
                 {/* 모임 썸네일과 정보 */}
                 {detailLoading ? (
                     <section className='flex flex-col sm:flex-row gap-4'>
@@ -105,7 +105,7 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                     </section>
                 )}
                 {/* 모임 리뷰 목록 */}
-                <section className='w-full h-full px-4 py-4 flex flex-col gap-4 bg-white rounded-lg'>
+                <section className='w-full h-full p-4 flex flex-col gap-4 bg-white rounded-lg'>
                     <h1 className='text-lg font-semibold'>다른 참여자들은 이렇게 느꼈어요!</h1>
                     {reviewsLoading ? (
                         <ReviewLoading width='w-full' height='h-32' />
@@ -119,7 +119,8 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                         <PageConverter page={page} setPage={setPage} totalPages={detailReviews?.totalPages} />
                     ) : (<p className='p-4 sm:p-20 mx-auto text-sm text-gray-500'>아직 리뷰가 없습니다.</p>)}
                 </section>
-            </section >
+            </main >
+
             {/* 모임 참가 Footer */}
             <Footer
                 token={token!}
@@ -136,6 +137,8 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                     else setDialog((prev) => ({ ...prev, isOpen: false }));
                 }}
             />
+
+            {/* 확인 다이얼로그 */}
             <ConfirmDialog
                 isOpen={signInDialogOpen}
                 text='로그인이 필요합니다'
@@ -147,6 +150,6 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
                 onClose={() => setDialog((prev) => ({ ...prev, isOpen: false }))}
                 onConfirm={dialog.onConfirm}
             />
-        </main>
+        </>
     );
 }

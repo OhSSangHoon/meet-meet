@@ -4,8 +4,8 @@ import { formatDate, formatTime } from '@/components/shared/utils/dateFormats';
 import { Gathering, Participant } from '@/types/gatherings';
 import { Check, UserRoundCheck } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
 
 const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
 const JoinedCountsProgressBar = dynamic(() => import('@/components/gatherings/shared/ui/JoinedCountsProgressBar'), { ssr: false });
@@ -52,25 +52,26 @@ export default function Information({ detail, id, participants }: { detail: Gath
                 <div className="flex justify-between text-sm">
                     <div className="flex items-center gap-2">
                         <div className='flex items-center gap-1'>
-                            <UserRoundCheck className='w-4 h-4 text-main-500' />
+                            <UserRoundCheck className='size-4 text-main-500' />
                             <span>{detail?.participantCount}명 참여 중</span>
                         </div>
                         {/* 참여자들의 프로필 이미지 */}
                         <TooltipProvider>
                             <div className="flex items-center">
                                 {participants?.slice(0, 4).map((participant: Participant, i: number) => (
-                                    <Image
+                                    <ImageWithFallback
                                         key={participant?.User?.id}
-                                        src={participant?.User?.image || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'}
+                                        src={participant?.User?.image}
+                                        fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
                                         alt="프로필 이미지"
                                         width={100}
                                         height={100}
-                                        className={`w-8 h-8 rounded-full border border-gray-300 ${i === 0 ? 'ml-0' : '-ml-2'}`}
+                                        className={`size-8 rounded-full border border-gray-300 ${i === 0 ? 'ml-0' : '-ml-2'}`}
                                     />
                                 ))}
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <div className="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center cursor-pointer">
+                                        <div className="size-8 bg-gray-50 rounded-full flex items-center justify-center cursor-pointer">
                                             <span className='text-sm font-semibold'>
                                                 {participants?.length - 4 > 0 ? `+${participants?.length - 4}` : '+0'}
                                             </span>
@@ -79,9 +80,10 @@ export default function Information({ detail, id, participants }: { detail: Gath
                                     <TooltipContent side="top" align="center" className="flex gap-1 bg-white border border-button rounded-lg p-2 shadow-lg">
                                         {participants?.slice(4)?.length > 0 ? (
                                             participants.slice(4).map((participant: Participant) => (
-                                                <Image
+                                                <ImageWithFallback
                                                     key={participant?.User?.id}
-                                                    src={participant?.User?.image || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'}
+                                                    src={participant?.User?.image}
+                                                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
                                                     alt="프로필 이미지"
                                                     width={100}
                                                     height={100}
@@ -99,7 +101,7 @@ export default function Information({ detail, id, participants }: { detail: Gath
                     {detail && detail?.participantCount >= 5 ? (
                         <div className='flex items-center gap-2'>
                             <div className='p-1 bg-main-300 rounded-full'>
-                                <Check className='text-white w-3 h-3' />
+                                <Check className='text-white size-3' />
                             </div>
                             <span>개설확정</span>
                         </div>

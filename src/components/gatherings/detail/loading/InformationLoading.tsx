@@ -3,7 +3,8 @@
 import { UserRoundCheck } from 'lucide-react';
 import Image from 'next/image';
 
-export default function DetailInformationLoading() {
+
+export default function InformationLoading() {
     return (
         <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] px-6 py-5 border-2 border-gray-300 bg-white rounded-lg flex flex-col justify-between gap-4 animate-pulse'
         >
@@ -28,9 +29,9 @@ export default function DetailInformationLoading() {
                 {/* RIGHT 찜하기 버튼 */}
                 <button
                     type='button'
-                    className={`flex-shrink-0 w-12 h-12 rounded-full border-2 border-main-300 text-main-600 transition-all duration-200`}
+                    className='flex-shrink-0 size-12 rounded-full border-2 border-main-300 text-main-600 transition-all duration-200'
                 >
-                    <svg className="w-6 h-6 mx-auto" viewBox="0 0 24 23" fill="currentColor">
+                    <svg className="size-6 mx-auto" viewBox="0 0 24 23" fill="currentColor">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                     </svg>
                 </button>
@@ -42,7 +43,7 @@ export default function DetailInformationLoading() {
                 <div className="flex justify-between text-sm">
                     <div className="flex items-center gap-2">
                         <div className='flex items-center gap-1'>
-                            <UserRoundCheck className='w-4 h-4 text-main-500' />
+                            <UserRoundCheck className='size-4 text-main-500' />
                             <span>-명 참여 중</span>
                         </div>
                         {/* 참여자들의 프로필 이미지 */}
@@ -52,7 +53,7 @@ export default function DetailInformationLoading() {
                                 alt="프로필 이미지"
                                 width={100}
                                 height={100}
-                                className='w-8 h-8 rounded-full border-2 border-white'
+                                className='size-8 rounded-full border-2 border-white'
                             />
                         </div>
                     </div>

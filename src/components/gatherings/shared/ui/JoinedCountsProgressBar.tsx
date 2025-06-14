@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 export default function JoinedCountsProgressBar({ participantCount, capacity }: { participantCount: number, capacity: number }) {
     const pathname = usePathname();
 
-    const hideMinIndicator = pathname.includes('/gatherings/detail');
+    const isDetailPage = pathname.includes('/gatherings/detail');
 
     const percent = useMemo(() => {
         if (!participantCount || !capacity) return 0;
@@ -26,7 +26,7 @@ export default function JoinedCountsProgressBar({ participantCount, capacity }: 
                 style={{ left: `calc(${minPercent}% - 8px)` }}
             >
                 <div className="size-4 bg-main-pink rounded-full border-2 border-white shadow" />
-                {!hideMinIndicator && (
+                {!isDetailPage && (
                     <span className="hidden md:block absolute left-1/2 -translate-x-1/2 mt-1 text-xs text-main-pink font-semibold whitespace-nowrap">
                         개설확정
                     </span>

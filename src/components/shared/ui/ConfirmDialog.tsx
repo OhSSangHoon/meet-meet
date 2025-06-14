@@ -38,7 +38,7 @@ export default function ConfirmDialog({ isOpen, text, onClose, onConfirm, onCall
                         onClick={onClose}
                         className='cursor-pointer hover:opacity-60 hover:text-button transition'
                     >
-                        <X className='w-6 h-6' />
+                        <X className='size-6' />
                     </button>
                 </div>
                 <Button

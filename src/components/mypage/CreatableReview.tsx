@@ -18,9 +18,9 @@ export default function CreatableReview({ gathering, myReviewsTab, userId, onOpe
             {/* 이미지 */}
             <div className="flex-shrink-0">
                 <ImageWithFallback
-                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'
                     src={gathering.image}
-                    alt="모임 이미지"
+                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
+                    alt="모임 썸네일"
                     width={1000}
                     height={1000}
                     className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"

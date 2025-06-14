@@ -3,8 +3,8 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { SquarePen } from 'lucide-react';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
 
 const ProfileEditDialog = dynamic(() => import('@/components/shared/ui/ProfileEditDialog'), { ssr: false });
 
@@ -15,24 +15,26 @@ export default function ProfileCard() {
   const [isProfileEditDialogOpen, setIsProfileEditDialogOpen] = useState(false);
 
   return (
-    <>
+    <section className='flex flex-col gap-2'>
       {/* 배경 헤더 */}
-      <section className="bg-main-350 dark:bg-main-500 relative px-4 py-6">
-        <div className="mb-1 text-sm sm:text-base md:text-lg font-bold text-white">PROFILE</div>
-        <div className="absolute top-4 right-4">
-          <button type="button" onClick={() => setIsProfileEditDialogOpen(true)} className='size-8 sm:size-10 rounded-full flex items-center justify-center hover-button'>
-            <SquarePen className="text-white" />
-          </button>
-        </div>
+      <section className="relative px-4 py-6 flex justify-between items-center bg-main-350 ">
+        <div className="text-sm sm:text-base md:text-lg font-bold text-white">PROFILE</div>
+        <button
+          type="button"
+          onClick={() => setIsProfileEditDialogOpen(true)}
+          className='size-8 sm:size-10 rounded-full flex items-center justify-center hover-button'>
+          <SquarePen className="text-white" />
+        </button>
       </section>
 
       {/* 프로필 정보 */}
       <section className="h-full flex items-center gap-4 bg-white p-4 dark:bg-dark-2">
         {/* 이미지 */}
         <div className="size-12 sm:size-18 z-1 -mt-20 rounded-full border border-gray-400">
-          <Image
-            src={userImage || 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'}
-            alt="프로필"
+          <ImageWithFallback
+            src={userImage}
+            fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
+            alt="프로필 이미지"
             width={1000}
             height={1000}
             className="size-12 sm:size-full border-gray-400 rounded-full pointer-events-none"
@@ -53,6 +55,6 @@ export default function ProfileCard() {
       </section>
 
       {isProfileEditDialogOpen && <ProfileEditDialog setIsProfileEditDialogOpen={setIsProfileEditDialogOpen} />}
-    </>
+    </section>
   );
 }

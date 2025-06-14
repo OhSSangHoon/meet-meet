@@ -38,9 +38,10 @@ export default function CreatedGatherings() {
               {/* 좌측 이미지 */}
               <article className='relative'>
                 <DateReminder registrationEnd={gathering?.registrationEnd} />
-                <ImageWithFallback src={gathering?.image}
-                  fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'
-                  alt='모임 이미지'
+                <ImageWithFallback
+                  src={gathering?.image}
+                  fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
+                  alt='모임 썸네일'
                   width={1000}
                   height={1000}
                   className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"

@@ -22,6 +22,9 @@ interface JoinedGatheringsProps {
   onOpenReviewDialog: (gathering: { userId: number, gatheringId: number }) => void;
 }
 
+const DEACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-slate-200 self-start text-gray-500 text-xs';
+const ACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-main-200 self-start text-white text-xs'
+
 /** 마이페이지 '참여중인 모임' */
 export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOpenReviewDialog }: JoinedGatheringsProps) {
   const { token, userId, signOut } = useContext(AuthContext);
@@ -62,9 +65,6 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
     return a.isCompleted ? 1 : -1;
   });
 
-  const DEACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-slate-200 self-start text-gray-500 text-xs';
-  const ACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-main-200 self-start text-white text-xs'
-
   if (isLoading) return <LoadingUI />;
   if (error && !fetchErrorMessage) return <div className="text-red-500">에러: {error.message}</div>;
   if (gatherings.length === 0 && !error) return <div className="text-gray-500 text-center">참여한 모임이 없습니다</div>;
@@ -86,9 +86,10 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
           {/* 좌측 */}
           <article className='relative'>
             <DateReminder registrationEnd={data?.registrationEnd} />
-            <ImageWithFallback src={data?.image}
-              fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'
-              alt='모임 이미지'
+            <ImageWithFallback
+              src={data?.image}
+              fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
+              alt='모임 썸네일'
               width={1000}
               height={1000}
               className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"

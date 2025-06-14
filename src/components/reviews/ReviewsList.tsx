@@ -1,12 +1,12 @@
 "use client"
 
-import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
-import HeartRating from '@/components/reviews/HeartRating';
+import { useMemo } from 'react';
 import { ReviewItem } from '@/types/reviews';
 import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteReviews';
 import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
 import ReviewStats from './ReviewStats';
-import { useMemo } from 'react';
+import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
+import HeartRating from '@/components/reviews/HeartRating';
 
 // 스타일 상수
 const TEXT_GRAY_XS_STYLES = "text-xs text-gray-400";
@@ -47,9 +47,9 @@ const filterReviewsByType = (
     selectedMainType: string,
     selectedSubType: string
 ): ReviewItem[] => {
-    
+
     if (selectedMainType === 'DORANDORAN') {
-        const result = reviewsList.filter(review => 
+        const result = reviewsList.filter(review =>
             review.Gathering && review.Gathering.type === 'WORKATION'
         );
         return result;
@@ -61,10 +61,10 @@ const filterReviewsByType = (
                     review.Gathering.type === 'MINDFULNESS'
                 )
             );
-            
+
             return result;
         } else {
-            const result = reviewsList.filter(review => 
+            const result = reviewsList.filter(review =>
                 review.Gathering && review.Gathering.type === selectedSubType
             );
             return result;
@@ -89,14 +89,14 @@ const filterReviewsByLocationAndDate = (
         if (location && review.Gathering?.location !== location) {
             return false;
         }
-        
+
         // 날짜 필터 (모임 개최일 기준)
         if (date && review.Gathering?.dateTime) {
             if (!isSameDateForFilter(review.Gathering.dateTime, date)) {
                 return false;
             }
         }
-        
+
         return true;
     });
 };
@@ -109,7 +109,7 @@ const filterReviewsByLocationAndDate = (
 const removeDuplicateReviews = (reviews: ReviewItem[]): ReviewItem[] => {
     const seen = new Set<string>();
     const duplicates: ReviewItem[] = [];
-    
+
     const result = reviews.filter(review => {
         if (seen.has(review.id)) {
             duplicates.push(review);
@@ -149,17 +149,17 @@ export default function ReviewsList({
     const filteredSSRReviews = useMemo(() => {
         // 1. 타입 필터링
         const typeFiltered = filterReviewsByType(ssrReviews, selectedMainType, selectedSubType);
-        
+
         // 2. 위치/날짜 필터링
         const locationDateFiltered = filterReviewsByLocationAndDate(typeFiltered, filters.location, filters.date);
-        
+
         return locationDateFiltered;
     }, [ssrReviews, selectedMainType, selectedSubType, filters]);
 
     // CSR 데이터 타입 필터링
     const filteredCSRReviews = useMemo(() => {
         const result = filterReviewsByType(infiniteReviews, selectedMainType, selectedSubType);
-        
+
         return result;
     }, [infiniteReviews, selectedMainType, selectedSubType]);
 
@@ -167,7 +167,7 @@ export default function ReviewsList({
     const allReviews = useMemo(() => {
         const combined = [...filteredSSRReviews, ...filteredCSRReviews];
         const deduplicated = removeDuplicateReviews(combined);
-        
+
         return deduplicated;
     }, [filteredSSRReviews, filteredCSRReviews]);
 
@@ -190,9 +190,9 @@ export default function ReviewsList({
                             {/* 이미지 영역 */}
                             <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
                                 <ImageWithFallback
-                                    src={review.Gathering.image || ''}
-                                    fallbackSrc={'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749779026/fallback_thumbnail_ssf66o.avif'}
-                                    alt="review image"
+                                    src={review.Gathering.image!}
+                                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
+                                    alt="리뷰 썸네일"
                                     width={320}
                                     height={180}
                                     className="rounded-t-lg md:rounded-l-lg md:rounded-t-none object-cover pointer-events-none"
@@ -228,7 +228,7 @@ export default function ReviewsList({
                 {enableInfiniteScroll && isFetchingNextPage && (
                     <div className="w-full h-[80px] flex justify-center items-center">
                         <div className="flex items-center gap-3">
-                            <div className="w-6 h-6 border-3 border-main-500 border-t-transparent rounded-full animate-spin"></div>
+                            <div className="size-6 border-3 border-main-500 border-t-transparent rounded-full animate-spin"></div>
                             <span className="text-gray-600 font-medium">더 많은 리뷰를 불러오는 중...</span>
                         </div>
                     </div>
@@ -238,9 +238,9 @@ export default function ReviewsList({
                 {!isLoading && allReviews.length === 0 && (
                     <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">
                         <>
-                                <p>선택한 조건에 맞는 리뷰가 없어요,</p>
-                                <p>다른 조건으로 검색해보세요</p>
-                            </>
+                            <p>선택한 조건에 맞는 리뷰가 없어요,</p>
+                            <p>다른 조건으로 검색해보세요</p>
+                        </>
                     </div>
                 )}
             </div>

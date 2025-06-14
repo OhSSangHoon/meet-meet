@@ -2,6 +2,8 @@ import { formatDate, formatTime } from "@/components/shared/utils/dateFormats";
 import { Gathering } from '@/types/gatherings';
 import { UserRoundCheck } from "lucide-react";
 
+const DATE_STYLE = 'inline-flex items-center rounded-md';
+
 export default function GatheringInformation({ data, children }: { data: Gathering, children?: React.ReactNode }) {
     return (
         <div className='flex flex-col gap-2 sm:gap-1 justify-between'>
@@ -14,17 +16,13 @@ export default function GatheringInformation({ data, children }: { data: Gatheri
             <div className='flex items-center gap-4 text-sm font-medium'>
                 {/* 참여자 수 */}
                 <div className='flex items-center gap-1'>
-                    <UserRoundCheck className="w-4 h-4 text-main-500" />
+                    <UserRoundCheck className="size-4 text-main-500" />
                     <span>{data?.participantCount ?? '-'}/{data?.capacity ?? '-'}</span>
                 </div>
                 {/* 날짜 */}
                 <div className="flex flex-wrap gap-2">
-                    <span className={`inline-flex items-center rounded-md`}>
-                        {formatDate(data?.dateTime ?? '')}
-                    </span>
-                    <span className={`inline-flex items-center rounded-md`}>
-                        {formatTime(data?.dateTime ?? '')}
-                    </span>
+                    <span className={DATE_STYLE}>{formatDate(data?.dateTime ?? '')}</span>
+                    <span className={DATE_STYLE}>{formatTime(data?.dateTime ?? '')}</span>
                 </div>
             </div>
             {children}

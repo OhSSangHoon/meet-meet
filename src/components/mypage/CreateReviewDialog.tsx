@@ -81,7 +81,7 @@ export default function CreateReviewDialog({
                 aria-label={`${val}점`}
               >
                 <Heart
-                  className={`w-8 h-8 transition-colors ${score >= val ? "text-main-500 fill-main-500" : "text-gray-300"}`}
+                  className={`size-8 transition-colors ${score >= val ? "text-main-500 fill-main-500" : "text-gray-300"}`}
                 />
               </button>
             ))}

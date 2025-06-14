@@ -22,6 +22,7 @@ const InputField = dynamic(() => import('@/components/auth/shared/ui/InputField'
 interface CreateGatheringDialogProps {
     onClose: (shouldRefresh?: boolean) => void;
 }
+
 /** 장소 스키마 */
 const LOCATION_OPTIONS = [
     { value: '', label: '장소를 선택해주세요' },
