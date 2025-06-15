@@ -7,8 +7,8 @@ import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from '@/types/gatherings';
 import GatheringsList from '@/components/gatherings/GatheringsList';
-import GatheringFilters from '@/components/gatherings/shared/GatheringsFilters';
-import GatheringsHeader from '@/components/gatherings/shared/GatheringsHeader';
+import GatheringFilters from '@/components/shared/GatheringsFilters';
+import GatheringsHeader from '@/components/shared/GatheringsHeader';
 
 // 매직넘버 상수
 const API_LIMIT = 1000; // 모임 조회 제한

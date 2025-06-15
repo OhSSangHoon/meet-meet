@@ -6,10 +6,10 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { getTimeRemaining } from '@/utils/shared/date';
 import dynamic from 'next/dynamic';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
-import GatheringInformation from '@/components/mypage/shared/GatheringInformation';
+import GatheringInformation from '@/components/mypage/GatheringInformation';
 import DateReminder from '@/components/shared/DateReminder'
 
-const LoadingUI = dynamic(() => import('@/components/mypage/shared/LoadingUI'), { ssr: false });
+const LoadingUI = dynamic(() => import('@/components/mypage/LoadingUI'), { ssr: false });
 
 /** 마이페이지 '내가 만든 모임' */
 export default function CreatedGatherings() {

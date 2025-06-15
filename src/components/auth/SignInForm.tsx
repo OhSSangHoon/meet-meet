@@ -7,9 +7,9 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cleanXSS } from '@/utils/shared/excapeForXSS';
 import axios from 'axios';
-import InputField from '@/components/auth/shared/InputField';
-import SubmitButton from '@/components/auth/shared/SubmitButton';
-import FormFooter from '@/components/auth/shared/FormFooter';
+import InputField from '@/components/auth/InputField';
+import SubmitButton from '@/components/auth/SubmitButton';
+import FormFooter from '@/components/auth/FormFooter';
 
 const signInFormSchema = z.object({
     email: z.string().email('올바른 이메일 형식이 아닙니다.'),

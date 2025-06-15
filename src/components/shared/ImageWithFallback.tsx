@@ -24,7 +24,7 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
                 src={imgSrc}
                 alt={alt}
                 onError={() => {
-                    console.log('이미지 로드 실패, fallback 이미지 적용');
+                    console.log('이미지 로드 실패 => fallback 이미지 적용');
                     setImgSrc(fallbackSrc)
                 }}
                 width={width}
