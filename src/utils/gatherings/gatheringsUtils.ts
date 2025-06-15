@@ -5,7 +5,7 @@ export {
     getApiTypeFromMainType,
     filterGatheringsByMainType,
     filterGatheringsByType
-} from '@/components/gatherings/shared/utils/gatheringsTypeUtils';
+} from '@/utils/gatherings/gatheringsTypeUtils';
 
 // 필터링
 export {
@@ -13,20 +13,20 @@ export {
     filterActiveGatherings,
     removeDuplicateGatherings,
     getUniqueGatherings
-} from '@/components/gatherings/shared/utils/gatheringsFilterUtils';
+} from '@/utils/gatherings/gatheringsFilterUtils';
 
 // 파라미터
 export {
     buildGatheringParams,
     isValidDateString,
     type GatheringApiParams
-} from '@/components/gatherings/shared/utils/gatheringsParamUtils';
+} from '@/utils/gatherings/gatheringsParamUtils';
 
 // 응답 처리
 export {
     normalizeGatheringsResponse,
     handleGatheringsError
-} from '@/components/gatherings/shared/utils/gatheringsResponseUtils';
+} from '@/utils/gatherings/gatheringsResponseUtils';
 
 // 상수
 export { GATHERING_CONSTANTS, GATHERING_TYPES } from '@/components/gatherings/shared/constants/gatheringsConstants';

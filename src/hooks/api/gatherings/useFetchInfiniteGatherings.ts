@@ -2,9 +2,9 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { fetchPaginatedGatherings } from '@/components/gatherings/shared/utils/fetchPaginatedGatherings';
+import { fetchPaginatedGatherings } from '@/utils/gatherings/fetchPaginatedGatherings';
 import { Gathering } from '@/types/gatherings';
-import { filterActiveGatherings, GATHERING_CONSTANTS } from '@/components/gatherings/shared/utils/gatheringsUtils';
+import { filterActiveGatherings, GATHERING_CONSTANTS } from '@/utils/gatherings/gatheringsUtils';
 
 /**
  * 무한 스크롤 데이터 쿼리 프로퍼티
@@ -67,17 +67,17 @@ export function useFetchInfiniteGatherings({
         status,
         isLoading,
         isError,
-    } = useInfiniteQuery<{gatherings: Gathering[], nextPage: number | null}>({
+    } = useInfiniteQuery<{ gatherings: Gathering[], nextPage: number | null }>({
         queryKey,
         queryFn: async ({ pageParam }) => {
             const csrPage = Number(pageParam);
-            
+
             // 전체 데이터에서 충분히 많은 데이터를 가져와서
             // 진행중 모임만 필터링한 후 CSR에 해당하는 부분만 추출
             let allActiveGatherings: Gathering[] = [];
             let currentOffset = 0; // 현재 오프셋
             let noMoreData = false; // 더 이상 데이터가 없는지 확인
-            
+
             // 처음부터 끝까지 모든 데이터를 가져와서 진행중 모임만 필터링
             while (!noMoreData && allActiveGatherings.length < GATHERING_CONSTANTS.MAX_ACTIVE_GATHERINGS) {
                 const allGatherings = await fetchPaginatedGatherings(
@@ -99,14 +99,14 @@ export function useFetchInfiniteGatherings({
 
                 // 진행중 모임만 필터링해서 누적
                 const newActiveGatherings = filterActiveGatherings(allGatherings);
-                
+
                 // 중복 제거 후 추가
-                const uniqueNewGatherings = newActiveGatherings.filter(gathering => 
+                const uniqueNewGatherings = newActiveGatherings.filter((gathering: Gathering) =>
                     !allActiveGatherings.some(existing => existing.id === gathering.id)
                 );
 
                 allActiveGatherings = allActiveGatherings.concat(uniqueNewGatherings);
-                
+
                 currentOffset += GATHERING_CONSTANTS.BATCH_SIZE;
             }
 
@@ -142,7 +142,7 @@ export function useFetchInfiniteGatherings({
     const lastItemRef = useCallback(
         (node: HTMLElement | null) => {
             if (isFetchingNextPage) return;
-            
+
             if (observer.current) observer.current.disconnect();
 
             observer.current = new IntersectionObserver((entries) => {

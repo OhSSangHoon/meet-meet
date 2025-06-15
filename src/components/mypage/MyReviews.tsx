@@ -6,11 +6,10 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { useFetchMyCreatedReviews } from '@/hooks/api/mypage/useFetchMyCreatedReviews';
 import { JoinedGathering } from '@/types/gatherings';
 import { ReviewItem } from '@/types/reviews';
-import dynamic from 'next/dynamic';
+import CreatedReview from '@/components/mypage/CreatedReview';
+import CreatableReview from '@/components/mypage/CreatableReview';
+import Button from '@/components/shared/ui/Button';
 
-const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
-const CreatableReview = dynamic(() => import('@/components/mypage/CreatableReview'), { ssr: false });
-const CreatedReview = dynamic(() => import('@/components/mypage/CreatedReview'), { ssr: false });
 
 interface MyReviewsProps {
   myReviewsTab: number;

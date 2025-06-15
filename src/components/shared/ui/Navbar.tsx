@@ -4,14 +4,14 @@ import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGather
 import { usePathname } from 'next/navigation';
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { shortenName } from '@/utils/shortenName';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { shortenName } from '@/utils/shared/shortenName';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/shadcn-ui/dropdown-menu';
 import DarkModeToggleButton from '@/components/shared/ui/DarkModeToggleButton';
 import TokenCountdown from '@/components/shared/ui/TokenCountDown';
 import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
 import Link from 'next/link';
 
-const HOVER_TRANSITION_STYLES = "hover:text-main-500 duration-300 ease-in-out";
+const HOVER_TRANSITION_STYLES = "hover:text-main-400 duration-300 ease-in-out";
 
 export default function Navbar() {
     const { token, signOut, userName, userImage } = useContext(AuthContext);
@@ -47,7 +47,7 @@ export default function Navbar() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`flex items-center gap-1 text-gray-800 dark:text-gray-200 ${pathname.includes(link.href) ? 'text-main-600 dark:text-main-400' : ''} ${HOVER_TRANSITION_STYLES}`}
+                                className={`flex items-center gap-1 text-gray-800 dark:text-gray-200 ${pathname.includes(link.href) ? 'text-main-400 dark:text-main-400' : ''} ${HOVER_TRANSITION_STYLES}`}
                             >
                                 <span>{link.label}</span>
                                 {link.href === '/saved' && <span className='bg-main-600 px-2 rounded-md text-xs text-button-text'>{savedCounts}</span>}

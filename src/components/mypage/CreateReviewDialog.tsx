@@ -6,7 +6,7 @@ import { useCreateReview } from '@/hooks/api/mypage/useCreateReview';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { cleanXSS } from '@/components/shared/utils/cleanXSS';
+import { cleanXSS } from '@/utils/shared/excapeForXSS';
 import { Heart } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/ui/Button';

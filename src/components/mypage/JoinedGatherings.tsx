@@ -4,17 +4,17 @@ import { useFetchJoinedGatherings } from '@/hooks/api/mypage/useFetchJoinedGathe
 import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGathering';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { getTimeRemaining, toKoreanTime } from '@/components/shared/utils/dateFormats';
+import { getTimeRemaining, toKoreanTime } from '@/utils/shared/date';
 import { CheckCircle } from "lucide-react"
 import dynamic from 'next/dynamic';
-import ImageWithFallback from '../shared/ui/ImageWithFallback';
+import Button from '@/components/shared/ui/Button';
+import GatheringInformation from '@/components/mypage/shared/ui/GatheringInformation';
+import DateReminder from '@/components/shared/ui/DateReminder';
+import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
 
 const LoadingUI = dynamic(() => import('@/components/mypage/shared/ui/LoadingUI'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 const OverlayForDisabled = dynamic(() => import('@/components/shared/ui/OverlayForDisabled'), { ssr: false });
-const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
-const GatheringInformation = dynamic(() => import('@/components/mypage/shared/ui/GatheringInformation'), { ssr: false });
-const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
 
 interface JoinedGatheringsProps {
   setSelectedTab: (tab: number) => void;
@@ -23,7 +23,7 @@ interface JoinedGatheringsProps {
 }
 
 const DEACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-slate-200 self-start text-gray-500 text-xs';
-const ACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-main-200 self-start text-white text-xs'
+const ACTIVATED_STYLE = 'px-3 py-1 rounded-full bg-main-200 dark:bg-main-500 self-start text-white text-xs'
 
 /** 마이페이지 '참여중인 모임' */
 export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOpenReviewDialog }: JoinedGatheringsProps) {
@@ -107,11 +107,11 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
 
                 {/* 마감 미완료 및 모임 전 '이용 예정' */}
                 {getTimeRemaining(data?.registrationEnd) !== '마감됨' && !data?.isCompleted && (
-                  <div className={`${ACTIVATED_STYLE} dark:bg-main-500`}>이용 예정</div>)}
+                  <div className={`${ACTIVATED_STYLE}`}>이용 예정</div>)}
 
                 {/* 마감 미완료 및 5명 이상 모집 '개설 확정'  */}
                 {getTimeRemaining(data?.registrationEnd) !== '마감됨' && data?.participantCount >= 5 && (
-                  <div className={`${ACTIVATED_STYLE} flex items-center gap-1 dark:bg-main-500`}>
+                  <div className={`${ACTIVATED_STYLE} flex items-center gap-1`}>
                     <CheckCircle className="w-4 h-4 text-white" />
                     개설 확정
                   </div>)}

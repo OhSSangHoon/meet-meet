@@ -7,7 +7,7 @@ import GatheringFilters from '@/components/gatherings/shared/ui/GatheringsFilter
 import LocationDateFilter from '@/components/gatherings/shared/ui/LocationDateFilter';
 import GatheringsList from '@/components/gatherings/GatheringsList';
 import dynamic from 'next/dynamic';
-import GatheringsHeader from './shared/ui/GatheringsHeader';
+import GatheringsHeader from '@/components/gatherings/shared/ui/GatheringsHeader';
 
 const CreateGatheringDialog = dynamic(() => import('@/components/gatherings/CreateGatheringDialog'), { ssr: false });
 
@@ -29,14 +29,14 @@ interface GatheringsProps {
     };
 }
 
-export default function Gatherings({ 
-    ssrGatherings, 
+export default function Gatherings({
+    ssrGatherings,
     activeStartIndex,
-    initialFilters 
+    initialFilters
 }: GatheringsProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    
+
     const [selectedMainType, setSelectedMainType] = useState(initialFilters.mainType);
     const [selectedSubType, setSelectedSubType] = useState('ALL');
     const [currentFilters, setCurrentFilters] = useState({
@@ -54,7 +54,7 @@ export default function Gatherings({
     // URL 업데이트 함수
     const updateURL = useCallback((newParams: Record<string, string>) => {
         const params = new URLSearchParams(searchParams);
-        
+
         Object.entries(newParams).forEach(([key, value]) => {
             if (value && value.trim()) {
                 params.set(key, value);
@@ -71,7 +71,7 @@ export default function Gatherings({
     const handleTypeChange = useCallback((mainType: string, subType: string) => {
         setSelectedMainType(mainType);
         setSelectedSubType(subType);
-        
+
         updateURL({
             mainType,
             location: currentFilters.location,
@@ -84,7 +84,7 @@ export default function Gatherings({
     // 필터 변경 핸들러
     const handleFilterChange = useCallback((filters: { location: string; date: string }) => {
         setCurrentFilters(filters);
-        
+
         updateURL({
             mainType: selectedMainType,
             location: filters.location,
@@ -97,7 +97,7 @@ export default function Gatherings({
     // 정렬 변경 핸들러
     const handleSortChange = useCallback((sort: { sortBy: string; sortOrder: string }) => {
         setCurrentSort(sort);
-        
+
         updateURL({
             mainType: selectedMainType,
             location: currentFilters.location,
@@ -115,7 +115,7 @@ export default function Gatherings({
     // 모달 닫기 + 새로고침 핸들러
     const handleCloseModal = useCallback((shouldRefresh = false) => {
         setIsCreateModalOpen(false);
-        
+
         if (shouldRefresh) {
             router.refresh();
         }
@@ -124,7 +124,7 @@ export default function Gatherings({
     return (
         <>
             <div className="flex flex-col">
-                <GatheringsHeader type="search"/>
+                <GatheringsHeader type="search" />
 
                 <GatheringFilters
                     onTypeChange={handleTypeChange}
@@ -157,7 +157,7 @@ export default function Gatherings({
             </div>
 
             {isCreateModalOpen && (
-                <CreateGatheringDialog 
+                <CreateGatheringDialog
                     onClose={handleCloseModal}
                 />
             )}

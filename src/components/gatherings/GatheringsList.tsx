@@ -3,16 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useFetchInfiniteGatherings } from "@/hooks/api/gatherings/useFetchInfiniteGatherings";
 import { useMemo } from 'react';
-import { formatDate, formatTime } from '@/components/shared/utils/dateFormats';
+import { formatDate, formatTime } from '@/utils/shared/date';
 import { Gathering } from "@/types/gatherings";
 import { UserRoundCheck } from "lucide-react";
-import dynamic from 'next/dynamic';
-import { filterGatheringsByType, getUniqueGatherings } from '@/components/gatherings/shared/utils/gatheringsUtils';
+import { filterGatheringsByType, getUniqueGatherings } from '@/utils/gatherings/gatheringsUtils';
 import ImageWithFallback from "@/components/shared/ui/ImageWithFallback";
-
-const JoinedCountsProgressBar = dynamic(() => import('@/components/gatherings/shared/ui/JoinedCountsProgressBar'), { ssr: false });
-const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
-const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
+import JoinedCountsProgressBar from "@/components/gatherings/shared/ui/JoinedCountsProgressBar";
+import SaveToggleButton from '@/components/gatherings/shared/ui/SaveToggleButton';
+import DateReminder from '@/components/shared/ui/DateReminder';
 
 // 스타일 상수
 const BADGE_BASE_STYLES = "inline-flex items-center px-3 py-1 text-sm font-medium rounded-md";
@@ -145,10 +143,10 @@ export default function GatheringsList({
 
                                 {gathering.dateTime && (
                                     <div className="flex flex-wrap gap-2 mb-3 -mt-3">
-                                        <span className={`${BADGE_BASE_STYLES} bg-main-500 text-white dark:bg-main-600 dark:text-gray-100`}>
+                                        <span className={`${BADGE_BASE_STYLES} bg-main-400 text-white dark:bg-main-600 dark:text-gray-100`}>
                                             {formatDate(gathering.dateTime)}
                                         </span>
-                                        <span className={`${BADGE_BASE_STYLES} border-2 border-main-500 text-main-600 dark:border-main-400 dark:text-main-400 dark:bg-none`}>
+                                        <span className={`${BADGE_BASE_STYLES} border-2 border-main-400 text-main-400 dark:border-main-400 dark:text-main-400 dark:bg-none`}>
                                             {formatTime(gathering.dateTime)}
                                         </span>
                                     </div>
@@ -157,7 +155,7 @@ export default function GatheringsList({
 
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <UserRoundCheck className="w-4 h-4 text-main-500 dark:text-main-400" />
+                                    <UserRoundCheck className="size-4 text-main-400 dark:text-main-400" />
                                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200">
                                         {gathering.participantCount}/{gathering.capacity}
                                     </span>
@@ -177,7 +175,7 @@ export default function GatheringsList({
             {enableInfiniteScroll && isFetchingNextPage && (
                 <div className="w-full h-[80px] flex justify-center items-center">
                     <div className="flex items-center gap-3">
-                        <div className="w-4 h-4 border-3 border-main-500 dark:border-main-400 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="size-4 border-3 border-main-400 dark:border-main-400 border-t-transparent rounded-full animate-spin"></div>
                         <span className="text-gray-600 dark:text-gray-400 font-medium transition-colors duration-200">더 많은 모임을 불러오는 중...</span>
                     </div>
                 </div>

@@ -1,10 +1,8 @@
 "use client"
 
 import { useContext, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { AuthContext } from "@/providers/AuthProvider";
-
-const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
+import Button from '@/components/shared/ui/Button';
 
 // 스타일 상수
 const MAIN_TYPE_BUTTON_STYLES = "text-lg font-semibold py-1 cursor-pointer";

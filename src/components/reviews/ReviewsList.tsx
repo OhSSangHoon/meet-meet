@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { ReviewItem } from '@/types/reviews';
 import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteReviews';
-import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
+import { isSameDateForFilter } from '@/utils/shared/date';
 import ReviewStats from './ReviewStats';
 import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
 import HeartRating from '@/components/reviews/HeartRating';

@@ -1,14 +1,12 @@
 'use client';
 
-import { formatDate, formatTime } from '@/components/shared/utils/dateFormats';
+import { formatDate, formatTime } from '@/utils/shared/date';
 import { Gathering, Participant } from '@/types/gatherings';
 import { Check, UserRoundCheck } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import dynamic from 'next/dynamic';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/shadcn-ui/tooltip";
 import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
-
-const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
-const JoinedCountsProgressBar = dynamic(() => import('@/components/gatherings/shared/ui/JoinedCountsProgressBar'), { ssr: false });
+import SaveToggleButton from '@/components/gatherings/shared/ui/SaveToggleButton';
+import JoinedCountsProgressBar from '@/components/gatherings/shared/ui/JoinedCountsProgressBar';
 
 /** 모임 상세 페이지 상단 우측 정보 */
 export default function Information({ detail, id, participants }: { detail: Gathering, id: string, participants: Participant[] }) {

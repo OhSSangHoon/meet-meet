@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { fetchReviewsPaginated } from '@/components/reviews/shared/utils/fetch';
+import { fetchReviewsPaginated } from '@/utils/reviews/fetch';
 import { ReviewItem } from '@/types/reviews';
 
 /**
@@ -85,12 +85,12 @@ export function useFetchInfiniteReviews({
             const lastPageLength = lastPage?.length || 0;
             const totalPages = allPages.length;
             const nextPage = startPage + totalPages;
-            
+
             // 3개 미만이면 마지막 페이지
             if (lastPageLength < 3) {
                 return undefined;
             }
-            
+
             return nextPage;
         },
         initialPageParam: startPage,
@@ -111,7 +111,7 @@ export function useFetchInfiniteReviews({
     const lastItemRef = useCallback(
         (node: HTMLElement | null) => {
             if (isFetchingNextPage) return;
-            
+
             if (observer.current) observer.current.disconnect();
 
             observer.current = new IntersectionObserver((entries) => {

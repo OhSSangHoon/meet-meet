@@ -3,13 +3,13 @@
 import { useFetchCreatedGatherings } from '@/hooks/api/mypage/useFetchCreatedGatherings';
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { getTimeRemaining } from '@/components/shared/utils/dateFormats';
+import { getTimeRemaining } from '@/utils/shared/date';
 import dynamic from 'next/dynamic';
-import ImageWithFallback from '../shared/ui/ImageWithFallback';
+import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
+import GatheringInformation from '@/components/mypage/shared/ui/GatheringInformation';
+import DateReminder from '@/components/shared/ui/DateReminder'
 
 const LoadingUI = dynamic(() => import('@/components/mypage/shared/ui/LoadingUI'), { ssr: false });
-const GatheringInformation = dynamic(() => import('@/components/mypage/shared/ui/GatheringInformation'), { ssr: false });
-const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
 
 /** 마이페이지 '내가 만든 모임' */
 export default function CreatedGatherings() {

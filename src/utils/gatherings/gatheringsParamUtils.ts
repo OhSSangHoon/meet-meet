@@ -1,4 +1,4 @@
-import { getApiTypeFromMainType } from '@/components/gatherings/shared/utils/gatheringsTypeUtils';
+import { getApiTypeFromMainType } from '@/utils/gatherings/gatheringsTypeUtils';
 import { GATHERING_CONSTANTS } from '@/components/gatherings/shared/constants/gatheringsConstants';
 
 /**

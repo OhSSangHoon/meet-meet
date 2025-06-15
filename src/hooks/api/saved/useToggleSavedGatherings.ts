@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
-import { getSavedGatherings, setSavedGatherings } from '@/components/gatherings/shared/utils/savedGatherings';
-import { getTimeRemaining } from '@/components/shared/utils/dateFormats';
+import { getSavedGatherings, setSavedGatherings } from '@/utils/gatherings/savedGatherings';
+import { getTimeRemaining } from '@/utils/shared/date';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from '@/types/gatherings';
@@ -20,7 +20,7 @@ export const useToggleSavedGatherings = () => {
   const cleanupExpiredGatherings = useCallback(async () => {
     const currentIds = getSavedGatherings();
     if (currentIds.length === 0) return currentIds;
-    
+
     try {
       const response = await internalClient.get(INTERNAL_PATHS.GATHERINGS, {
         params: { limit: API_LIMIT }
@@ -41,10 +41,10 @@ export const useToggleSavedGatherings = () => {
       if (validIds.length !== currentIds.length) {
         setSavedGatherings(validIds);
         queryClient.setQueryData(["savedGatherings"], validIds);
-        
+
         const currentSavedData = queryClient.getQueryData<Gathering[]>(["allSavedGatherings", currentIds]);
         if (currentSavedData) {
-          const updatedSavedData = currentSavedData.filter(gathering => 
+          const updatedSavedData = currentSavedData.filter(gathering =>
             validIds.includes(gathering.id.toString())
           );
           queryClient.setQueryData(["allSavedGatherings", validIds], updatedSavedData);
@@ -60,9 +60,9 @@ export const useToggleSavedGatherings = () => {
 
   useEffect(() => {
     cleanupExpiredGatherings();
-    
+
     const interval = setInterval(cleanupExpiredGatherings, CLEANUP_INTERVAL);
-    
+
     const handleFocus = () => cleanupExpiredGatherings();
     const handleVisibilityChange = () => {
       if (!document.hidden) cleanupExpiredGatherings();
@@ -70,7 +70,7 @@ export const useToggleSavedGatherings = () => {
 
     window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+
     return () => {
       clearInterval(interval);
       window.removeEventListener('focus', handleFocus);
@@ -122,11 +122,11 @@ export const useToggleSavedGatherings = () => {
         }
       }
 
-      return { 
-        previousSavedIds, 
-        previousAllSavedData, 
+      return {
+        previousSavedIds,
+        previousAllSavedData,
         currentSaved,
-        isCurrentlySaved 
+        isCurrentlySaved
       };
     },
 
@@ -140,7 +140,7 @@ export const useToggleSavedGatherings = () => {
         queryClient.setQueryData(["savedGatherings"], context.previousSavedIds);
         setSavedGatherings(context.previousSavedIds);
       }
-      
+
       if (context?.previousAllSavedData && context?.currentSaved) {
         queryClient.setQueryData(["allSavedGatherings", context.currentSaved], context.previousAllSavedData);
       }

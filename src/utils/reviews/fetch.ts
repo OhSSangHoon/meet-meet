@@ -1,6 +1,6 @@
 import { internalClient } from "@/lib/api/clientFetchers";
 import { ReviewItem } from "@/types/reviews";
-import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
+import { isSameDateForFilter } from '@/utils/shared/date';
 
 // 매직넘버 상수
 const ITEMS_PER_PAGE = 3; // 페이지당 리뷰 개수
@@ -67,10 +67,10 @@ export async function fetchReviewsPaginated(
         // 한국 시간 기준 날짜 필터링
         if (date && date.trim() !== '') {
             const targetDate = date.trim();
-            
+
             reviews = reviews.filter((review: ReviewItem) => {
                 if (!review.Gathering?.dateTime) return false;
-                
+
                 return isSameDateForFilter(review.Gathering.dateTime, targetDate);
             });
         }
@@ -89,12 +89,12 @@ export async function fetchReviewsPaginated(
         return filteredReviews;
     } catch (error) {
         console.error('리뷰 목록 조회 에러:', error);
-        
+
         // 에러 상세 정보
         if (error instanceof Error) {
             console.error('에러 메시지:', error.message);
         }
-        
+
         return [];
     }
 }

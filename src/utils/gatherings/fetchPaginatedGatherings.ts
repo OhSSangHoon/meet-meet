@@ -1,8 +1,8 @@
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { Gathering } from "@/types/gatherings";
-import { isSameDateForFilter } from '@/components/shared/utils/dateFormats';
-import { buildGatheringParams, normalizeGatheringsResponse, handleGatheringsError, filterGatheringsByMainType } from '@/components/gatherings/shared/utils/gatheringsUtils';
+import { isSameDateForFilter } from '@/utils/shared/date';
+import { buildGatheringParams, normalizeGatheringsResponse, handleGatheringsError, filterGatheringsByMainType } from '@/utils/gatherings/gatheringsUtils';
 
 // 매직넘버 상수
 const DEFAULT_LIMIT = 10;

@@ -1,5 +1,5 @@
 import { ReviewItem } from '@/types/reviews';
-import { formatDate, formatTime } from '@/components/shared/utils/dateFormats';
+import { formatDate, formatTime } from '@/utils/shared/date';
 import { Heart } from 'lucide-react';
 import ImageWithFallback from '../shared/ui/ImageWithFallback';
 

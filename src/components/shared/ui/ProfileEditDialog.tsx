@@ -6,13 +6,13 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { cleanXSS } from '@/components/shared/utils/cleanXSS';
-import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
+import { cleanXSS } from '@/utils/shared/excapeForXSS';
+import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDialog';
 import { Upload } from 'lucide-react';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
+import Button from './Button';
 
-const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 
 const profileEditFormSchema = z.object({

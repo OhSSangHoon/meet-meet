@@ -10,7 +10,7 @@ export default function HeartRating({ score }: { score: number }) {
       {[...Array(5)].map((_, i) => (
         <Heart
           key={i}
-          className={`size-4 ${i < score ? 'fill-main-500 stroke-main-500' : 'fill-gray-200 stroke-gray-200'}`}
+          className={`size-4 ${i < score ? 'fill-main-400 stroke-main-400' : 'fill-gray-200 stroke-gray-200'}`}
         />
       ))}
     </div>

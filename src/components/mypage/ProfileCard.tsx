@@ -2,7 +2,7 @@
 
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
-import { shortenName } from '@/utils/shortenName';
+import { shortenName } from '@/utils/shared/shortenName';
 import { SquarePen } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';

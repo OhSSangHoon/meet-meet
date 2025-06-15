@@ -1,4 +1,4 @@
-import { TIME_OPTIONS, DateTimeValue } from '@/components/shared/utils/dateFormats';
+import { TIME_OPTIONS, DateTimeValue } from '@/utils/shared/date';
 import { useState } from 'react';
 
 // 매직넘버 상수

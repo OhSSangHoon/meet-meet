@@ -4,37 +4,36 @@ import { useState, useEffect } from 'react';
 
 const ServiceItem = ({ id, title, subtitle, isSelected, onSelect }: { id: string, title: string, subtitle: string, isSelected: boolean, onSelect: (id: string) => void }) => {
     return (
-        <div 
-            className={`w-full border-2 rounded-lg px-5 py-3 sm:px-3 sm:py-2 cursor-pointer ${
-            isSelected ? 'border-main-500 bg-main-50' : 'border-gray-200'
-            }`}
+        <div
+            className={`w-full border-2 rounded-lg px-5 py-3 sm:px-3 sm:py-2 cursor-pointer ${isSelected ? 'border-main-500 bg-main-50' : 'border-gray-200'
+                }`}
             onClick={() => onSelect(id)}
         >
             <div className="flex flex-col justify-start gap-4">
                 <div className="flex flex-row items-center gap-2">
-                    <input 
-                        type="checkbox" 
-                        name="service" 
+                    <input
+                        type="checkbox"
+                        name="service"
                         id={id}
                         checked={isSelected}
                         onChange={() => onSelect(id)}
                         className="accent-main-500 rounded-lg w-[18px] h-[18px]"
                     />
-                    <h1 className={`${isSelected ? 'text-gray-800' : 'text-gray-200'} font-semibold text-sm md:text-base`}>{title}</h1>
+                    <h1 className='text-gray-800 font-semibold text-sm md:text-base'>{title}</h1>
                 </div>
-                {subtitle && <label htmlFor={id} className={`${isSelected ? 'text-gray-800' : 'text-gray-200'} cursor-pointer text-xs font-medium flex`}>{subtitle}</label>}
+                {subtitle && <label htmlFor={id} className='text-gray-800 cursor-pointer text-xs font-medium flex'>{subtitle}</label>}
             </div>
         </div>
     );
 };
-  
+
 // 부모 컴포넌트에서 선택된 서비스와 onChange 핸들러를 받음
-export default function SelectionService({ 
-    selectedType = 'OFFICE_STRETCHING', 
-    onSelect 
-}: { 
-    selectedType?: string, 
-    onSelect: (type: string) => void 
+export default function SelectionService({
+    selectedType = 'OFFICE_STRETCHING',
+    onSelect
+}: {
+    selectedType?: string,
+    onSelect: (type: string) => void
 }) {
     // 선택된 서비스 상태 관리
     const [selectedServices, setSelectedServices] = useState(selectedType);
@@ -54,19 +53,19 @@ export default function SelectionService({
     // 서비스 데이터
     const services = [
         {
-          id: 'OFFICE_STRETCHING',
-          title: '북적북적',
-          subtitle: '엔터테인먼트'
+            id: 'OFFICE_STRETCHING',
+            title: '북적북적',
+            subtitle: '엔터테인먼트'
         },
         {
-          id: 'MINDFULNESS',
-          title: '북적북적',
-          subtitle: '액티비티'
+            id: 'MINDFULNESS',
+            title: '북적북적',
+            subtitle: '액티비티'
         },
         {
-          id: 'WORKATION',
-          title: '도란도란',
-          subtitle: null
+            id: 'WORKATION',
+            title: '도란도란',
+            subtitle: null
         }
     ];
 

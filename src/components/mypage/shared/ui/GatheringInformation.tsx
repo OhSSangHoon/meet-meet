@@ -1,4 +1,4 @@
-import { formatDate, formatTime } from "@/components/shared/utils/dateFormats";
+import { formatDate, formatTime } from "@/utils/shared/date";
 import { Gathering } from '@/types/gatherings';
 import { UserRoundCheck } from "lucide-react";
 

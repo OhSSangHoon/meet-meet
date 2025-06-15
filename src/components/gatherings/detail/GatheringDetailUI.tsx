@@ -10,19 +10,19 @@ import { useCancelGathering } from '@/hooks/api/gatherings/detail/useCancelGathe
 import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGathering';
 import { useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from '@/providers/AuthProvider';
-import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
+import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDialog';
 import { ReviewItem, Reviews } from '@/types/reviews';
 import dynamic from 'next/dynamic';
+import Thumbnail from '@/components/gatherings/detail/Thumbnail';
+import Information from '@/components/gatherings/detail/Information';
+import PageConverter from '@/components/gatherings/detail/PageConverter';
+import Review from '@/components/gatherings/detail/Review';
+import Footer from '@/components/gatherings/detail/Footer';
 
 const InformationLoading = dynamic(() => import('@/components/gatherings/detail/loading/InformationLoading'), { ssr: false });
 const ThumbnailLoading = dynamic(() => import('@/components/gatherings/detail/loading/ThumbnailLoading'), { ssr: false });
 const ReviewLoading = dynamic(() => import('@/components/gatherings/detail/loading/ReviewLoading'), { ssr: false });
-const Thumbnail = dynamic(() => import('@/components/gatherings/detail/Thumbnail'), { ssr: false });
-const Information = dynamic(() => import('@/components/gatherings/detail/Information'), { ssr: false });
-const PageConverter = dynamic(() => import('@/components/gatherings/detail/PageConverter'), { ssr: false });
-const Review = dynamic(() => import('@/components/gatherings/detail/Review'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
-const Footer = dynamic(() => import('@/components/gatherings/detail/Footer'), { ssr: false });
 
 const handleCopyUrl = () => {
     const currentUrl = window.location.href;

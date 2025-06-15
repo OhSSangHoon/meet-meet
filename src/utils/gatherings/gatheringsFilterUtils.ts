@@ -1,5 +1,5 @@
 import { Gathering } from '@/types/gatherings';
-import { getTimeRemaining } from '@/components/shared/utils/dateFormats';
+import { getTimeRemaining } from '@/utils/shared/date';
 
 /**
  * 진행중인 모임인지 확인
@@ -43,7 +43,7 @@ export const removeDuplicateGatherings = (gatherings: Gathering[]): Gathering[] 
  * @returns 중복되지 않는 모임 목록
  */
 export const getUniqueGatherings = (
-    sourceGatherings: Gathering[], 
+    sourceGatherings: Gathering[],
     existingGatherings: Gathering[]
 ): Gathering[] => {
     const existingIds = new Set(existingGatherings.map(g => g.id));

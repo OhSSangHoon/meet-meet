@@ -235,18 +235,18 @@ export default async function MainPage() {
               <div className="flex items-center gap-3">
                 {/* 로고 이미지 위치 */}
                 <div className='w-10 h-10 bg-gray-50 rounded-lg hover:scale-110 transition-transform cursor-pointer'>
-                  <Image src="/images/logo_hero.avif" alt="로고 이미지" width={1000} height={1000} className="w-full h-full" />
+                  <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713054/logo_hero_lp6zw5.avif" alt="로고 이미지" width={1000} height={1000} className="w-full h-full" />
                 </div>
                 <span className="text-xl font-bold">Meet Meet</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
-                혼자보다 함께,<br />
-                지금 당장 시작하는 일상 속 특별한 경험<br />
+                혼자보다 함께<br />
+                평범한 일상 속 특별한 만남<br />
               </p>
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-semibold">서비스</h3>
+              <h3 className="font-semibold">찾아보기</h3>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><Link href="/gatherings" className="hover:text-white transition-colors">모임 찾기</Link></li>
                 <li><Link href="/saved" className="hover:text-white transition-colors">찜한 모임</Link></li>
@@ -265,8 +265,8 @@ export default async function MainPage() {
               <h3 className="font-semibold">팔로우</h3>
               <div className="flex gap-3">
                 <a href="https://www.github.com/window-ook/meet-meet" target="_blank" className="hover:text-white transition-colors">
-                  <div className="w-8 h-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                    <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713865/github_xnloon.svg" alt="인스타그램 로고" width={500} height={500} className="w-full h-full" />
+                  <div title='Github 링크' className="size-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                    <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749972038/github_oqdvnr.svg" alt="인스타그램 로고" width={500} height={500} className="size-5" />
                   </div>
                 </a>
               </div>
@@ -278,9 +278,9 @@ export default async function MainPage() {
               © 2025 Meet Meet All rights reserved
             </p>
             <div className="flex gap-2 text-sm text-gray-400">
-              <span className="hover:text-white transition-colors">window-ook</span>
+              <Link href='https://github.com/window-ook' target='_blank' className="hover:text-white transition-colors">window-ook</Link>
               <span>&</span>
-              <span className="hover:text-white transition-colors">OhSSang</span>
+              <Link href='https://github.com/OhSSangHoon' target='_blank' className="hover:text-white transition-colors">OhSSang</Link>
             </div>
           </div>
         </footer>

@@ -49,7 +49,7 @@ export default function ReviewStats({ reviews }: ReviewsStatsProps) {
                             <span className="w-6 text-xs">{rating}점</span>
                             <div className="flex-1 bg-gray-100 h-2 rounded-full mx-2 overflow-hidden">
                                 <div
-                                    className="h-full bg-main-500 transition-all duration-300"
+                                    className="h-full bg-main-400 transition-all duration-300"
                                     style={{
                                         width: totalReviews > 0
                                             ? `${(ratingCounts[rating as 1 | 2 | 3 | 4 | 5] / totalReviews) * 100}%`

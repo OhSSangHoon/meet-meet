@@ -3,9 +3,9 @@
 import { Gathering } from '@/types/gatherings'
 import dynamic from 'next/dynamic'
 import ImageWithFallback from '@/components/shared/ui/ImageWithFallback';
+import DateReminder from '@/components/shared/ui/DateReminder';
 
 const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/ui/SaveToggleButton'), { ssr: false });
-const DateReminder = dynamic(() => import('@/components/shared/ui/DateReminder'), { ssr: false });
 
 /** 모임 상세 페이지 썸네일 */
 export default function Thumbnail({ detail, id }: { detail: Gathering, id: string }) {

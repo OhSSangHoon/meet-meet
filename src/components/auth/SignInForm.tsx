@@ -5,7 +5,7 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { cleanXSS } from '@/components/shared/utils/cleanXSS';
+import { cleanXSS } from '@/utils/shared/excapeForXSS';
 import axios from 'axios';
 import InputField from '@/components/auth/shared/ui/InputField';
 import SubmitButton from '@/components/auth/shared/ui/SubmitButton';

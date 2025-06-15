@@ -6,18 +6,18 @@ import { useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from '@/providers/AuthProvider';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ConfirmDialogState, openConfirmDialog } from '@/components/shared/utils/confirmDialog';
-import { cleanXSS } from '@/components/shared/utils/cleanXSS';
-import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/components/shared/utils/dateFormats';
+import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDialog';
+import { cleanXSS } from '@/utils/shared/excapeForXSS';
+import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/utils/shared/date';
 import { CreateGatheringFormSchemaType, createGatheringFormSchema } from '@/components/gatherings/schema/createGatheringSchema';
 import { X } from "lucide-react";
 import axios, { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
+import SelectionService from '@/components/gatherings/SelectionService';
+import InputField from '@/components/auth/shared/ui/InputField';
 
-const SelectionService = dynamic(() => import('@/components/gatherings/SelectionService'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ui/ConfirmDialog'), { ssr: false });
 const DateTimePicker = dynamic(() => import('@/components/gatherings/DateTimePick'), { ssr: false });
-const InputField = dynamic(() => import('@/components/auth/shared/ui/InputField'), { ssr: false });
 
 interface CreateGatheringDialogProps {
     onClose: (shouldRefresh?: boolean) => void;
@@ -266,7 +266,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                                 <select
                                     id="location"
                                     {...register('location')}
-                                    className="w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold appearance-none bg-[url('https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717642/polygon_down_kqzif8.svg')] bg-[length:13px_13px] bg-[right_16px_center] bg-no-repeat"
+                                    className="w-full h-[44px] rounded-lg cursor-pointer bg-gray-50 py-2 px-4 text-semibold appearance-none bg-[url('https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717642/polygon_down_kqzif8.svg')] bg-[length:13px_13px] bg-[right_16px_center] bg-no-repeat"
                                 >
                                     {LOCATION_OPTIONS.map(option => (
                                         <option key={option.value} value={option.value}>
@@ -409,8 +409,8 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                     <div className="relative bg-white rounded-lg p-6 max-w-md w-full">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-bold">모임 일정 선택</h2>
-                            <button onClick={() => setShowGatheringPicker(false)}>
-                                <X className="w-6 h-6 text-gray-500" />
+                            <button type="button" className='cursor-pointer' onClick={() => setShowGatheringPicker(false)}>
+                                <X className="size-6 text-gray-500" />
                             </button>
                         </div>
                         <DateTimePicker
@@ -429,8 +429,8 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                     <div className="relative bg-white rounded-lg p-6 max-w-md w-full">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-bold">마감 일정 선택</h2>
-                            <button onClick={() => setShowDeadlinePicker(false)}>
-                                <X className="w-6 h-6 text-gray-500" />
+                            <button type="button" className='cursor-pointer' onClick={() => setShowDeadlinePicker(false)}>
+                                <X className="size-6 text-gray-500" />
                             </button>
                         </div>
                         <DateTimePicker

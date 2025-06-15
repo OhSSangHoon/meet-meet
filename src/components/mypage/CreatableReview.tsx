@@ -1,10 +1,8 @@
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering } from '@/types/gatherings';
-import dynamic from 'next/dynamic';
 import ImageWithFallback from '../shared/ui/ImageWithFallback';
-
-const GatheringInformation = dynamic(() => import('@/components/mypage/shared/ui/GatheringInformation'), { ssr: false });
-const Button = dynamic(() => import('@/components/shared/ui/Button'), { ssr: false });
+import GatheringInformation from '@/components/mypage/shared/ui/GatheringInformation';
+import Button from '@/components/shared/ui/Button';
 
 /** 나의 리뷰 - 작성 가능한 리뷰 */
 export default function CreatableReview({ gathering, myReviewsTab, userId, onOpenReviewDialog }: { gathering: Gathering, myReviewsTab: number, userId: number, onOpenReviewDialog: (gathering: { userId: number, gatheringId: number }) => void }) {

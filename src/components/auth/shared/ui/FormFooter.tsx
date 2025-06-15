@@ -10,7 +10,7 @@ interface FormFooterProps {
 export default function FormFooter({ route, description, text }: FormFooterProps) {
     return (
         <p className='text-center text-sm text-gray-400'>
-            {description} <Link className="underline text-main-500" href={route}>{text}</Link>
+            {description} <Link className="underline text-main-400" href={route}>{text}</Link>
         </p>
     );
 }

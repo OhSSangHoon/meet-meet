@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { serverFetcher } from '@/lib/api/serverFetcher';
-import { Gathering } from "@/types/gatherings";
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { Gathering } from "@/types/gatherings";
+import { buildGatheringParams, filterGatheringsByMainType, isActiveGathering, GATHERING_CONSTANTS } from '@/utils/gatherings/gatheringsUtils';
 import Gatherings from "@/components/gatherings/GatheringsUI";
-import { buildGatheringParams, filterGatheringsByMainType, isActiveGathering, GATHERING_CONSTANTS } from '@/components/gatherings/shared/utils/gatheringsUtils';
 
 export const metadata: Metadata = {
     title: `모임 찾기 | Meet Meet`,
@@ -60,7 +60,7 @@ async function getActiveGatheringsWithSkip(searchParams: {
             // 첫 번째 진행중 모임 찾기
             for (let i = 0; i < typeFilteredData.length; i++) {
                 const gathering = typeFilteredData[i];
-                
+
                 if (isActiveGathering(gathering)) {
                     activeStartIndex = currentOffset + i; // 전체 데이터에서의 인덱스
                     break;
@@ -107,15 +107,15 @@ async function getActiveGatheringsWithSkip(searchParams: {
                 // 현재 배치에서 유효한 진행중 모임만 수집
                 for (let i = 0; i < typeFilteredData.length; i++) {
                     const globalIndex = searchOffset + i;
-                    
+
                     // activeStartIndex 이후의 모임만 수집
                     if (globalIndex >= activeStartIndex) {
                         const gathering = typeFilteredData[i];
-                        
+
                         if (isActiveGathering(gathering)) {
                             activeGatherings.push(gathering);
                             collectedCount++;
-                            
+
                             if (collectedCount >= GATHERING_CONSTANTS.SSR_COUNT) break;
                         }
                     }
@@ -134,11 +134,11 @@ async function getActiveGatheringsWithSkip(searchParams: {
             gatherings: activeGatherings,
             activeStartIndex: activeStartIndex === -1 ? 0 : activeStartIndex
         };
-        
+
     } catch (error) {
         console.error('SSR 에러 발생:', error);
         return { gatherings: [], activeStartIndex: 0 };
-    }    
+    }
 }
 
 /**
@@ -156,13 +156,13 @@ export default async function GatheringsPage({
     }>
 }) {
     const params = await searchParams;
-    
+
     const { gatherings: ssrGatherings, activeStartIndex } = await getActiveGatheringsWithSkip(params);
 
     return (
         <div>
             <div className="contents-container bg-white dark:bg-dark min-h-screen transition-colors duration-200">
-                <Gatherings 
+                <Gatherings
                     ssrGatherings={ssrGatherings}
                     activeStartIndex={activeStartIndex}
                     initialFilters={{
