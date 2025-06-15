@@ -13,7 +13,7 @@ import GatheringsHeader from '@/components/gatherings/shared/ui/GatheringsHeader
 // 매직넘버 상수
 const API_LIMIT = 1000; // 모임 조회 제한
 
-export default function SavedGatheringsClient() {
+export default function SavedGatheringsUI() {
     const [selectedMainType, setSelectedMainType] = useState('DALLAEMFIT');
     const [selectedSubType, setSelectedSubType] = useState('ALL');
 
@@ -52,14 +52,14 @@ export default function SavedGatheringsClient() {
     return (
         <div className="w-full flex flex-col">
             <GatheringsHeader type="saved" />
-            
+
             <GatheringFilters
                 onTypeChange={handleTypeChange}
                 initialMainType={selectedMainType}
                 initialSubType={selectedSubType}
                 showCreateButton={false}
             />
-            
+
             <GatheringsList
                 ssrGatherings={savedGatherings}
                 activeStartIndex={0}

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SavedGatheringsClient from '@/components/saved/SavedGatheringUI';
+import SavedGatheringsUI from '@/components/saved/SavedGatheringUI';
 
 export const metadata: Metadata = {
   title: `찜한 모임 | Meet Meet`,
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function SavedPage() {
   return (
     <div className="contents-container dark:bg-dark dark:text-white">
-      <SavedGatheringsClient />
+      <SavedGatheringsUI />
     </div>
   );
 }

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import JoinedGatherings from '@/components/mypage/JoinedGatherings';
+import MyReviews from '@/components/mypage/MyReviews';
+import CreatedGatherings from '@/components/mypage/CreatedGatherings';
 import dynamic from 'next/dynamic';
 
-const JoinedGatherings = dynamic(() => import('@/components/mypage/JoinedGatherings'), { ssr: false });
-const MyReviews = dynamic(() => import('@/components/mypage/MyReviews'), { ssr: false });
-const CreatedGatherings = dynamic(() => import('@/components/mypage/CreatedGatherings'), { ssr: false });
 const CreateReviewDialog = dynamic(() => import('@/components/mypage/CreateReviewDialog'), { ssr: false });
 
 /** 마이페이지 UI */
@@ -15,7 +15,7 @@ export default function MyPageUI() {
   const [reviewableGathering, setReviewableGathering] = useState<{ userId: number; gatheringId: number } | null>();
 
   return (
-    <>
+    <section className="flex flex-col gap-4">
       {/* 버튼바 */}
       <section className="relative py-4 flex gap-4 justify-between sm:justify-start text-sm sm:text-lg font-bold">
         {[
@@ -62,6 +62,6 @@ export default function MyPageUI() {
           />
         )
       }
-    </>
+    </section>
   );
 }

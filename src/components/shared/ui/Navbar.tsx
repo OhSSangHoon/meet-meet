@@ -4,6 +4,7 @@ import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGather
 import { usePathname } from 'next/navigation';
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
+import { shortenName } from '@/utils/shortenName';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import DarkModeToggleButton from '@/components/shared/ui/DarkModeToggleButton';
 import TokenCountdown from '@/components/shared/ui/TokenCountDown';
@@ -72,7 +73,7 @@ export default function Navbar() {
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='w-[9rem] mt-2 border-2 border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-dark-2 flex flex-col'>
-                                    <DropdownMenuLabel className='text-main-500 dark:text-main-400 p-1'>{userName}</DropdownMenuLabel>
+                                    <DropdownMenuLabel className='text-main-500 dark:text-main-400 p-1'>{shortenName(userName, 20)}</DropdownMenuLabel>
                                     <DropdownMenuSeparator className='h-[0.1rem] bg-gray-300' />
                                     <DropdownMenuItem className='text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-1 transition-colors duration-200'>
                                         <Link href='/mypage'>마이페이지</Link>

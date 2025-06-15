@@ -3,8 +3,8 @@
 import { createContext, useState, Dispatch, SetStateAction, useEffect } from "react";
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { internalClient } from '@/lib/api/clientFetchers';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 
@@ -119,6 +119,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         localStorage.removeItem('user_company_name');
         localStorage.removeItem('user_image');
         localStorage.removeItem('token_issued_at');
+        localStorage.removeItem('savedGatherings');
         setToken(null);
         setUserId(0);
         setUserName('');

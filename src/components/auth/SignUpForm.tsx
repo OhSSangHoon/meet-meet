@@ -13,12 +13,18 @@ import SubmitButton from '@/components/auth/shared/ui/SubmitButton';
 import FormFooter from '@/components/auth/shared/ui/FormFooter';
 
 const signUpFormSchema = z.object({
-    name: z.string().min(1, '이름을 입력해 주세요.'),
-    email: z.string().min(1, '이메일을 입력해 주세요.').email('올바른 이메일 형식이 아닙니다.'),
-    companyName: z.string().min(1, '회사명을 정확하게 입력해 주세요.'),
-    password: z
-        .string()
-        .min(8, '비밀번호가 8자 이상이 되도록 해주세요.'),
+    name: z.string().min(1, '이름을 입력해 주세요.').max(20, '이름은 20자 이하로 입력해 주세요.'),
+    email: z.string().min(1, '이메일을 입력해 주세요.').max(30, '이메일은 30자 이하로 입력해 주세요.').email('올바른 이메일 형식이 아닙니다.'),
+    companyName: z.string().min(1, '크루 이름을 정확하게 입력해 주세요.').max(20, '크루 이름은 20자 이하로 입력해 주세요.'),
+    password: z.string().min(8, '비밀번호가 8자 이상이 되도록 해주세요.').refine(
+        (password) => {
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            return hasSpecialChar && hasNumber && hasLowercase;
+        },
+        { message: '영문 소문자, 숫자, 특수문자를 포함해야 합니다.' }
+    ),
 });
 
 type SignupFormSchemaType = z.infer<typeof signUpFormSchema>;
@@ -86,10 +92,10 @@ export default function SignUpForm() {
                 errorResponseMessage={errorResponseMessage}
             />
             <InputField
-                label='회사명'
+                label='크루'
                 id='company-name'
                 type='text'
-                placeholder='회사명을 입력해 주세요'
+                placeholder='크루 이름을 입력해 주세요'
                 {...register('companyName')}
                 disabled={isSubmitted}
                 isError={errors.companyName?.message}
@@ -116,7 +122,7 @@ export default function SignUpForm() {
                     <input
                         type={isPasswordCheckVisible ? 'text' : 'password'}
                         id="password-check"
-                        className={`w-full rounded-lg bg-gray-50 p-2.5 text-sm border-2 focus:outline-none ${!isPasswordMatch || !passwordCheck ? 'border-red-600' : 'focus:border-main-300'}`}
+                        className={`w-full rounded-lg bg-gray-50 p-2.5 text-sm border-2 focus:outline-none ${!isPasswordMatch ? 'border-red-600' : 'focus:border-main-300'}`}
                         placeholder="비밀번호를 다시 한 번 입력해 주세요"
                         onChange={(e) => setPasswordCheck(e.target.value)}
                     />
@@ -132,11 +138,8 @@ export default function SignUpForm() {
                             height={24} />
                     </button>
                 </div>
-                {!isPasswordMatch || !passwordCheck ? (
-                    <span className='text-red-600 text-sm'>비밀번호가 일치하지 않습니다.</span>
-                ) :
-                    password.length < 8 ? <span className='text-red-600 text-sm'>비밀번호가 8자 이상이 되도록 해주세요.</span> : <span className='text-green-400 text-sm'>✓</span>
-                }
+                {!passwordCheck && password?.length > 0 && <span className='text-red-600 text-sm'>비밀번호가 일치하지 않습니다.</span>}
+                {isPasswordMatch && password?.length > 0 && <span className='text-green-400 text-sm'>✓</span>}
             </div>
             <SubmitButton
                 isSubmitting={isSubmitting}
