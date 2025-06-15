@@ -19,9 +19,9 @@ import PageConverter from '@/components/gatherings/detail/PageConverter';
 import Review from '@/components/gatherings/detail/Review';
 import Footer from '@/components/gatherings/detail/Footer';
 
-const InformationLoading = dynamic(() => import('@/components/gatherings/detail/loading/InformationLoading'), { ssr: false });
-const ThumbnailLoading = dynamic(() => import('@/components/gatherings/detail/loading/ThumbnailLoading'), { ssr: false });
-const ReviewLoading = dynamic(() => import('@/components/gatherings/detail/loading/ReviewLoading'), { ssr: false });
+const InformationLoading = dynamic(() => import('@/components/gatherings/detail/InformationLoading'), { ssr: false });
+const ThumbnailLoading = dynamic(() => import('@/components/gatherings/detail/ThumbnailLoading'), { ssr: false });
+const ReviewLoading = dynamic(() => import('@/components/gatherings/detail/ReviewLoading'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ConfirmDialog'), { ssr: false });
 
 const handleCopyUrl = () => {

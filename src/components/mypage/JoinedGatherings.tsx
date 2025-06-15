@@ -8,11 +8,11 @@ import { getTimeRemaining, toKoreanTime } from '@/utils/shared/date';
 import { CheckCircle } from "lucide-react"
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
-import GatheringInformation from '@/components/mypage/shared/GatheringInformation';
+import GatheringInformation from '@/components/mypage/GatheringInformation';
 import DateReminder from '@/components/shared/DateReminder';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 
-const LoadingUI = dynamic(() => import('@/components/mypage/shared/LoadingUI'), { ssr: false });
+const LoadingUI = dynamic(() => import('@/components/mypage/LoadingUI'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ConfirmDialog'), { ssr: false });
 const OverlayForDisabled = dynamic(() => import('@/components/shared/OverlayForDisabled'), { ssr: false });
 

@@ -1,7 +1,7 @@
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering } from '@/types/gatherings';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
-import GatheringInformation from '@/components/mypage/shared/GatheringInformation';
+import GatheringInformation from '@/components/mypage/GatheringInformation';
 import Button from '@/components/shared/Button';
 
 /** 나의 리뷰 - 작성 가능한 리뷰 */

@@ -9,12 +9,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDialog';
 import { cleanXSS } from '@/utils/shared/excapeForXSS';
 import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/utils/shared/date';
-import { CreateGatheringFormSchemaType, createGatheringFormSchema } from '@/components/gatherings/schema/createGatheringSchema';
+import { CreateGatheringFormSchemaType, createGatheringFormSchema } from '@/utils/gatherings/createGatheringSchema';
 import { X } from "lucide-react";
 import axios, { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import SelectionService from '@/components/gatherings/SelectionService';
-import InputField from '@/components/auth/shared/InputField';
+import InputField from '@/components/auth/InputField';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ConfirmDialog'), { ssr: false });
 const DateTimePicker = dynamic(() => import('@/components/gatherings/DateTimePick'), { ssr: false });

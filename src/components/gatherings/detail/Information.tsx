@@ -5,7 +5,7 @@ import { Gathering, Participant } from '@/types/gatherings';
 import { Check, UserRoundCheck } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/shadcn-ui/tooltip";
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
-import SaveToggleButton from '@/components/gatherings/shared/SaveToggleButton';
+import SaveToggleButton from '@/components/shared/SaveToggleButton';
 import JoinedCountsProgressBar from '@/components/gatherings/shared/JoinedCountsProgressBar';
 
 /** 모임 상세 페이지 상단 우측 정보 */

@@ -8,9 +8,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { cleanXSS } from '@/utils/shared/excapeForXSS';
 import Image from 'next/image';
 import axios from 'axios';
-import InputField from '@/components/auth/shared/InputField';
-import SubmitButton from '@/components/auth/shared/SubmitButton';
-import FormFooter from '@/components/auth/shared/FormFooter';
+import InputField from '@/components/auth/InputField';
+import SubmitButton from '@/components/auth/SubmitButton';
+import FormFooter from '@/components/auth/FormFooter';
 
 const signUpFormSchema = z.object({
     name: z.string().min(1, '이름을 입력해 주세요.').max(20, '이름은 20자 이하로 입력해 주세요.'),

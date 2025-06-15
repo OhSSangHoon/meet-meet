@@ -9,16 +9,16 @@ interface GatheringsHeaderProps {
 // 모임 목록 헤더 컨텐츠
 const content = {
   search: {
-    subtitle: "함께 할 사람이 없나요?",
-    title: "지금 모임에 참여해보세요"
+    subTitle: "혼자 하기 힘들잖아요?",
+    title: "내가 원하는 모임을 찾아보세요 😄"
   },
   saved: {
-    subtitle: "찜한 모임",
-    title: "마감되기 전에 지금 바로 참여해보세요 👀"
+    subTitle: "일단 찜 해둬요",
+    title: "당장 참여하지 않아도 괜찮아요 🙌"
   },
   review: {
-    subtitle: "모임 리뷰",
-    title: "다른 사람들의 후기를 참고해보세요 👀"
+    subTitle: "어떤 모임들인지 궁금하다면",
+    title: "다른 사람들이 올린 리뷰로 알 수 있어요 👀"
   }
 };
 
@@ -28,7 +28,7 @@ export default function GatheringsHeader({ type }: GatheringsHeaderProps) {
       <div className="w-full flex flex-row justify-between items-center">
         <div className="w-full flex flex-col justify-start gap-2">
           <p className="text-[#374151] dark:text-main-100 text-base font-medium">
-            {content[type].subtitle}
+            {content[type].subTitle}
           </p>
           <p className="text-2xl font-semibold">
             {content[type].title}

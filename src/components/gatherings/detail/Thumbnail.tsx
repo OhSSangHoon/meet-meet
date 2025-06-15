@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import DateReminder from '@/components/shared/DateReminder';
 
-const SaveToggleButton = dynamic(() => import('@/components/gatherings/shared/SaveToggleButton'), { ssr: false });
+const SaveToggleButton = dynamic(() => import('@/components/shared/SaveToggleButton'), { ssr: false });
 
 /** 모임 상세 페이지 썸네일 */
 export default function Thumbnail({ detail, id }: { detail: Gathering, id: string }) {

@@ -4,9 +4,9 @@ import { useState, useCallback } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ReviewItem } from "@/types/reviews";
 import ReviewsList from "@/components/reviews/ReviewsList";
-import GatheringFilters from "@/components/gatherings/shared/GatheringsFilters";
-import GatheringsHeader from "@/components/gatherings/shared/GatheringsHeader";
-import LocationDateFilter from "@/components/gatherings/shared/LocationDateFilter";
+import GatheringFilters from "@/components/shared/GatheringsFilters";
+import GatheringsHeader from "@/components/shared/GatheringsHeader";
+import LocationDateFilter from "@/components/shared/LocationDateFilter";
 
 // 페이지 컴포넌트 props 타입 정의
 interface PageProps {
