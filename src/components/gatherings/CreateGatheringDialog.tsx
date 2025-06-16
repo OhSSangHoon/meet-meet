@@ -137,13 +137,11 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
     const handleMeetingDateTimeChange = (dateTime: DateTimeValue | null) => {
         setValue('meetingDateTime', dateTime);
         trigger('meetingDateTime');
-        setShowGatheringPicker(false);
     };
 
     const handleDeadlineDateTimeChange = (dateTime: DateTimeValue | null) => {
         setValue('deadlineDateTime', dateTime);
         trigger('deadlineDateTime');
-        setShowDeadlinePicker(false);
     };
 
     const handleNormalClose = () => onClose(false);
@@ -218,7 +216,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
     };
 
     return (
-        <div className="dialog-background">
+        <div className="dialog-background text-gray-900">
             <div className="relative w-full h-full flex items-center justify-center md:p-4">
                 <div className="w-full max-w-2xl max-h-full flex flex-col">
                     <form
@@ -324,7 +322,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                             {/* 날짜/시간 선택 */}
                             <div className="flex flex-col md:flex-row gap-5">
                                 <div className="flex-1 flex flex-col gap-2">
-                                    <label htmlFor="meetingDateTime" className="font-bold text-gray-800 dark:text-gray-200">모임 일정</label>
+                                    <label htmlFor="meetingDateTime" className="font-bold dark:text-white">모임 일정</label>
                                     <input
                                         id="meetingDateTime"
                                         type="text"
@@ -339,7 +337,7 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                                     )}
                                 </div>
                                 <div className="flex-1 flex flex-col gap-2">
-                                    <label htmlFor="deadlineDateTime" className="font-bold text-gray-800">마감 일정</label>
+                                    <label htmlFor="deadlineDateTime" className="font-bold dark:text-white">마감 일정</label>
                                     <input
                                         id="deadlineDateTime"
                                         type="text"
@@ -405,11 +403,28 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
             {/* 모임 일정 선택 모달 */}
             {showGatheringPicker && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black opacity-50" onClick={() => setShowGatheringPicker(false)}></div>
-                    <div className="relative bg-white rounded-lg p-6 max-w-md w-full">
+                    <div 
+                        className="absolute inset-0 bg-black opacity-50" 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShowGatheringPicker(false);
+                        }}
+                    ></div>
+                    <div 
+                        className="relative bg-white rounded-lg p-6 max-w-md w-full"
+                        onClick={(e) => e.stopPropagation()} // 📌 모달 내부 클릭 시 이벤트 버블링 방지
+                    >
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-bold">모임 일정 선택</h2>
-                            <button type="button" className='cursor-pointer' onClick={() => setShowGatheringPicker(false)}>
+                            <button 
+                                type="button" 
+                                className='cursor-pointer' 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setShowGatheringPicker(false);
+                                }}
+                            >
                                 <X className="size-6 text-gray-500" />
                             </button>
                         </div>
@@ -425,11 +440,28 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
             {/* 마감 일정 선택 모달 */}
             {showDeadlinePicker && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black opacity-50" onClick={() => setShowDeadlinePicker(false)}></div>
-                    <div className="relative bg-white rounded-lg p-6 max-w-md w-full">
+                    <div 
+                        className="absolute inset-0 bg-black opacity-50" 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShowDeadlinePicker(false);
+                        }}
+                    ></div>
+                    <div 
+                        className="relative bg-white rounded-lg p-6 max-w-md w-full"
+                        onClick={(e) => e.stopPropagation()} // 📌 모달 내부 클릭 시 이벤트 버블링 방지
+                    >
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-bold">마감 일정 선택</h2>
-                            <button type="button" className='cursor-pointer' onClick={() => setShowDeadlinePicker(false)}>
+                            <button 
+                                type="button" 
+                                className='cursor-pointer' 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setShowDeadlinePicker(false);
+                                }}
+                            >
                                 <X className="size-6 text-gray-500" />
                             </button>
                         </div>

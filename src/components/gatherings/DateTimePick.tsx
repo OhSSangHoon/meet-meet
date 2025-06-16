@@ -17,11 +17,15 @@ interface DateTimePickerProps {
 }
 
 const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
+  const today = new Date(); // 오늘 날짜 기준
   const [currentDate, setCurrentDate] = useState(new Date());
   const [hourDropdownOpen, setHourDropdownOpen] = useState(false);
   const [minuteDropdownOpen, setMinuteDropdownOpen] = useState(false);
 
-  const selectedDate = value ? new Date(value.year, value.month - 1, value.day) : null;
+  // value가 없으면 오늘 날짜를 기본 선택으로 설정
+  const selectedDate = value 
+    ? new Date(value.year, value.month - 1, value.day) 
+    : today;
 
   const goToPrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
@@ -91,6 +95,11 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
     setMinuteDropdownOpen(false);
   };
 
+  // 현재 월의 날짜인지 확인하는 함수
+  const isCurrentMonth = (date: Date) => {
+    return date.getMonth() === currentDate.getMonth();
+  };
+
   const calendarDays = generateCalendarDays();
   const currentMonth = currentDate.toLocaleString('ko-KR', { year: 'numeric', month: 'long' });
 
@@ -140,6 +149,8 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
               date.getMonth() === selectedDate.getMonth() &&
               date.getDate() === selectedDate.getDate();
 
+            const currentMonth = isCurrentMonth(date);
+
             return (
               <button
                 key={date.getTime()}
@@ -150,8 +161,13 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                   handleDateSelect(date);
                 }}
                 className={`
-                  w-8 h-8 text-sm rounded flex items-center justify-center
-                  ${isSelected ? 'bg-main-500 text-white' : 'hover:bg-gray-100'}
+                  w-8 h-8 text-sm rounded flex items-center justify-center relative
+                  ${isSelected 
+                    ? 'bg-main-500 text-white' 
+                    : currentMonth 
+                      ? 'hover:bg-gray-100 text-gray-900' 
+                      : 'text-gray-400 hover:bg-gray-50'
+                  }
                 `}
               >
                 {date.getDate()}
@@ -170,7 +186,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                 setHourDropdownOpen(!hourDropdownOpen);
                 setMinuteDropdownOpen(false);
               }}
-              className="w-16 h-10 rounded-lg border-2 border-main-500 bg-main-500 text-white text-center font-bold hover:bg-main-50 flex items-center justify-center"
+              className="w-16 h-10 rounded-lg border-2 border-main-500 bg-main-500 text-white text-center font-bold hover:bg-main-600 flex items-center justify-center"
             >
               {value?.hour || 12}
             </button>
@@ -205,7 +221,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                 setMinuteDropdownOpen(!minuteDropdownOpen);
                 setHourDropdownOpen(false);
               }}
-              className="w-16 h-10 rounded-lg border-2 border-main-500 bg-main-500 text-white text-center font-bold hover:bg-main-50 flex items-center justify-center"
+              className="w-16 h-10 rounded-lg border-2 border-main-500 bg-main-500 text-white text-center font-bold hover:bg-main-600 flex items-center justify-center"
             >
               {(value?.minute || 0).toString().padStart(2, '0')}
             </button>
@@ -273,7 +289,8 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
       {(hourDropdownOpen || minuteDropdownOpen) && (
         <div
           className="fixed inset-0 z-0"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             setHourDropdownOpen(false);
             setMinuteDropdownOpen(false);
           }}
