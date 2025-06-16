@@ -64,7 +64,6 @@ export function useFetchInfiniteGatherings({
         hasNextPage,
         isFetchingNextPage,
         status,
-        isLoading,
         isError,
     } = useInfiniteQuery<{ gatherings: Gathering[], nextPage: number | null }>({
         queryKey,
@@ -171,7 +170,6 @@ export function useFetchInfiniteGatherings({
         isFetchingNextPage,
         infiniteScrollEnabled,
         status,
-        isLoading,
         isError,
         hasNextPage,
     };

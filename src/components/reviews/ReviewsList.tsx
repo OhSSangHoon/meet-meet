@@ -33,6 +33,7 @@ interface ReviewsListProps {
         sortOrder: string;
     };
     enableInfiniteScroll?: boolean;
+    isFilterChanged?: boolean;
 }
 
 /**
@@ -128,6 +129,7 @@ export default function ReviewsList({
     filters,
     sort,
     enableInfiniteScroll = true,
+    isFilterChanged = false,
 }: ReviewsListProps) {
 
     // CSR 무한스크롤 데이터
@@ -135,7 +137,6 @@ export default function ReviewsList({
         infiniteReviews,
         lastItemRef,
         isFetchingNextPage,
-        isLoading,
     } = useFetchInfiniteReviews({
         enabled: enableInfiniteScroll,
         mainType: selectedMainType,
@@ -188,14 +189,14 @@ export default function ReviewsList({
                             ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll ? lastItemRef : undefined}
                         >
                             {/* 이미지 영역 */}
-                            <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
+                            <div className="w-full md:w-80 h-48 md:h-40 flex-shrink-0">
                                 <ImageWithFallback
                                     src={review.Gathering.image!}
                                     fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                                     alt="리뷰 썸네일"
                                     width={320}
                                     height={180}
-                                    className="rounded-t-lg md:rounded-l-lg md:rounded-t-none object-cover pointer-events-none"
+                                    className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
                                 />
                             </div>
 
@@ -235,12 +236,18 @@ export default function ReviewsList({
                 )}
 
                 {/* 빈 목록 메시지 */}
-                {!isLoading && allReviews.length === 0 && (
+                {allReviews.length === 0 && !isFilterChanged && (
                     <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">
                         <>
                             <p>선택한 조건에 맞는 리뷰가 없어요,</p>
                             <p>다른 조건으로 검색해보세요</p>
                         </>
+                    </div>
+                )}
+
+                {isFilterChanged && (
+                    <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 font-medium text-sm">
+                        <p>로딩 중...</p>
                     </div>
                 )}
             </div>

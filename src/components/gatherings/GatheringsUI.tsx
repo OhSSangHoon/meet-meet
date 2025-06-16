@@ -49,7 +49,8 @@ export default function Gatherings({
     });
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [filterChangeKey, setFilterChangeKey] = useState(0);
+    const [filterChangeKey, setFilterChangeKey] = useState(0); // 컴포넌트 재마운트를 위한 키
+    const [isFilterChanged, setIsFilterChanged] = useState(false); // 로딩 상태 표시를 위한 플래그
 
     // URL 업데이트 함수
     const updateURL = useCallback((newParams: Record<string, string>) => {
@@ -71,6 +72,7 @@ export default function Gatherings({
     const handleTypeChange = useCallback((mainType: string, subType: string) => {
         setSelectedMainType(mainType);
         setSelectedSubType(subType);
+        setIsFilterChanged(true);
 
         updateURL({
             mainType,
@@ -79,6 +81,10 @@ export default function Gatherings({
             sortBy: currentSort.sortBy,
             sortOrder: currentSort.sortOrder
         });
+
+        setTimeout(() => {
+            setIsFilterChanged(false);
+        }, 300);
     }, [currentFilters, currentSort, updateURL]);
 
     // 필터 변경 핸들러
@@ -153,6 +159,7 @@ export default function Gatherings({
                     sort={currentSort} // 현재 정렬 상태
                     enableInfiniteScroll={true} // 무한 스크롤 활성화
                     savedGatheringIds={[]} // 저장된 모임 ID 목록
+                    isFilterChanged={isFilterChanged}
                 />
             </div>
 

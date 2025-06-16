@@ -33,6 +33,7 @@ interface GatheringsListProps {
     };
     enableInfiniteScroll?: boolean;
     savedGatheringIds?: string[];
+    isFilterChanged?: boolean;
 }
 
 const truncateTitle = (title: string, maxLength: number = DEFAULT_TITLE_MAX_LENGTH): string => {
@@ -49,6 +50,7 @@ export default function GatheringsList({
     sort,
     enableInfiniteScroll = true,
     savedGatheringIds = [],
+    isFilterChanged = false,
 }: GatheringsListProps) {
     const router = useRouter();
     const isSavedPage = savedGatheringIds.length > 0;
@@ -66,7 +68,6 @@ export default function GatheringsList({
         infiniteGatherings,
         lastItemRef,
         isFetchingNextPage,
-        isLoading,
     } = useFetchInfiniteGatherings({
         enabled: enableInfiniteScroll && !isSavedPage,
         mainType: selectedMainType,
@@ -112,15 +113,16 @@ export default function GatheringsList({
                         ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll && !isSavedPage ? lastItemRef : undefined}
                         className="w-full flex flex-col md:flex-row justify-start border border-gray-200 dark:border-dark-2 dark:bg-dark-2 rounded-2xl bg-white hover:border-main-300 dark:hover:border-main-400 hover:shadow-lg dark:hover:shadow-dark-lg transition-all duration-300 overflow-hidden relative cursor-pointer"
                     >
-                        <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
+                        {/* 이미지 영역 */}
+                        <div className="w-full md:w-80 h-48 md:h-40 flex-shrink-0">
                             <DateReminder registrationEnd={gathering.registrationEnd} />
                             <ImageWithFallback
                                 src={gathering.image}
                                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                                 alt="모임 썸네일"
-                                className="rounded-t-lg md:rounded-l-lg md:rounded-t-none object-cover pointer-events-none"
                                 width={320}
                                 height={180}
+                                className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
                             />
                         </div>
 
@@ -131,7 +133,7 @@ export default function GatheringsList({
                                         <h1 className="text-lg font-semibold -mt-6 text-gray-900 dark:text-gray-100 transition-colors duration-200">
                                             {truncateTitle(gathering.name)}
                                         </h1>
-                                        <div className="hidden sm:block w-[2px] h-[16px] -mt-6 bg-gray-900 dark:bg-gray-300"></div>
+                                        <div className="hidden md:block w-[2px] h-[16px] -mt-6 bg-gray-900 dark:bg-gray-300"></div>
                                         <p className="text-sm font-medium -mt-6 text-gray-700 dark:text-gray-300 transition-colors duration-200">
                                             {gathering.location}
                                         </p>
@@ -172,6 +174,7 @@ export default function GatheringsList({
                 );
             })}
 
+            {/* 무한 스크롤 로딩 */}
             {enableInfiniteScroll && isFetchingNextPage && (
                 <div className="w-full h-[80px] flex justify-center items-center">
                     <div className="flex items-center gap-3">
@@ -181,12 +184,21 @@ export default function GatheringsList({
                 </div>
             )}
 
-            {!isLoading && allGatherings.length === 0 && (
+            {/* 모임 없음 */}
+            {allGatherings.length === 0 && !isFilterChanged && (
                 <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 dark:text-gray-400 font-medium text-sm transition-colors duration-200">
                     <p className="text-lg font-semibold mb-2">아직 모임이 없어요</p>
                     <p>곧 새로운 모임이 열릴 예정이에요</p>
                 </div>
             )}
+
+            {/* 필터 변경*/}
+            {isFilterChanged && (
+                <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 dark:text-gray-400 font-medium text-sm transition-colors duration-200">
+                    <p>로딩 중...</p>
+                </div>
+            )}
+
         </div>
     );
 }

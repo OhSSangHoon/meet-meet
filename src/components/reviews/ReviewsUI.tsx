@@ -53,6 +53,8 @@ export default function ReviewsUI({ ssrReviews, initialFilters }: PageProps) {
 
     // 필터 변경 감지를 위한 키
     const [filterChangeKey, setFilterChangeKey] = useState(0);
+    const [isFilterChanged, setIsFilterChanged] = useState(false);
+
 
     // URL 업데이트 함수
     const updateURL = useCallback((newParams: Record<string, string>) => {
@@ -77,6 +79,7 @@ export default function ReviewsUI({ ssrReviews, initialFilters }: PageProps) {
     const handleTypeChange = useCallback((mainType: string, subType: string) => {
         setSelectedMainType(mainType);
         setSelectedSubType(subType);
+        setIsFilterChanged(true);
 
         updateURL({
             mainType,
@@ -85,6 +88,10 @@ export default function ReviewsUI({ ssrReviews, initialFilters }: PageProps) {
             sortBy: currentSort.sortBy,
             sortOrder: currentSort.sortOrder
         });
+
+        setTimeout(() => {
+            setIsFilterChanged(false);
+        }, 300);
     }, [currentFilters, currentSort, updateURL]);
 
     // 필터 변경 핸들러
@@ -146,6 +153,7 @@ export default function ReviewsUI({ ssrReviews, initialFilters }: PageProps) {
                 filters={currentFilters} // 현재 필터 상태
                 sort={currentSort} // 현재 정렬 상태
                 enableInfiniteScroll={true} // 무한스크롤 활성화
+                isFilterChanged={isFilterChanged}
             />
         </div>
     );

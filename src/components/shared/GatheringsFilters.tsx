@@ -3,6 +3,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from "@/providers/AuthProvider";
 import Button from '@/components/shared/Button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn-ui/tooltip';
 
 // 스타일 상수
 const MAIN_TYPE_BUTTON_STYLES = "text-lg font-semibold py-1 cursor-pointer";
@@ -62,20 +63,32 @@ export default function GatheringFilters({
         <div className="w-full h-[160px] flex flex-col justify-start gap-4 py-5 whitespace-nowrap dark:text-white">
             <div className="flex flex-row relative gap-6">
                 <div className={`absolute bottom-0 h-1 rounded-full bg-main-apricot transition-all duration-300 ease-in-out w-15 ${selectedMainType === 'DALLAEMFIT' ? 'translate-x-0' : 'translate-x-22'}`} />
-                <button
-                    onClick={() => handleMainTypeChange('DALLAEMFIT')}
-                    title="외향인인 당신에게 추천하는 모임!"
-                    className={`${MAIN_TYPE_BUTTON_STYLES}`}
-                >
-                    북적북적
-                </button>
-                <button
-                    onClick={() => handleMainTypeChange('DORANDORAN')}
-                    title="내향인인 당신에게 추천하는 모임!"
-                    className={MAIN_TYPE_BUTTON_STYLES}
-                >
-                    도란도란
-                </button>
+                <Tooltip>
+                    <TooltipTrigger>
+                        <button
+                            onClick={() => handleMainTypeChange('DALLAEMFIT')}
+                            className={`${MAIN_TYPE_BUTTON_STYLES}`}
+                        >
+                            북적북적
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>외향인인 당신에게 추천하는 모임!</p>
+                    </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <button
+                            onClick={() => handleMainTypeChange('DORANDORAN')}
+                            className={MAIN_TYPE_BUTTON_STYLES}
+                        >
+                            도란도란
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>내향인인 당신에게 추천하는 모임!</p>
+                    </TooltipContent>
+                </Tooltip>
             </div>
 
             <div className="flex items-center">
