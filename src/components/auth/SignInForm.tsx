@@ -5,7 +5,7 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { cleanXSS } from '@/utils/shared/excapeForXSS';
+import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import axios from 'axios';
 import InputField from '@/components/auth/InputField';
 import SubmitButton from '@/components/auth/SubmitButton';
@@ -41,7 +41,7 @@ export default function SignInForm() {
     const onSubmit = async (data: SignInFormSchemaType) => {
         setErrorResponseMessage(null);
         try {
-            await signIn(cleanXSS(data.email), cleanXSS(data.password));
+            await signIn(excapeForXSS(data.email), excapeForXSS(data.password));
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;

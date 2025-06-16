@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { AxiosError } from 'axios';
 import { externalClient } from '@/lib/api/clientFetchers';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { handleApiError } from '@/lib/api/handleApiError';
 
 /**
  * 로그인
@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
         const response = await externalClient.post(EXTERNAL_PATHS.SIGN_IN, { email, password })
         return new NextResponse(JSON.stringify(response.data), { status: 200 });
     } catch (error) {
-        const err = error as AxiosError;
-        return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
+        return handleApiError(error);
     }
 }

@@ -24,7 +24,7 @@ export function isErrorResponse(data: unknown): data is ErrorResponse {
  * @param fallbackStatus - 기본 상태 코드
  * @returns {NextResponse} 응답 객체
  */
-export function handleApiError(error: unknown, fallbackMessage = '서버 에러 확인이 필요합니다', fallbackStatus = 500) {
+export function handleApiError(error: unknown, fallbackMessage = '서버 에러 확인이 필요합니다', fallbackStatus = 500): NextResponse {
     if (error && typeof error === 'object' && 'isAxiosError' in error && (error as AxiosError).isAxiosError) {
         const err = error as AxiosError;
 

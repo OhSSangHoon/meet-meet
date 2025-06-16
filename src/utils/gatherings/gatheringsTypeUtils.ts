@@ -1,5 +1,5 @@
 import { Gathering } from '@/types/gatherings';
-import { GATHERING_TYPES } from '@/utils/gatherings/gatheringsConstants';
+import { GATHERING_TYPES } from '@/utils/gatherings/constants/gatheringsConstants';
 
 /**
  * 메인타입을 API 타입으로 변환

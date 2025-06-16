@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { AxiosError } from 'axios';
 import { externalClient } from '@/lib/api/clientFetchers';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { handleApiError } from '@/lib/api/handleApiError';
 
 /**
  * 유저 정보 조회
@@ -18,8 +18,7 @@ export async function GET(request: NextRequest) {
     const response = await externalClient.get(EXTERNAL_PATHS.USER, { headers: { Authorization: token! } });
     return new NextResponse(JSON.stringify(response.data), { status: 200 });
   } catch (error) {
-    const err = error as AxiosError;
-    return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -48,8 +47,6 @@ export async function PUT(request: NextRequest) {
 
     return new NextResponse(JSON.stringify(response.data), { status: 200 });
   } catch (error) {
-    console.error('API Error:', error);
-    const err = error as AxiosError;
-    return new NextResponse(JSON.stringify({ error: err?.response?.data }), { status: 500 });
+    return handleApiError(error)
   }
 }

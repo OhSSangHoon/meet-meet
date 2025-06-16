@@ -6,7 +6,7 @@ import { useCreateReview } from '@/hooks/api/mypage/useCreateReview';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { cleanXSS } from '@/utils/shared/excapeForXSS';
+import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import { Heart } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
@@ -62,7 +62,7 @@ export default function CreateReviewDialog({
   const openConfirmDialog = (text: string, onConfirm?: () => void) => setConfirmDialog({ open: true, text, onConfirm });
 
   const onSubmit = (data: ReviewFormSchemaType) => {
-    createReview({ gatheringId: reviewFormData.gatheringId, score: data.score, comment: cleanXSS(data.comment) });
+    createReview({ gatheringId: reviewFormData.gatheringId, score: data.score, comment: excapeForXSS(data.comment) });
   };
 
   return (

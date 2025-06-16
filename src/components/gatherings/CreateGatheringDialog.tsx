@@ -7,7 +7,7 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDialog';
-import { cleanXSS } from '@/utils/shared/excapeForXSS';
+import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/utils/shared/date';
 import { CreateGatheringFormSchemaType, createGatheringFormSchema } from '@/utils/gatherings/createGatheringSchema';
 import { X } from "lucide-react";
@@ -84,7 +84,6 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
             deadlineDateTime: null,
             imageFile: null,
         },
-        mode: 'onChange', // 실시간 유효성 검사
     });
 
     // 📌 watch로 폼 값들 관찰
@@ -152,10 +151,10 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
     const createApiFormData = (data: CreateGatheringFormSchemaType): FormData => {
         const apiFormData = new FormData();
 
-        apiFormData.append('name', cleanXSS(data.name));
-        apiFormData.append('location', cleanXSS(data.location));
-        apiFormData.append('type', cleanXSS(data.type));
-        apiFormData.append('capacity', cleanXSS(data.capacity.toString()));
+        apiFormData.append('name', excapeForXSS(data.name));
+        apiFormData.append('location', excapeForXSS(data.location));
+        apiFormData.append('type', excapeForXSS(data.type));
+        apiFormData.append('capacity', excapeForXSS(data.capacity.toString()));
 
         if (data.meetingDateTime) {
             const finalGatheringDateTime = dateTimeValueToDate(data.meetingDateTime);

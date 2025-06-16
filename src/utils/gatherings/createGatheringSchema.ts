@@ -67,7 +67,7 @@ export const createGatheringFormSchema = z.object({
             if (!trimmed) return false;
             return validateGatheringName(val);
         }, {
-            message: '모임 이름은 1-20자 이내로 입력하고, 특수문자는 제한됩니다. 연속된 공백은 사용할 수 없습니다.'
+            message: '모임 이름은 1-20자 이내, 특수문자는 불가능합니다. 연속된 공백은 사용할 수 없습니다.'
         })
         .transform((val) => val.trim()), // 검증 통과 후 공백 제거
 

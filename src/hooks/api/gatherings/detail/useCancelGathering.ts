@@ -2,12 +2,12 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useGatheringsStore } from '@/store/gatheringsStore';
-import { GatheringApiParams } from '@/types/gatheringApi';
 import { useRouter } from 'next/navigation';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { AxiosError } from 'axios';
 import { isErrorResponse } from '@/lib/api/handleApiError';
+import { GatheringApiParams } from '@/types/gatheringApi';
+import { AxiosError } from 'axios';
 
 /** 모임 삭제 훅
 * @param token 토큰
