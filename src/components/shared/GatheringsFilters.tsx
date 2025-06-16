@@ -64,26 +64,16 @@ export default function GatheringFilters({
             <div className="flex flex-row relative gap-6">
                 <div className={`absolute bottom-0 h-1 rounded-full bg-main-apricot transition-all duration-300 ease-in-out w-15 ${selectedMainType === 'DALLAEMFIT' ? 'translate-x-0' : 'translate-x-22'}`} />
                 <Tooltip>
-                    <TooltipTrigger>
-                        <button
-                            onClick={() => handleMainTypeChange('DALLAEMFIT')}
-                            className={`${MAIN_TYPE_BUTTON_STYLES}`}
-                        >
+                    <TooltipTrigger onClick={() => handleMainTypeChange('DALLAEMFIT')} className={`${MAIN_TYPE_BUTTON_STYLES}`}>
                             북적북적
-                        </button>
                     </TooltipTrigger>
                     <TooltipContent>
                         <p>외향인인 당신에게 추천하는 모임!</p>
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>
-                    <TooltipTrigger asChild>
-                        <button
-                            onClick={() => handleMainTypeChange('DORANDORAN')}
-                            className={MAIN_TYPE_BUTTON_STYLES}
-                        >
+                    <TooltipTrigger onClick={() => handleMainTypeChange('DORANDORAN')} className={`${MAIN_TYPE_BUTTON_STYLES}`}>
                             도란도란
-                        </button>
                     </TooltipTrigger>
                     <TooltipContent>
                         <p>내향인인 당신에게 추천하는 모임!</p>
