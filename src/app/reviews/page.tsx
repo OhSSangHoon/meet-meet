@@ -64,8 +64,8 @@ async function getFilteredReviews(searchParams: {
             params.set('date', date.trim());
         }
 
-        const data = await serverFetcher<Reviews>(`${EXTERNAL_PATHS.REVIEWS}?${params.toString()}`);
-        
+        const data = await serverFetcher<Reviews>(`${EXTERNAL_PATHS.REVIEWS}?${params.toString()}`, { cache: 'force-cache' });
+
         // 응답 데이터 구조 확인
         let reviews: ReviewItem[] = [];
         if (Array.isArray(data)) {
@@ -118,7 +118,7 @@ export default async function ReviewsPage({
 
     return (
         <div className="contents-container dark:bg-dark dark:text-white">
-            <ReviewsUI 
+            <ReviewsUI
                 ssrReviews={ssrReviews}
                 initialFilters={{
                     mainType: params.mainType || 'DALLAEMFIT',

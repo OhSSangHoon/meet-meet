@@ -191,7 +191,7 @@ export default function ReviewsList({
                             <div className="w-full md:w-80 h-48 md:h-40 relative flex-shrink-0">
                                 <ImageWithFallback
                                     src={review.Gathering.image!}
-                                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
+                                    fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                                     alt="리뷰 썸네일"
                                     width={320}
                                     height={180}

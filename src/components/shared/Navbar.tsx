@@ -35,7 +35,7 @@ export default function Navbar() {
                     <Link href='/' className='p-0 hover:scale-105 transition-transform duration-200 ease-in-out'>
                         <ImageWithFallback
                             src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713224/logo_krdgww.avif"
-                            fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749802823/fallback_otg1es.avif'
+                            fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                             alt="로고 이미지"
                             width={100}
                             height={100}
