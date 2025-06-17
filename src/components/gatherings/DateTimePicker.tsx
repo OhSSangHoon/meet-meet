@@ -104,11 +104,14 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
   const currentMonth = currentDate.toLocaleString('ko-KR', { year: 'numeric', month: 'long' });
 
   return (
-    <div className="w-full flex flex-col">
-      <h1 className="font-bold text-gray-800 mb-3">{label}</h1>
-      <span className='text-sm text-gray-500'>현재 시간: {toKoreanTime(new Date()).toLocaleString()}</span>
+    <section className="w-full flex flex-col" aria-labelledby="datetime-picker-title">
+      <h2 id="datetime-picker-title" className="font-bold text-gray-800 mb-3">{label}</h2>
+      <time className='text-sm text-gray-500' dateTime={new Date().toISOString()}>
+        현재 시간: {toKoreanTime(new Date()).toLocaleString()}
+      </time>
 
-      <div className="border border-gray-200 rounded-lg p-4 bg-white">
+      <div className="border border-gray-200 rounded-lg p-4 bg-white" role="group" aria-label="날짜 및 시간 선택">
+        {/* 달력 헤더 */}
         <div className="flex items-center justify-between mb-4">
           <button
             type="button"
@@ -118,10 +121,11 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
               goToPrevMonth();
             }}
             className="p-2 hover:bg-gray-100 rounded"
+            aria-label="이전 달"
           >
             ◀
           </button>
-          <h2 className="text-lg font-semibold">{currentMonth}</h2>
+          <h3 className="text-lg font-semibold">{currentMonth}</h3>
           <button
             type="button"
             onClick={(e) => {
@@ -130,20 +134,27 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
               goToNextMonth();
             }}
             className="p-2 hover:bg-gray-100 rounded"
+            aria-label="다음 달"
           >
             ▶
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 mb-2">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+        {/* 요일 헤더 */}
+        <div className="grid grid-cols-7 gap-1 mb-2" role="row">
+          {['일', '월', '화', '수', '목', '금', '토'].map(day => (
+            <div key={day} className="text-center text-sm font-medium text-gray-500 py-2" role="columnheader" aria-label={`${day}요일`}>
               {day}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-1 mb-4">
+        {/* 달력 그리드 */}
+        <div
+          className="grid grid-cols-7 gap-1 mb-4"
+          role="grid"
+          aria-label="달력"
+        >
           {calendarDays.map((date) => {
             const isSelected = selectedDate &&
               date.getFullYear() === selectedDate.getFullYear() &&
@@ -151,6 +162,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
               date.getDate() === selectedDate.getDate();
 
             const currentMonth = isCurrentMonth(date);
+            const dateString = date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
             return (
               <button
@@ -170,6 +182,9 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                       : 'text-gray-400 hover:bg-gray-50'
                   }
                 `}
+                aria-label={dateString}
+                aria-selected={isSelected}
+                role="gridcell"
               >
                 {date.getDate()}
               </button>
@@ -177,7 +192,8 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
           })}
         </div>
 
-        <div className="flex gap-2 items-center justify-center">
+        {/* 시간 선택 */}
+        <div className="flex gap-2 items-center justify-center" role="group" aria-label="시간 선택">
           <div className="relative">
             <button
               type="button"
@@ -188,12 +204,19 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                 setMinuteDropdownOpen(false);
               }}
               className="w-16 h-10 rounded-lg border-2 border-main-500 bg-main-500 text-white text-center font-bold hover:bg-main-600 flex items-center justify-center"
+              aria-label="시간 선택"
+              aria-expanded={hourDropdownOpen}
+              aria-haspopup="listbox"
             >
               {value?.hour || 12}
             </button>
 
             {hourDropdownOpen && (
-              <div className="absolute top-12 left-0 w-16 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+              <div
+                className="absolute top-12 left-0 w-16 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10"
+                role="listbox"
+                aria-label="시간 목록"
+              >
                 {TIME_OPTIONS.hours.map(hour => (
                   <button
                     key={hour}
@@ -203,7 +226,10 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                       e.stopPropagation();
                       handleHourSelect(hour);
                     }}
-                    className="w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center">
+                    className="w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center"
+                    role="option"
+                    aria-selected={value?.hour === hour}
+                  >
                     {hour}
                   </button>
                 ))}
@@ -211,7 +237,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
             )}
           </div>
 
-          <span className="text-gray-500">:</span>
+          <span className="text-gray-500" aria-hidden="true">:</span>
 
           <div className="relative">
             <button
@@ -223,12 +249,19 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                 setHourDropdownOpen(false);
               }}
               className="w-16 h-10 rounded-lg border-2 border-main-500 bg-main-500 text-white text-center font-bold hover:bg-main-600 flex items-center justify-center"
+              aria-label="분 선택"
+              aria-expanded={minuteDropdownOpen}
+              aria-haspopup="listbox"
             >
               {(value?.minute || 0).toString().padStart(2, '0')}
             </button>
 
             {minuteDropdownOpen && (
-              <div className="absolute top-12 left-0 w-16 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+              <div
+                className="absolute top-12 left-0 w-16 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg z-10"
+                role="listbox"
+                aria-label="분 목록"
+              >
                 {TIME_OPTIONS.minutes.map(minute => (
                   <button
                     key={minute}
@@ -238,7 +271,10 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                       e.stopPropagation();
                       handleMinuteSelect(minute);
                     }}
-                    className="w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center">
+                    className="w-full h-8 text-sm hover:bg-gray-100 flex items-center justify-center"
+                    role="option"
+                    aria-selected={value?.minute === minute}
+                  >
                     {minute.toString().padStart(2, '0')}
                   </button>
                 ))}
@@ -246,7 +282,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
             )}
           </div>
 
-          <div className="flex gap-1">
+          <div className="flex gap-1" role="radiogroup" aria-label="오전/오후 선택">
             <button
               type="button"
               onClick={(e) => {
@@ -262,6 +298,8 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                   ? 'bg-main-500 text-white border-main-500'
                   : 'bg-white text-main-500 border-main-500 hover:bg-main-50'}
               `}
+              role="radio"
+              aria-checked={(value?.period || 'AM') === 'AM'}
             >
               AM
             </button>
@@ -280,6 +318,8 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                   ? 'bg-main-500 text-white border-main-500'
                   : 'bg-white text-main-500 border-main-500 hover:bg-main-50'}
               `}
+              role="radio"
+              aria-checked={(value?.period || 'AM') === 'PM'}
             >
               PM
             </button>
@@ -297,7 +337,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
           }}
         />
       )}
-    </div>
+    </section>
   );
 };
 

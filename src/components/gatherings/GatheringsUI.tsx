@@ -7,7 +7,7 @@ import GatheringFilters from '@/components/shared/GatheringsFilters';
 import LocationDateFilter from '@/components/shared/LocationDateFilter';
 import GatheringsList from '@/components/gatherings/GatheringsList';
 import dynamic from 'next/dynamic';
-import GatheringsHeader from '@/components/shared/GatheringsHeader';
+import PagesHeader from '@/components/shared/PagesHeader';
 
 const CreateGatheringDialog = dynamic(() => import('@/components/gatherings/CreateGatheringDialog'), { ssr: false });
 
@@ -129,8 +129,8 @@ export default function Gatherings({
 
     return (
         <>
-            <div className="flex flex-col">
-                <GatheringsHeader type="search" />
+            <section className="flex flex-col" aria-label="모임 검색 영역">
+                <PagesHeader type="search" />
 
                 <GatheringFilters
                     onTypeChange={handleTypeChange}
@@ -161,7 +161,7 @@ export default function Gatherings({
                     savedGatheringIds={[]} // 저장된 모임 ID 목록
                     isFilterChanged={isFilterChanged}
                 />
-            </div>
+            </section>
 
             {isCreateModalOpen && (
                 <CreateGatheringDialog

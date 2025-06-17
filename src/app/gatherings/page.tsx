@@ -3,7 +3,7 @@ import { serverFetcher } from '@/lib/api/serverFetcher';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from "@/types/gatherings";
 import { buildGatheringParams, filterGatheringsByMainType, isActiveGathering, GATHERING_CONSTANTS } from '@/utils/gatherings/gatheringsUtils';
-import Gatherings from "@/components/gatherings/GatheringsUI";
+import GatheringsUI from "@/components/gatherings/GatheringsUI";
 
 export const metadata: Metadata = {
     title: `모임 찾기 | Meet Meet`,
@@ -160,8 +160,8 @@ export default async function GatheringsPage({
     const { gatherings: ssrGatherings, activeStartIndex } = await getActiveGatheringsWithSkip(params);
 
     return (
-        <div className="contents-container">
-            <Gatherings
+        <main className="contents-container">
+            <GatheringsUI
                 ssrGatherings={ssrGatherings}
                 activeStartIndex={activeStartIndex}
                 initialFilters={{
@@ -172,6 +172,6 @@ export default async function GatheringsPage({
                     sortOrder: params.sortOrder || 'asc'
                 }}
             />
-        </div>
+        </main>
     );
 }

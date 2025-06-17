@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ReviewItem } from "@/types/reviews";
 import ReviewsList from "@/components/reviews/ReviewsList";
 import GatheringFilters from "@/components/shared/GatheringsFilters";
-import GatheringsHeader from "@/components/shared/GatheringsHeader";
+import PagesHeader from "@/components/shared/PagesHeader";
 import LocationDateFilter from "@/components/shared/LocationDateFilter";
 
 // 페이지 컴포넌트 props 타입 정의
@@ -122,9 +122,9 @@ export default function ReviewsUI({ ssrReviews, initialFilters }: PageProps) {
 
     return (
         <div className="w-full flex flex-col">
-            <GatheringsHeader type="review" />
+            <PagesHeader type="review" />
 
-            <div className="w-full flex flex-col">
+            <section className="w-full flex flex-col">
                 {/* 모임 주제 선택 */}
                 <GatheringFilters
                     showCreateButton={false} // 모임 만들기 버튼 숨김
@@ -142,7 +142,7 @@ export default function ReviewsUI({ ssrReviews, initialFilters }: PageProps) {
                     initialDate={currentFilters.date} // 초기 날짜
                     initialSort={`${currentSort.sortBy}_${currentSort.sortOrder}`} // 초기 정렬
                 />
-            </div>
+            </section>
 
             {/* 리뷰 목록 */}
             <ReviewsList

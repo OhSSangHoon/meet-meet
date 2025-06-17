@@ -117,7 +117,7 @@ export default async function ReviewsPage({
     const ssrReviews = await getFilteredReviews(params);
 
     return (
-        <div className="contents-container">
+        <main className="contents-container">
             <ReviewsUI
                 ssrReviews={ssrReviews}
                 initialFilters={{
@@ -128,6 +128,6 @@ export default async function ReviewsPage({
                     sortOrder: params.sortOrder || 'desc'
                 }}
             />
-        </div>
+        </main>
     );
 }

@@ -60,8 +60,8 @@ export default function GatheringFilters({
     };
 
     return (
-        <div className="w-full h-[160px] flex flex-col justify-start gap-4 py-5 whitespace-nowrap dark:text-white">
-            <div className="flex flex-row relative gap-6">
+        <nav className="w-full h-[160px] flex flex-col justify-start gap-4 py-5 whitespace-nowrap dark:text-white">
+            <section className="flex flex-row relative gap-6">
                 <div className={`absolute bottom-0 h-1 rounded-full bg-main-apricot transition-all duration-300 ease-in-out w-15 ${selectedMainType === 'DALLAEMFIT' ? 'translate-x-0' : 'translate-x-22'}`} />
                 <Tooltip>
                     <TooltipTrigger onClick={() => handleMainTypeChange('DALLAEMFIT')} className={`${MAIN_TYPE_BUTTON_STYLES}`}>
@@ -79,9 +79,9 @@ export default function GatheringFilters({
                         <p>내향적 성격의 모임이에요</p>
                     </TooltipContent>
                 </Tooltip>
-            </div>
+            </section>
 
-            <div className="flex items-center">
+            <section className="flex items-center">
                 {selectedMainType === 'DALLAEMFIT' && (
                     <div className="w-full flex items-center py-5">
                         <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export default function GatheringFilters({
                         customClassName="h-[55%] items-center shadow-md"
                     />
                 )}
-            </div>
-        </div>
+            </section>
+        </nav>
     );
 }

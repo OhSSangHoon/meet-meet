@@ -24,7 +24,7 @@ export default function ReviewStats({ reviews }: ReviewsStatsProps) {
     const totalReviews = reviews.length;
 
     return (
-        <section className="bg-white dark:bg-dark-2 dark:text-white border border-gray-200 px-6 py-6 rounded-lg mb-10">
+        <section className="bg-white dark:bg-dark-2 dark:text-white border border-gray-200 p-6 rounded-lg mb-10">
             <div className="flex items-center gap-6">
                 <div className="w-40 flex flex-col items-center">
                     <h2 className="text-2xl font-bold">

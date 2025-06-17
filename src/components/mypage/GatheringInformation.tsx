@@ -6,7 +6,7 @@ const DATE_STYLE = 'inline-flex items-center rounded-md';
 
 export default function GatheringInformation({ data, children }: { data: Gathering, children?: React.ReactNode }) {
     return (
-        <div className='flex flex-col gap-2 sm:gap-1 justify-between'>
+        <article className='flex flex-col gap-2 sm:gap-1 justify-between'>
             <div className='flex flex-col gap-2 sm:gap-1'>
                 {/* 모임 이름  */}
                 <span className="text-lg sm:text-xl font-semibold">{data?.name}</span>
@@ -26,6 +26,6 @@ export default function GatheringInformation({ data, children }: { data: Gatheri
                 </div>
             </div>
             {children}
-        </div>
+        </article>
     );
 }

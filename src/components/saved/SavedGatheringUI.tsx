@@ -9,7 +9,7 @@ import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from '@/types/gatherings';
 import GatheringsList from '@/components/gatherings/GatheringsList';
 import GatheringFilters from '@/components/shared/GatheringsFilters';
-import GatheringsHeader from '@/components/shared/GatheringsHeader';
+import PagesHeader from '@/components/shared/PagesHeader';
 
 // 매직넘버 상수
 const API_LIMIT = 1000; // 모임 조회 제한
@@ -52,7 +52,7 @@ export default function SavedGatheringsUI() {
 
     return (
         <div className="w-full flex flex-col">
-            <GatheringsHeader type="saved" />
+            <PagesHeader type="saved" />
 
             <GatheringFilters
                 onTypeChange={handleTypeChange}

@@ -10,6 +10,7 @@ import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import { Heart } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
+import { useEffect } from 'react';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ConfirmDialog'), { ssr: false });
 
@@ -65,10 +66,30 @@ export default function CreateReviewDialog({
     createReview({ gatheringId: reviewFormData.gatheringId, score: data.score, comment: excapeForXSS(data.comment) });
   };
 
+  useEffect(() => {
+    // ESC 키 눌렀을 때 다이얼로그 닫기
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
   return (
-    <section className="dialog-background">
-      <div className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4 dark:bg-dark-2">
-        <h2 className="text-xl font-semibold">리뷰 남기기</h2>
+    <dialog
+      open
+      className="dialog-background w-full h-full"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4 dark:bg-dark-2"
+        role="dialog"
+        aria-labelledby="dialog-title"
+        aria-modal="true"
+      >
+        <h2 id="dialog-title" className="text-xl font-semibold">리뷰 남기기</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <label className="block">만족스러운 경험이었나요?</label>
           <div className="flex gap-2">
@@ -118,6 +139,6 @@ export default function CreateReviewDialog({
         onConfirm={confirmDialog.onConfirm}
         onCallback={() => onClose()}
       />
-    </section>
+    </dialog>
   );
 }

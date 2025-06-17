@@ -11,7 +11,7 @@ const ARROW_BUTTON_STYLE = 'size-8 flex items-center justify-center text-gray-50
 export default function PageConverter({ page, setPage, totalPages }: PageConverterProps) {
 
     return (
-        <div className="flex justify-center items-center gap-2 mt-4">
+        <section className="flex justify-center items-center gap-2 mt-4">
             <button
                 className={ARROW_BUTTON_STYLE}
                 disabled={page === 1}
@@ -29,6 +29,6 @@ export default function PageConverter({ page, setPage, totalPages }: PageConvert
                 disabled={page === totalPages}
                 onClick={() => setPage(page + 1)}
             >〉</button>
-        </div>
+        </section>
     )
 }

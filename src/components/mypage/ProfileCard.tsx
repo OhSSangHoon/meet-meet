@@ -18,7 +18,7 @@ export default function ProfileCard() {
   return (
     <section className="relative pt-16 pb-8 px-6 sm:px-10 max-w-md mx-auto flex flex-col items-center bg-white dark:bg-dark-2 rounded-2xl shadow-lg">
       {/* 프로필 이미지 오버레이 */}
-      <div className="absolute -top-12 left-1/2 -translate-x-1/2 z-10">
+      <figure className="absolute -top-12 left-1/2 -translate-x-1/2 z-10">
         <div className="relative">
           <ImageWithFallback
             src={validateProfileImage(userImage)}
@@ -37,10 +37,10 @@ export default function ProfileCard() {
             <SquarePen className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
-      </div>
+      </figure>
 
       {/* 프로필 정보 */}
-      <div className="flex flex-col items-center gap-2 mt-4">
+      <article className="flex flex-col items-center gap-2 mt-4">
         <span className="text-xl sm:text-2xl font-bold text-main-500 dark:text-main-300">{shortenName(userName, 20)}</span>
 
         <div className="flex items-center gap-2 text-gray-700 dark:text-white text-sm sm:text-base">
@@ -55,7 +55,7 @@ export default function ProfileCard() {
           <span className="px-2 py-0.5 rounded flex-shrink-0 bg-main-100 dark:bg-main-400/20 font-semibold">E-MAIL</span>
           <span>{userEmail}</span>
         </div>
-      </div>
+      </article>
 
       {/* 프로필 수정 다이얼로그 */}
       {isProfileEditDialogOpen && <ProfileEditDialog setIsProfileEditDialogOpen={setIsProfileEditDialogOpen} />}

@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 export default function MyPage() {
   return (
     <main className="contents-container">
-      <section className="pt-20 flex flex-col gap-4">
+      <div className="pt-20 flex flex-col gap-4">
         <ProfileCard />
         <MyPageUI />
-      </section>
+      </div>
     </main>
   );
 }

@@ -216,8 +216,15 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
     };
 
     return (
-        <div className="dialog-background text-gray-900">
-            <div className="relative w-full h-full flex items-center justify-center md:p-4">
+        <dialog
+            open
+            className="dialog-background w-full h-full"
+            onClick={handleNormalClose}
+        >
+            <div
+                className="relative w-full h-full flex items-center justify-center md:p-4"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="w-full max-w-2xl max-h-full flex flex-col">
                     <form
                         className="flex flex-col w-full h-full bg-white dark:bg-dark-2 md:rounded-lg shadow-xl overflow-hidden"
@@ -473,6 +480,6 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                     </div>
                 </div>
             )}
-        </div>
+        </dialog>
     );
 }

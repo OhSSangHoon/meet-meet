@@ -112,38 +112,55 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
     const handleExit = () => router.replace('/');
 
     return (
-        <section className="dialog-background">
+        <dialog
+            open
+            className="dialog-background w-full h-full"
+            onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                    if (pathname === '/auth/profile') handleExit();
+                    else handleCancel();
+                }
+            }}
+        >
             <h1 className='text-2xl font-semibold text-white'>PROFILE EDIT</h1>
             <form
                 className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4"
-                onSubmit={handleSubmit(onSubmit)}>
+                onSubmit={handleSubmit(onSubmit)}
+                aria-labelledby="profile-edit-title"
+            >
+                <h2 id="profile-edit-title" className="sr-only">프로필 수정</h2>
                 <div className="grid grid-cols-3 items-center gap-y-6 gap-x-4 w-full mb-2">
-                    <label className="col-span-1 text-left font-semibold">IMAGE (1:1)</label>
+                    <label htmlFor="profile-image" className="col-span-1 text-left font-semibold">IMAGE (1:1)</label>
                     <div className="col-span-2 flex items-center gap-4">
                         <Button
                             variant='cancel'
                             onClick={handleFileClick}
                             customClassName='size-16'
+                            aria-label="프로필 이미지 업로드"
                         >
                             <Upload className='size-full' />
                         </Button>
                         <input
                             type="file"
+                            id="profile-image"
                             ref={fileInputRef}
                             className="hidden"
                             onChange={handleFileChange}
                             accept="image/*"
+                            aria-label="프로필 이미지 선택"
                         />
                         <span>{imageFile?.name}</span>
                     </div>
-                    <label className="col-span-1 text-left font-semibold">COMPANY</label>
+                    <label htmlFor="company-name" className="col-span-1 text-left font-semibold">COMPANY</label>
                     <input
                         type="text"
+                        id="company-name"
                         {...register('companyName')}
                         className="col-span-2 w-full border-2 border-gray-300 rounded-lg p-2"
+                        aria-label="회사명 입력"
                     />
                 </div>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {error && <p role="alert" className="text-red-500 text-sm">{error}</p>}
                 <div className='flex gap-4'>
                     <Button
                         variant='default'
@@ -159,12 +176,13 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
                     />
                 </div>
             </form>
+
             <ConfirmDialog
                 isOpen={confirmDialog.isOpen}
                 text={'프로필을 수정했습니다'}
                 onClose={() => setConfirmDialog({ isOpen: false, text: '' })}
                 onConfirm={confirmDialog.onConfirm}
             />
-        </section>
+        </dialog>
     );
 }

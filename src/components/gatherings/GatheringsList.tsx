@@ -100,18 +100,22 @@ export default function GatheringsList({
     }, [filteredSSRGatherings, filteredCSRGatherings, isSavedPage]);
 
     return (
-        <div className="w-full flex flex-col justify-start gap-5">
+        <section
+            className="w-full flex flex-col justify-start gap-5"
+            aria-label="모임 목록"
+        >
             {allGatherings.map((gathering: Gathering, index: number) => {
                 const isLastItem = index === allGatherings.length - 1;
 
                 return (
-                    <section
+                    <article
                         role="button"
                         tabIndex={0}
                         key={`${gathering.teamId || 'unknown'}-${gathering.id}-${index}`}
                         onClick={() => router.push(`/gatherings/detail/${gathering.id}`)}
                         ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll && !isSavedPage ? lastItemRef : undefined}
                         className="w-full flex flex-col md:flex-row justify-start border border-gray-200 dark:border-dark-2 dark:bg-dark-2 rounded-2xl bg-white hover:border-main-300 dark:hover:border-main-400 hover:shadow-lg dark:hover:shadow-dark-lg transition-all duration-300 overflow-hidden relative cursor-pointer"
+                        aria-label={`${gathering.name} 모임`}
                     >
                         {/* 이미지 영역 */}
                         <div className="w-full md:w-80 h-48 md:h-40 flex-shrink-0">
@@ -119,7 +123,7 @@ export default function GatheringsList({
                             <ImageWithFallback
                                 src={gathering.image}
                                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
-                                alt="모임 썸네일"
+                                alt={`${gathering.name} 모임 썸네일`}
                                 width={320}
                                 height={180}
                                 className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
@@ -130,9 +134,9 @@ export default function GatheringsList({
                             <div className="flex-1 w-full">
                                 <div className="flex flex-row md:justify-between gap-3">
                                     <div className="flex-1 flex flex-row gap-2 items-center">
-                                        <h1 className="text-lg font-semibold -mt-6 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+                                        <h2 className="text-lg font-semibold -mt-6 text-gray-900 dark:text-gray-100 transition-colors duration-200">
                                             {truncateTitle(gathering.name)}
-                                        </h1>
+                                        </h2>
                                         <div className="hidden md:block w-[2px] h-[16px] -mt-6 bg-gray-900 dark:bg-gray-300"></div>
                                         <p className="text-sm font-medium -mt-6 text-gray-700 dark:text-gray-300 transition-colors duration-200">
                                             {gathering.location}
@@ -170,7 +174,7 @@ export default function GatheringsList({
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </article>
                 );
             })}
 
@@ -199,6 +203,6 @@ export default function GatheringsList({
                 </div>
             )}
 
-        </div>
+        </section>
     );
 }
