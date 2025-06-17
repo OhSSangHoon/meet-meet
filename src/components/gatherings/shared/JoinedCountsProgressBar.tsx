@@ -8,18 +8,17 @@ export default function JoinedCountsProgressBar({ participantCount, capacity }: 
 
     const isDetailPage = pathname.includes('/gatherings/detail');
 
-    const percent = useMemo(() => {
-        if (!participantCount || !capacity) return 0;
-        return Math.min((participantCount / capacity) * 100, 100);
-    }, [participantCount, capacity]);
-
     const minPercent = useMemo(() => {
         if (!capacity) return 0;
         return Math.min((5 / capacity) * 100, 100);
     }, [capacity]);
 
     return (
-        <div className="w-full relative bg-gray-200 rounded-full h-2">
+        <progress
+            className="w-full relative bg-gray-200 rounded-full h-2 appearance-none [&::-webkit-progress-bar]:bg-gray-200 [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-main-400 [&::-webkit-progress-value]:rounded-full [&::-moz-progress-bar]:bg-main-400 [&::-moz-progress-bar]:rounded-full"
+            value={participantCount}
+            max={capacity}
+        >
             {/* 최소 인원 인디케이터 */}
             <div
                 className="absolute -top-1 left-0"
@@ -32,12 +31,7 @@ export default function JoinedCountsProgressBar({ participantCount, capacity }: 
                     </span>
                 )}
             </div>
-            {/* 진행 바 */}
-            <div
-                className='bg-main-400 h-2 rounded-full transition-all duration-300'
-                style={{ width: `${percent}%` }}
-            ></div>
-        </div>
+        </progress>
     );
 }
 

@@ -12,7 +12,7 @@ export default function DateReminder({ registrationEnd }: { registrationEnd: str
                     width={24}
                     height={24}
                 />
-                <span className="font-medium text-white">{getTimeRemaining(registrationEnd)}</span>
+                <time className="font-medium text-white">{getTimeRemaining(registrationEnd)}</time>
             </div>
         </div>
     );

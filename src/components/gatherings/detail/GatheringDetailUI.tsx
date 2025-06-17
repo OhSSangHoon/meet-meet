@@ -31,6 +31,7 @@ const handleCopyUrl = () => {
 };
 
 const LIMIT = 4;
+const UPPER_SECTIONS_STYLE = 'flex flex-col sm:flex-row gap-4';
 
 /** 모임 상세 페이지 UI */
 export default function GatheringsDetailUI({ id, detailReviews }: { id: string, detailReviews: Reviews }) {
@@ -95,12 +96,12 @@ export default function GatheringsDetailUI({ id, detailReviews }: { id: string, 
             <main className='contents-container'>
                 {/* 모임 썸네일과 정보 */}
                 {detailLoading ? (
-                    <section className='flex flex-col sm:flex-row gap-4'>
+                    <section className={UPPER_SECTIONS_STYLE}>
                         <ThumbnailLoading />
                         <InformationLoading />
                     </section>
                 ) : (
-                    <section className='flex flex-col sm:flex-row gap-4'>
+                    <section className={UPPER_SECTIONS_STYLE}>
                         <Thumbnail detail={detail} id={id} />
                         <Information detail={detail} id={id} participants={participants} />
                     </section>

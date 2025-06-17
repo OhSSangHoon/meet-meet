@@ -167,153 +167,149 @@ export default function LocationDateFilter({
     const currentLocation = locations.find(loc => loc.value === selectedLocation);
 
     return (
-        <div className="w-full flex flex-col gap-4 py-4">
-            <div className="flex flex-row gap-4">
-                <div className="flex flex-wrap gap-3">
-                    <div className="relative">
-                        <button
-                            onClick={() => setIsLocationOpen(!isLocationOpen)}
-                            className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-gathering-item justify-between dark:bg-dark-2 dark:text-gray-200`}
-                        >
-                            <span>{currentLocation?.label || '지역 선택'}</span>
-                            <ChevronDown
-                                className={`w-4 h-4 transition-transform duration-200 ${
-                                    isLocationOpen ? 'rotate-180' : ''
+        <div className="w-full flex flex-row gap-4 py-4">
+            <section className="flex flex-wrap gap-3">
+                <div className="relative">
+                    <button
+                        onClick={() => setIsLocationOpen(!isLocationOpen)}
+                        className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-gathering-item justify-between dark:bg-dark-2 dark:text-gray-200`}
+                    >
+                        <span>{currentLocation?.label || '지역 선택'}</span>
+                        <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-200 ${isLocationOpen ? 'rotate-180' : ''
                                 }`}
-                            />
-                        </button>
+                        />
+                    </button>
 
-                        {isLocationOpen && (
-                            <div className={`${DROPDOWN_CONTAINER_STYLES} left-0`}>
-                                {locations.map((location, index) => {
-                                    const isSelected = selectedLocation === location.value;
+                    {isLocationOpen && (
+                        <div className={`${DROPDOWN_CONTAINER_STYLES} left-0`}>
+                            {locations.map((location, index) => {
+                                const isSelected = selectedLocation === location.value;
 
-                                    return (
-                                        <button
-                                            key={location.value}
-                                            onClick={() => handleLocationChange(location.value)}
-                                            className={`
+                                return (
+                                    <button
+                                        key={location.value}
+                                        onClick={() => handleLocationChange(location.value)}
+                                        className={`
                                                 ${DROPDOWN_ITEM_BASE_STYLES}
                                                 ${isSelected ? 'bg-main-50 text-main-600' : 'text-gray-700'}
                                                 ${index === 0 ? 'rounded-t-lg' : ''}
                                                 ${index === locations.length - 1 ? 'rounded-b-lg' : ''}
                                             `}
-                                        >
-                                            <div className="flex-1">
-                                                <div className={`text-sm font-medium ${isSelected && 'text-main-600'}`}>
-                                                    {location.label}
-                                                </div>
+                                    >
+                                        <div className="flex-1">
+                                            <div className={`text-sm font-medium ${isSelected && 'text-main-600'}`}>
+                                                {location.label}
                                             </div>
-                                            {isSelected && (
-                                                <div className={`${SELECTED_INDICATOR_STYLES} ml-1`}></div>
-                                            )}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        )}
+                                        </div>
+                                        {isSelected && (
+                                            <div className={`${SELECTED_INDICATOR_STYLES} ml-1`}></div>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
 
-                        {isLocationOpen && (
-                            <div
-                                className="fixed inset-0 z-40"
-                                onClick={() => setIsLocationOpen(false)}
-                            />
-                        )}
-                    </div>
-
-                    {/* 날짜 선택 */}
-                    <input
-                        type="date"
-                        value={selectedDate}
-                        min={pageType === 'search' ? today : undefined}
-                        onChange={(e) => handleDateChange(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500 dark:bg-dark-2 dark:text-gray-200"
-                    />
-
-                    {(selectedLocation || selectedDate) && (
-                        <button
-                            onClick={() => {
-                                setSelectedLocation('');
-                                setSelectedDate('');
-                            }}
-                            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm transition-colors duration-200 dark:bg-dark-2 dark:text-gray-200"
-                        >
-                            필터 초기화
-                        </button>
+                    {isLocationOpen && (
+                        <div
+                            className="fixed inset-0 z-40"
+                            onClick={() => setIsLocationOpen(false)}
+                        />
                     )}
                 </div>
-                {onSortChange && (
-                    <div className="flex items-center gap-3 ml-auto">
-                        {pageType === 'search' ? (
-                            // 마감순 정렬
+
+                {/* 날짜 선택 */}
+                <input
+                    type="date"
+                    value={selectedDate}
+                    min={pageType === 'search' ? today : undefined}
+                    onChange={(e) => handleDateChange(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-main-500 dark:bg-dark-2 dark:text-gray-200"
+                />
+
+                {(selectedLocation || selectedDate) && (
+                    <button
+                        onClick={() => {
+                            setSelectedLocation('');
+                            setSelectedDate('');
+                        }}
+                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm transition-colors duration-200 dark:bg-dark-2 dark:text-gray-200"
+                    >
+                        필터 초기화
+                    </button>
+                )}
+            </section>
+            {onSortChange && (
+                <fieldset className="flex items-center gap-3 ml-auto">
+                    <legend className="sr-only">정렬 옵션</legend>
+                    {pageType === 'search' ? (
+                        // 마감순 정렬
+                        <button
+                            onClick={handleSearchToggle}
+                            className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-all duration-200 dark:bg-dark-2 dark:text-gray-200`}
+                        >
+                            <CurrentIcon className="w-4 h-4" />
+                            <span className="hidden sm:inline">{currentOption?.label}</span>
+                        </button>
+                    ) : (
+                        <div className="relative">
                             <button
-                                onClick={handleSearchToggle}
-                                className={`${BUTTON_BASE_STYLES} hover:bg-gray-50 transition-all duration-200 dark:bg-dark-2 dark:text-gray-200`}
+                                onClick={() => setIsSortOpen(!isSortOpen)}
+                                // 정렬 버튼
+                                className={`${BUTTON_BASE_STYLES} transition-all duration-200 dark:bg-dark-2 dark:text-gray-200`}
                             >
-                                <CurrentIcon className="w-4 h-4"/>
+                                <CurrentIcon className="w-4 h-4" />
                                 <span className="hidden sm:inline">{currentOption?.label}</span>
-                            </button>
-                        ) : (
-                            <div className="relative">
-                                <button
-                                    onClick={() => setIsSortOpen(!isSortOpen)}
-                                    // 정렬 버튼
-                                    className={`${BUTTON_BASE_STYLES} transition-all duration-200 dark:bg-dark-2 dark:text-gray-200`}
-                                >
-                                    <CurrentIcon className="w-4 h-4" />
-                                    <span className="hidden sm:inline">{currentOption?.label}</span>
-                                    <ChevronDown
-                                        className={`w-4 h-4 transition-transform duration-200 ${
-                                            isSortOpen ? 'rotate-180' : ''
+                                <ChevronDown
+                                    className={`w-4 h-4 transition-transform duration-200 ${isSortOpen ? 'rotate-180' : ''
                                         }`}
-                                    />
-                                </button>
+                                />
+                            </button>
 
-                                {isSortOpen && (
-                                    <div className={`${DROPDOWN_CONTAINER_STYLES} right-0 dark:bg-dark-2 dark:text-gray-200`}>
-                                        {sortOptions.map((option) => {
-                                            const Icon = option.icon;
-                                            const isSelected = currentSort === option.value;
+                            {isSortOpen && (
+                                <div className={`${DROPDOWN_CONTAINER_STYLES} right-0 dark:bg-dark-2 dark:text-gray-200`}>
+                                    {sortOptions.map((option) => {
+                                        const Icon = option.icon;
+                                        const isSelected = currentSort === option.value;
 
-                                            return (
-                                                <button
-                                                    key={option.value}
-                                                    onClick={() => handleSortChange(option.value)}
-                                                    className={`
+                                        return (
+                                            <button
+                                                key={option.value}
+                                                onClick={() => handleSortChange(option.value)}
+                                                className={`
                                                         w-18 sm:w-full ${DROPDOWN_ITEM_BASE_STYLES} px-3 py-3
                                                         ${isSelected ? 'bg-main-50 text-main-600 dark:bg-dark-2 dark:text-gray-200' : 'text-gray-700 dark:text-gray-200'}
                                                         ${option.value === sortOptions[0].value ? 'rounded-t-lg' : ''}
                                                         ${option.value === sortOptions[sortOptions.length - 1].value ? 'rounded-b-lg' : ''}
                                                     `}
-                                                >
-                                                    <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                                                        isSelected ? 'text-main-600 dark:text-main-400' : 'text-gray-400 dark:text-gray-200'
+                                            >
+                                                <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${isSelected ? 'text-main-600 dark:text-main-400' : 'text-gray-400 dark:text-gray-200'
                                                     }`} />
-                                                    <div className="flex-1 hidden sm:block">
-                                                        <div className={`text-sm font-medium ${isSelected && 'text-main-600 dark:text-main-400'}`}>
-                                                            {option.label}
-                                                        </div>
+                                                <div className="flex-1 hidden sm:block">
+                                                    <div className={`text-sm font-medium ${isSelected && 'text-main-600 dark:text-main-400'}`}>
+                                                        {option.label}
                                                     </div>
-                                                    {isSelected && (
-                                                        <div className={`${SELECTED_INDICATOR_STYLES} mt-1.5 dark:bg-main-400`}></div>
-                                                    )}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                )}
+                                                </div>
+                                                {isSelected && (
+                                                    <div className={`${SELECTED_INDICATOR_STYLES} mt-1.5 dark:bg-main-400`}></div>
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
 
-                                {isSortOpen && (
-                                    <div
-                                        className="fixed inset-0 z-40"
-                                        onClick={() => setIsSortOpen(false)}
-                                    />
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
+                            {isSortOpen && (
+                                <div
+                                    className="fixed inset-0 z-40"
+                                    onClick={() => setIsSortOpen(false)}
+                                />
+                            )}
+                        </div>
+                    )}
+                </fieldset>
+            )}
         </div>
     );
 }

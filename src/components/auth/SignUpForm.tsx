@@ -10,7 +10,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import InputField from '@/components/auth/InputField';
 import SubmitButton from '@/components/auth/SubmitButton';
-import FormFooter from '@/components/auth/FormFooter';
+import AuthSwitchLink from '@/components/auth/AuthSwitchLink';
 
 const signUpFormSchema = z.object({
     name: z.string().min(1, '이름을 입력해 주세요.').max(20, '이름은 20자 이하로 입력해 주세요.'),
@@ -147,7 +147,7 @@ export default function SignUpForm() {
                 text="확인"
                 props={{ name, email, companyName, password }}
             />
-            <FormFooter
+            <AuthSwitchLink
                 route="/auth/signin"
                 description="이미 계정이 있으신가요?"
                 text="로그인"

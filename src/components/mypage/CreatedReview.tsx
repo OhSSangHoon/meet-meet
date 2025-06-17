@@ -6,7 +6,7 @@ import ImageWithFallback from '@/components/shared/ImageWithFallback';
 /** 나의 리뷰 - 작성한 리뷰 */
 export default function CreatedReview({ review }: { review: ReviewItem }) {
     return (
-        <section className='flex flex-col sm:flex-row gap-4'>
+        <article className='flex flex-col sm:flex-row gap-4'>
             <div className="flex-shrink-0">
                 <ImageWithFallback
                     src={review.Gathering.image!}
@@ -34,7 +34,7 @@ export default function CreatedReview({ review }: { review: ReviewItem }) {
                     </span>
                 </div>
             </div>
-        </section>
+        </article>
     );
 }
 

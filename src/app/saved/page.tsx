@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function SavedPage() {
   return (
-    <div className="contents-container dark:bg-dark dark:text-white">
+    <main className="contents-container">
       <SavedGatheringsUI />
-    </div>
+    </main>
   );
 }

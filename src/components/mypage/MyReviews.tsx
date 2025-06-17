@@ -36,7 +36,7 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
 
   return (
     <section className="flex w-full flex-col justify-start gap-4">
-      <div className="flex justify-center sm:justify-start items-center gap-2">
+      <nav className="flex justify-center sm:justify-start items-center gap-2">
         <Button
           variant='default'
           text='작성 가능한 리뷰'
@@ -49,13 +49,13 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
           onClick={() => setMyReviewsTab(1)}
           customClassName={`${myReviewsTab === 1 ? 'bg-main-apricot' : 'bg-slate-100 dark:bg-gray-700 dark:text-white'} ${FILTER_BUTTON_STYLE}`}
         />
-      </div>
+      </nav>
 
       {myReviewsTab === 0 ? (
         !reviewableGatherings || reviewableGatherings.length === 0 ?
           <span className="text-gray-500 text-center">작성 가능한 리뷰가 없어요</span>
           :
-          <div className="flex flex-col gap-4">
+          <section className="flex flex-col gap-4">
             {reviewableGatherings.map((gathering: JoinedGathering) => (
               <CreatableReview
                 key={gathering.id}
@@ -65,19 +65,19 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
                 onOpenReviewDialog={onOpenReviewDialog}
               />
             ))}
-          </div>
+          </section>
       ) :
         (
           !createdReviews || createdReviews?.length === 0 ?
             <span className="text-gray-500 text-center">아직 작성한 리뷰가 없어요</span>
             :
-            <div className='flex flex-col gap-4'>
+            <section className='flex flex-col gap-4'>
               {createdReviews?.map((review: ReviewItem) => (
                 <div key={`${review?.Gathering?.id}-${review?.id}`}
                   className={`relative w-full p-4 rounded-xl border-1 hover:border-main-200 hover:shadow-md transition-gathering-item ${myReviewsTab === 0 ? 'bg-main-apricot' : 'dark:bg-gray-700 dark:text-white'}`}
                 ><CreatedReview review={review} /></div>
               ))}
-            </div>
+            </section>
         )
       }
     </section >

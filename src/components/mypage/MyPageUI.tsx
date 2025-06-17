@@ -17,7 +17,11 @@ export default function MyPageUI() {
   return (
     <section className="flex flex-col gap-4">
       {/* 버튼바 */}
-      <section className="relative py-4 flex gap-4 justify-between sm:justify-start text-sm sm:text-lg font-bold">
+      <nav
+        className="relative py-4 flex gap-4 justify-between sm:justify-start text-sm sm:text-lg font-bold"
+        role="tablist"
+        aria-label="마이페이지 탭 메뉴"
+      >
         {[
           { label: "참여중인 모임", value: 0 },
           { label: "나의 리뷰", value: 1 },
@@ -26,6 +30,10 @@ export default function MyPageUI() {
           <button
             key={value}
             type="button"
+            role="tab"
+            aria-selected={selectedTab === value}
+            aria-controls={`tab-panel-${value}`}
+            id={`tab-${value}`}
             onClick={() => setSelectedTab(value)}
             className={`cursor-pointer transition-colors duration-150 ${selectedTab === value ? "text-gray-800 dark:text-main-400" : "text-slate-400 dark:text-gray-200"}`}
           >
@@ -35,7 +43,7 @@ export default function MyPageUI() {
         <div
           className="absolute bottom-0 left-0 h-1 rounded-full bg-gray-800 transition-transform duration-300"
         />
-      </section>
+      </nav>
 
       {/* 컨텐츠 */}
       {selectedTab === 0 &&

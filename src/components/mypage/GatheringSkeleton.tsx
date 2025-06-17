@@ -9,7 +9,7 @@ interface LoadingUIProps {
  * @prop {string} width w-full, w-[17.5rem] 등
  * @prop {string} height h-32, h-[10rem] 등
  */
-export default function LoadingUI({ width = 'w-full' }: LoadingUIProps) {
+export default function GatheringSkeleton({ width = 'w-full' }: LoadingUIProps) {
     return (
         <div className={`relative ${width} p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item animate-pulse`}>
             {/* 좌측: 썸네일 및 뱃지 */}

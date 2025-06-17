@@ -9,7 +9,7 @@ import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import axios from 'axios';
 import InputField from '@/components/auth/InputField';
 import SubmitButton from '@/components/auth/SubmitButton';
-import FormFooter from '@/components/auth/FormFooter';
+import AuthSwitchLink from '@/components/auth/AuthSwitchLink';
 
 const signInFormSchema = z.object({
     email: z.string().email('올바른 이메일 형식이 아닙니다.'),
@@ -85,7 +85,7 @@ export default function SignInForm() {
                 text="로그인"
                 props={{ email, password }}
             />
-            <FormFooter
+            <AuthSwitchLink
                 route="/auth/signup"
                 description="MeetMeet이 처음이신가요?"
                 text="회원가입"

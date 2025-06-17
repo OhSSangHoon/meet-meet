@@ -173,7 +173,7 @@ export default function ReviewsList({
     }, [filteredSSRReviews, filteredCSRReviews]);
 
     return (
-        <div className="w-full flex flex-col">
+        <section className="w-full flex flex-col">
             {/* 리뷰 전용 평균 평점 섹션 */}
             <ReviewStats reviews={allReviews} />
 
@@ -183,7 +183,7 @@ export default function ReviewsList({
                     const isLastItem = index === allReviews.length - 1;
 
                     return (
-                        <section
+                        <article
                             key={`${review.id}-${index}`}
                             className="w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative dark:border-gray-700 dark:bg-dark-2 dark:text-white"
                             ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll ? lastItemRef : undefined}
@@ -221,7 +221,7 @@ export default function ReviewsList({
                                     </div>
                                 </div>
                             </div>
-                        </section>
+                        </article>
                     );
                 })}
 
@@ -251,6 +251,6 @@ export default function ReviewsList({
                     </div>
                 )}
             </div>
-        </div>
+        </section>
     );
 }

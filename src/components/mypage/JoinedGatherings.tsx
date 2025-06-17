@@ -12,7 +12,7 @@ import GatheringInformation from '@/components/mypage/GatheringInformation';
 import DateReminder from '@/components/shared/DateReminder';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 
-const LoadingUI = dynamic(() => import('@/components/mypage/LoadingUI'), { ssr: false });
+const GatheringSkeleton = dynamic(() => import('@/components/mypage/GatheringSkeleton'), { ssr: false });
 const ConfirmDialog = dynamic(() => import('@/components/shared/ConfirmDialog'), { ssr: false });
 const OverlayForDisabled = dynamic(() => import('@/components/shared/OverlayForDisabled'), { ssr: false });
 
@@ -65,14 +65,14 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
     return a.isCompleted ? 1 : -1;
   });
 
-  if (isLoading) return <LoadingUI />;
+  if (isLoading) return <GatheringSkeleton />;
   if (error && !fetchErrorMessage) return <div className="text-red-500">에러: {error.message}</div>;
   if (gatherings.length === 0 && !error) return <div className="text-gray-500 text-center">참여한 모임이 없습니다</div>;
 
   return (
     <section className='flex flex-col gap-2'>
       {sortedGatherings.map(data => (
-        <div
+        <article
           key={data.id}
           className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item dark:bg-dark-2 dark:text-white"
         >
@@ -84,7 +84,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
           />
 
           {/* 좌측 */}
-          <article className='relative'>
+          <figure className='relative'>
             <DateReminder registrationEnd={data?.registrationEnd} />
             <ImageWithFallback
               src={data?.image}
@@ -94,10 +94,10 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
               height={1000}
               className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
             />
-          </article>
+          </figure>
 
           {/* 우측 */}
-          <div className='flex flex-col gap-2 sm:gap-0 justify-between'>
+          <article className='flex flex-col gap-2 sm:gap-0 justify-between'>
             {/* 모임 정보 */}
             <div className='flex flex-col gap-2 sm:gap-1'>
               <div className='flex items-center gap-1'>
@@ -158,8 +158,8 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
                 customClassName='w-28 sm:w-32'
               />
             </div>
-          </div>
-        </div>
+          </article>
+        </article>
       ))}
 
       <ConfirmDialog

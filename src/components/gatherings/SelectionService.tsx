@@ -5,23 +5,36 @@ import { useState, useEffect } from 'react';
 const ServiceItem = ({ id, title, subtitle, isSelected, onSelect }: { id: string, title: string, subtitle: string, isSelected: boolean, onSelect: (id: string) => void }) => {
     return (
         <div
-            className={`w-full border-2 rounded-lg px-5 py-3 sm:px-3 sm:py-2 cursor-pointer ${isSelected ? 'border-main-500 bg-main-50' : 'border-gray-200 dark:border-gray-700 dark:text-white'
-                }`}
+            role="radio"
+            aria-checked={isSelected}
+            className={`w-full border-2 rounded-lg px-5 py-3 sm:px-3 sm:py-2 cursor-pointer ${isSelected ? 'border-main-500 bg-main-50' : 'border-gray-200 dark:border-gray-700 dark:text-white'}`}
             onClick={() => onSelect(id)}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSelect(id);
+                }
+            }}
+            tabIndex={0}
         >
-            <div className="flex flex-col justify-start gap-4 ">
+            <div className="flex flex-col justify-start gap-4">
                 <div className="flex flex-row items-center gap-2">
                     <input
-                        type="checkbox"
+                        type="radio"
                         name="service"
                         id={id}
                         checked={isSelected}
                         onChange={() => onSelect(id)}
                         className="accent-main-500 rounded-lg w-[18px] h-[18px]"
+                        aria-label={`${title} ${subtitle ? subtitle : ''} 선택`}
                     />
-                    <h1 className='font-semibold text-sm md:text-base'>{title}</h1>
+                    <h3 className='font-semibold text-sm md:text-base'>{title}</h3>
                 </div>
-                {subtitle && <label htmlFor={id} className='cursor-pointer text-xs font-medium flex'>{subtitle}</label>}
+                {subtitle && (
+                    <span className='text-xs font-medium flex text-gray-600 dark:text-gray-300'>
+                        {subtitle}
+                    </span>
+                )}
             </div>
         </div>
     );
@@ -70,9 +83,13 @@ export default function SelectionService({
     ];
 
     return (
-        <div className="w-full mb-5">
-            <h1 className="font-bold text-gray-800 mb-3 dark:text-gray-200">선택 서비스</h1>
-            <div className="w-full flex flex-row gap-5">
+        <fieldset className="w-full mb-5">
+            <legend className="font-bold text-gray-800 mb-3 dark:text-gray-200">선택 서비스</legend>
+            <div
+                className="w-full flex flex-row gap-5"
+                role="radiogroup"
+                aria-label="서비스 유형 선택"
+            >
                 {services.map((service) => (
                     <ServiceItem
                         key={service.id}
@@ -84,6 +101,6 @@ export default function SelectionService({
                     />
                 ))}
             </div>
-        </div>
+        </fieldset>
     );
 }

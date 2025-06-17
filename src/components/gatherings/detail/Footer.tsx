@@ -34,12 +34,11 @@ export default function Footer({ userId, token, id, detail, isParticipated, leav
     return (
         <footer className='sticky bottom-0 w-full h-16 border-t border-gray-300 bg-white dark:bg-dark-2 dark:text-white dark:border-gray-600'>
             <div className='max-w-screen-lg h-full mx-auto px-4 md:px-20 flex justify-between items-center'>
-                <div className='hidden sm:flex flex-col gap-1'>
+                <section className='hidden sm:flex flex-col gap-1'>
                     <span className='font-semibold'>Meet Meet Together</span>
                     <span className='text-xs font-medium'>모임은 여러분을 기다리고 있어요!</span>
-                </div>
-                <div className='flex gap-2'>
-
+                </section>
+                <section className='flex gap-2'>
                     {/* 모임 생성자 권한 확인 */}
                     {userId === detail?.createdBy ?
                         <div className='flex justify-between sm:justify-end gap-2'>
@@ -71,6 +70,7 @@ export default function Footer({ userId, token, id, detail, isParticipated, leav
                             />
                         )
                     }
+                    {/* 공유하기 - 모든 유저가 가능 */}
                     <Tooltip open={copied}>
                         <TooltipTrigger asChild>
                             <div
@@ -86,7 +86,7 @@ export default function Footer({ userId, token, id, detail, isParticipated, leav
                             복사되었습니다!
                         </TooltipContent>
                     </Tooltip>
-                </div>
+                </section>
             </div>
         </footer>
     )

@@ -15,11 +15,12 @@ interface InformationProps {
     participants: Participant[],
 }
 
+const LOCATION_POSTER_STYLE = 'text-gray-500 dark:text-gray-400';
+
 /** 모임 상세 페이지 상단 우측 정보 */
 export default function Information({ detail, id, participants }: InformationProps) {
     return (
-        <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] px-6 py-5 border-2 border-gray-300 bg-white rounded-lg flex flex-col justify-between gap-4 overflow-hidden dark:bg-dark-2 dark:text-white dark:border-gray-600'
-        >
+        <article className='max-w-screen-lg sm:w-[30rem] h-[14rem] px-6 py-5 border-2 border-gray-300 bg-white rounded-lg flex flex-col justify-between gap-4 overflow-hidden dark:bg-dark-2 dark:text-white dark:border-gray-600'>
             {/* 상단 */}
             <section className='flex justify-between gap-8'>
                 {/* LEFT */}
@@ -34,9 +35,9 @@ export default function Information({ detail, id, participants }: InformationPro
                                 : ''}
                         </h2>
                         <div className='flex items-center gap-1'>
-                            <span className="text-gray-500 dark:text-gray-400">{detail?.location || '장소'}</span>
-                            <span className="text-gray-500 dark:text-gray-400">·</span>
-                            <span className="text-gray-500 dark:text-gray-400">{detail?.createdBy}님 게시</span>
+                            <span className={LOCATION_POSTER_STYLE}>{detail?.location || '장소'}</span>
+                            <span className={LOCATION_POSTER_STYLE}>·</span>
+                            <span className={LOCATION_POSTER_STYLE}>{detail?.createdBy}님 게시</span>
                         </div>
                     </div>
                     {/* 날짜 시간 */}

@@ -199,8 +199,7 @@ html {
     @apply cursor-pointer hover:bg-button-hover transition duration-150 ease-in;
   }
 
-
-  /* 모달 배경 */
+  /* 다이얼로그 */
   .dialog-background {
     @apply fixed inset-0 z-50 px-4 sm:px-0 flex flex-col items-center justify-center gap-2 bg-black/40 dark:text-white;
   }

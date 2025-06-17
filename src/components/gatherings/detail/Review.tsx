@@ -6,10 +6,10 @@ import ImageWithFallback from '@/components/shared/ImageWithFallback';
 
 const MAX_RATING = 5;
 
-/** 모임 상세 페이지 리뷰 목록 */
+/** 모임 상세 페이지 리뷰 목록의 아이템 */
 export default function Review({ review }: { review: ReviewItem }) {
     return (
-        <div className='w-full border-dotted border-b-2 border-main-300 flex flex-col gap-2'>
+        <article className='w-full border-dotted border-b-2 border-main-300 flex flex-col gap-2'>
             <div className='flex gap-1'>
                 {Array.from({ length: review.score }).map((_, index) => (
                     <Heart key={index} className="size-4 fill-main-500 text-main-500" />
@@ -33,6 +33,6 @@ export default function Review({ review }: { review: ReviewItem }) {
                 <span>{formatDate(review.createdAt)}</span>
             </div>
             <div className='w-full h-1'></div>
-        </div>
+        </article>
     )
 }

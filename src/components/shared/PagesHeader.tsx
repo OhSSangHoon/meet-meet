@@ -2,7 +2,7 @@
  * 모임 목록 헤더 컴포넌트 속성
  * @param type 모임 목록 타입
  */
-interface GatheringsHeaderProps {
+interface PagesHeaderProps {
   type: 'search' | 'saved' | 'review';
 }
 
@@ -22,12 +22,12 @@ const content = {
   }
 };
 
-export default function GatheringsHeader({ type }: GatheringsHeaderProps) {
+export default function PagesHeader({ type }: PagesHeaderProps) {
   return (
-    <div className="w-full flex flex-col dark:text-main-300">
+    <header className="w-full flex flex-col dark:text-main-300">
       <div className="w-full flex flex-row justify-between items-center">
         <div className="w-full flex flex-col justify-start gap-2">
-          <p className="text-[#374151] dark:text-main-100 text-base font-medium">
+          <p className="text-gray-500 dark:text-main-100 text-base font-medium">
             {content[type].subTitle}
           </p>
           <p className="text-2xl font-semibold">
@@ -35,6 +35,6 @@ export default function GatheringsHeader({ type }: GatheringsHeaderProps) {
           </p>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
