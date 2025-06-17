@@ -10,15 +10,15 @@ import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDia
 import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/utils/shared/date';
 import { CreateGatheringFormSchemaType, createGatheringFormSchema } from '@/utils/gatherings/createGatheringSchema';
+import { gatheringsQuery } from '@/queries/gatherings.query';
 import { X } from "lucide-react";
 import axios, { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import SelectionService from '@/components/gatherings/SelectionService';
 import InputField from '@/components/auth/InputField';
-import { gatheringsQuery } from '@/queries/gatherings.query';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ConfirmDialog'), { ssr: false });
-const DateTimePicker = dynamic(() => import('@/components/gatherings/DateTimePick'), { ssr: false });
+const DateTimePicker = dynamic(() => import('@/components/gatherings/DateTimePicker'), { ssr: false });
 
 interface CreateGatheringDialogProps {
     onClose: (shouldRefresh?: boolean) => void;

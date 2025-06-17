@@ -3,6 +3,7 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { shortenName } from '@/utils/shared/shortenName';
+import { validateProfileImage } from '@/utils/shared/validateProfileImage';
 import { SquarePen } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
@@ -20,7 +21,7 @@ export default function ProfileCard() {
       <div className="absolute -top-12 left-1/2 -translate-x-1/2 z-10">
         <div className="relative">
           <ImageWithFallback
-            src={!userImage || userImage === 'null' || userImage.trim() === '' ? 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg' : userImage}
+            src={validateProfileImage(userImage)}
             fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
             alt="프로필 이미지"
             width={120}

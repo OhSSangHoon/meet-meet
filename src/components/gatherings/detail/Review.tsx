@@ -1,4 +1,5 @@
 import { formatDate } from '@/utils/shared/date';
+import { validateProfileImage } from '@/utils/shared/validateProfileImage';
 import { ReviewItem } from '@/types/reviews';
 import { Heart } from 'lucide-react';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
@@ -20,7 +21,7 @@ export default function Review({ review }: { review: ReviewItem }) {
             <p className='text-sm'>{review.comment}</p>
             <div className='flex items-center gap-1 text-xs'>
                 <ImageWithFallback
-                    src={review.User?.image}
+                    src={validateProfileImage(review.User?.image)}
                     fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
                     alt='프로필 이미지'
                     width={32}

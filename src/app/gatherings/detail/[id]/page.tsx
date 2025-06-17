@@ -46,7 +46,7 @@ export async function generateMetadata(
  */
 async function getDetailReview(id: string): Promise<Reviews> {
     try {
-        const data = await serverFetcher<Reviews>(`/reviews?gatheringId=${id}&limit=4&offset=0`, { cache: 'force-cache' });
+        const data = await serverFetcher<Reviews>(`${EXTERNAL_PATHS.fetchDetailReview(Number(id))}`);
 
         if (
             data &&

@@ -1,4 +1,4 @@
-import { TIME_OPTIONS, DateTimeValue } from '@/utils/shared/date';
+import { TIME_OPTIONS, DateTimeValue, toKoreanTime } from '@/utils/shared/date';
 import { useState } from 'react';
 
 // 매직넘버 상수
@@ -23,8 +23,8 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
   const [minuteDropdownOpen, setMinuteDropdownOpen] = useState(false);
 
   // value가 없으면 오늘 날짜를 기본 선택으로 설정
-  const selectedDate = value 
-    ? new Date(value.year, value.month - 1, value.day) 
+  const selectedDate = value
+    ? new Date(value.year, value.month - 1, value.day)
     : today;
 
   const goToPrevMonth = () => {
@@ -106,6 +106,7 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
   return (
     <div className="w-full flex flex-col">
       <h1 className="font-bold text-gray-800 mb-3">{label}</h1>
+      <span className='text-sm text-gray-500'>현재 시간: {toKoreanTime(new Date()).toLocaleString()}</span>
 
       <div className="border border-gray-200 rounded-lg p-4 bg-white">
         <div className="flex items-center justify-between mb-4">
@@ -162,10 +163,10 @@ const DateTimePicker = ({ value, onChange, label }: DateTimePickerProps) => {
                 }}
                 className={`
                   w-8 h-8 text-sm rounded flex items-center justify-center relative
-                  ${isSelected 
-                    ? 'bg-main-500 text-white' 
-                    : currentMonth 
-                      ? 'hover:bg-gray-100 text-gray-900' 
+                  ${isSelected
+                    ? 'bg-main-500 text-white'
+                    : currentMonth
+                      ? 'hover:bg-gray-100 text-gray-900'
                       : 'text-gray-400 hover:bg-gray-50'
                   }
                 `}

@@ -7,6 +7,7 @@
  * @string REVIEWS -> 리뷰 목록 조회, 리뷰 생성
  * @string CHECK_JOINED -> 모임 상세 참여 확인
  * @function fetchGatheringDetail -> 모임 상세 정보 조회
+ * @function fetchDetailReview -> 모임 상세 리뷰 목록 조회
  * @function fetchGatheringParticipants -> 모임 상세 참여자 목록 조회
  * @function joinGathering -> 모임 참여
  * @function leaveGathering -> 모임 참여 취소
@@ -21,6 +22,7 @@ export const EXTERNAL_PATHS = {
     REVIEWS: '/reviews',
     CHECK_JOINED: '/gatherings/joined',
     fetchGatheringDetail: (id: number) => `/gatherings/${id}`,
+    fetchDetailReview: (id: number) => `/reviews?gatheringId=${id}&limit=4&offset=0`,
     fetchGatheringParticipants: (id: number) => `/gatherings/${id}/participants?limit=100`,
     joinGathering: (id: number) => `/gatherings/${id}/join`,
     cancelGathering: (id: number) => `/gatherings/${id}/cancel`,
