@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import { useQuery } from '@tanstack/react-query';
+import { allSavedQueries } from '@/queries/saved.query';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { Gathering } from '@/types/gatherings';
@@ -20,7 +21,7 @@ export default function SavedGatheringsUI() {
     const { savedIds } = useToggleSavedGatherings();
 
     const { data: savedGatherings = [] } = useQuery({
-        queryKey: ["allSavedGatherings", savedIds],
+        queryKey: allSavedQueries.idsByFilter(savedIds),
         queryFn: async () => {
             if (savedIds.length === 0) return [];
 

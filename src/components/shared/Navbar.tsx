@@ -2,8 +2,9 @@
 
 import { useToggleSavedGatherings } from '@/hooks/api/saved/useToggleSavedGatherings';
 import { usePathname } from 'next/navigation';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
+import { validateProfileImage } from '@/utils/shared/validateProfileImage';
 import { shortenName } from '@/utils/shared/shortenName';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/shadcn-ui/dropdown-menu';
 import DarkModeToggleButton from '@/components/shared/DarkModeToggleButton';
@@ -21,6 +22,10 @@ export default function Navbar() {
     const { savedIds } = useToggleSavedGatherings();
 
     const savedCounts = savedIds.length;
+
+    const profileImageSrc = useMemo(() => {
+        return validateProfileImage(userImage);
+    }, [userImage]);
 
     const navLinks = [
         { href: '/gatherings', label: '모임 찾기' },
@@ -63,7 +68,8 @@ export default function Navbar() {
                                 <DropdownMenuTrigger className='rounded-full cursor-pointer'>
                                     <div className='size-10 rounded-full border border-gray-300 dark:border-gray-600 overflow-hidden cursor-pointer'>
                                         <ImageWithFallback
-                                            src={!userImage || userImage === 'null' || userImage.trim() === '' ? 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg' : userImage}
+                                            key={userImage}
+                                            src={profileImageSrc}
                                             fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg'
                                             alt='네비게이션바 프로필 이미지'
                                             width={100}

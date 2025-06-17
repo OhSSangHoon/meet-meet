@@ -42,7 +42,7 @@ export const useFetchGatheringDetail = (
 
     const { data, isLoading, isError } = useQuery({
         enabled: !!id,
-        queryKey: [gatheringDetailQuery.detail(id)],
+        queryKey: gatheringDetailQuery.detail(id),
         queryFn: async () => {
             const detail = await fetchGatheringDetail(id)
             const participants = await fetchGatheringParticipants(id)

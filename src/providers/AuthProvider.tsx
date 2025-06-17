@@ -152,14 +152,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             const userEmail = localStorage.getItem('user_email');
             const userCompanyName = localStorage.getItem('user_company_name');
             const userImage = localStorage.getItem('user_image');
-            const VALID_USER_IMAGE = userImage && userImage !== 'null' && userImage !== '';
 
             if (storedToken) setToken(storedToken);
             if (userName) setUserName(userName);
             if (userId) setUserId(Number(userId));
             if (userEmail) setUserEmail(userEmail);
             if (userCompanyName) setUserCompanyName(userCompanyName);
-            if (VALID_USER_IMAGE) setUserImage(userImage);
+            if (userImage) setUserImage(userImage);
             setIsLoading(false);
         };
 

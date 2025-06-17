@@ -78,7 +78,7 @@ export default function Information({ detail, id, participants }: InformationPro
                                                 alt="프로필 이미지"
                                                 width={100}
                                                 height={100}
-                                                className={`size-8 rounded-full border border-gray-300 object-cover object-center ${i === 0 ? 'ml-0' : '-ml-2'}`}
+                                                className={`size-8 rounded-full border border-gray-300 object-cover object-center ${i === 0 ? 'ml-0' : '-ml-2'} pointer-events-none`}
                                             />
                                         </TooltipTrigger>
                                         <TooltipContent side="top" align="center" className="flex gap-1 rounded-lg p-2 shadow-lg">
@@ -106,7 +106,7 @@ export default function Information({ detail, id, participants }: InformationPro
                                                         alt="프로필 이미지"
                                                         width={100}
                                                         height={100}
-                                                        className="size-8 rounded-full border-2 border-white"
+                                                        className="size-8 rounded-full border-2 border-white pointer-events-none"
                                                     />
                                                     <span className='font-medium text-white'>{shortenName(participant?.User?.name, 15)}</span>
                                                 </div>

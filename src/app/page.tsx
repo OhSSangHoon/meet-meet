@@ -1,3 +1,7 @@
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { serverFetcher } from '@/lib/api/serverFetcher';
+import { Gathering } from '@/types/gatherings';
+import { getTimeRemaining, toKoreanTime } from '@/utils/shared/date';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,12 +19,32 @@ interface FeatureCardProps {
 }
 
 interface GatheringCardProps {
+  link: string;
   title: string;
   schedule: string;
-  category: string;
+  category: 'MINDFULNESS' | 'WORKATION' | 'OFFICE_STRETCHING';
   participants: number;
-  categoryColor: string;
   image: string;
+}
+
+async function getFourMostPopularGatherings(): Promise<Gathering[]> {
+  try {
+    let data: Gathering[] = [];
+    const response = await serverFetcher(`${EXTERNAL_PATHS.GATHERINGS}?sortBy=participantCount&sortOrder=desc`, { cache: 'force-cache', next: { revalidate: 60 * 60 } });
+    if (Array.isArray(response)) data = response as Gathering[];
+
+    const now = new Date();
+    const koreanNow = toKoreanTime(now);
+
+    // 모집 마감 안 지난 모임만 필터링
+    const filtered = data.filter((gathering) => new Date(gathering.registrationEnd) > koreanNow);
+
+    // 상위 4개만 반환
+    return filtered.slice(0, 4);
+  } catch (error) {
+    console.error('인기 모임 4개 조회 실패:', error);
+    return [];
+  }
 }
 
 /** 피처 카드 */
@@ -40,35 +64,52 @@ const FeatureCard = ({ icon, title, description, gradient }: FeatureCardProps) =
 
 /** 지금 핫한 모임 카드  */
 const GatheringCard = ({
+  link,
   title,
   schedule,
   category,
   participants,
-  categoryColor,
   image
 }: GatheringCardProps) => (
-  <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all">
+  <Link href={link} className="group p-6 rounded-2xl shadow-sm border border-gray-100 bg-white hover:shadow-md hover:border-main-300 transition-all">
     <div className="space-y-4">
       {/* 모임 썸네일 위치 */}
-      <Image src={image} alt={title} width={300} height={128} className="w-full h-32 object-cover rounded-xl" />
+      <Image src={image} alt={title} width={300} height={128} className="w-full h-32 object-cover rounded-xl pointer-events-none" />
       <div className="space-y-2">
-        <h3 className="font-semibold text-gray-800">{title}</h3>
+        <h3 className="font-semibold text-gray-800 group-hover:text-main-500 transition-all">{title}</h3>
         <p className="text-sm text-gray-600">{schedule}</p>
         <div className="flex items-center gap-2">
-          <span className={`text-xs ${categoryColor} text-white px-2 py-1 rounded-full`}>
+          <span className={`px-2 py-1 rounded-full bg-main-400 text-xs text-white`}>
             {category}
           </span>
-          <span className="text-xs text-gray-500">{participants}명 참여</span>
+          <span className="text-sm text-gray-500"><span className='font-semibold text-main-500'>{participants}</span>명 참여</span>
         </div>
       </div>
     </div>
-  </div>
+  </Link>
 );
 
 export default async function MainPage() {
+  const fourMostPopularGatherings = await getFourMostPopularGatherings();
+
+  const gatheringTypes = [
+    {
+      id: 'OFFICE_STRETCHING',
+      title: '엔터테인먼트',
+    },
+    {
+      id: 'MINDFULNESS',
+      title: '액티비티',
+    },
+    {
+      id: 'WORKATION',
+      title: '도란도란',
+    }
+  ];
+
   return (
     // 색상 경계를 없애기 위해 
-    <div className="min-h-screen dark:bg-dark"> 
+    <div className="min-h-screen dark:bg-dark">
       <div className="contents-container">
         {/* Hero Section */}
         <section className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
@@ -119,7 +160,8 @@ export default async function MainPage() {
                 alt="메인 히어로 이미지"
                 width={1000}
                 height={1000}
-                className="w-2/3 mx-auto" />
+                priority
+                className="w-2/3 mx-auto pointer-events-none" />
             </div>
             {/* Floating Elements */}
             <div className="absolute top-4 right-4 w-16 h-16 bg-[#F6D55C] rounded-full flex items-center justify-center shadow-lg animate-bounce">
@@ -149,7 +191,7 @@ export default async function MainPage() {
             <FeatureCard
               icon="👥"
               title="북적북적/도란도란"
-              description="외향적인 성격의 모임, 내향적인 성격의 모임을 구분했어요"
+              description="모임의 성격을 기준으로 구분했어요"
               gradient="bg-gradient-to-r from-main-jade to-main-apricot"
 
             />
@@ -176,51 +218,32 @@ export default async function MainPage() {
           <div className="space-y-12">
             <div className="text-center space-y-4">
               <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
-                지금 <span className="bg-gradient-to-r from-main-apricot to-[#F472B6] bg-clip-text text-transparent">핫한</span> 모임들
+                지금 <span className="bg-gradient-to-r from-main-apricot to-[#F472B6] bg-clip-text text-transparent">HOT한</span> 모임들
               </h2>
               <p className="text-lg text-gray-600 dark:text-white">
-                다양한 사람들이 만나고 있는 인기 모임을 확인해보세요
+                다양한 사람들이 만나고 있는 인기 모임에 참여해보시는 건 어떤가요?
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <GatheringCard
-                title="반포 러닝 크루 모집합니다!"
-                schedule="13일 후 마감"
-                category="액티비티"
-                participants={10}
-                categoryColor="bg-[#6EE7B7]"
-                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/running_p79a4b.avif"
-              />
-              <GatheringCard
-                title="원데이 클래스 같이 들어요"
-                schedule="곧 마감"
-                category="액티비티"
-                participants={4}
-                categoryColor="bg-[#F6D55C]"
-                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/oneday_class_kwsiry.avif"
-              />
-              <GatheringCard
-                title="축구 보면서 맥주 고고고"
-                schedule="3시간 후 마감"
-                category="도란도란"
-                participants={6}
-                categoryColor="bg-[#8B5CF6]"
-                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/pub_vqo6b7.avif"
-              />
-              <GatheringCard
-                title="더 현대 팝업 가실 분?!"
-                schedule="6일 2시간 후 마감"
-                category="엔터테인먼트"
-                participants={5}
-                categoryColor="bg-[#F472B6]"
-                image="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749715783/popup_wcwq04.avif"
-              />
+              {fourMostPopularGatherings.map((gathering) => {
+                return (
+                  <GatheringCard
+                    key={`${gathering.id} - ${gathering.dateTime}`}
+                    title={gathering.name}
+                    link={`/gatherings/detail/${gathering.id}`}
+                    schedule={getTimeRemaining(gathering.registrationEnd)}
+                    category={gatheringTypes.find(type => type.id === gathering.type)?.title as 'MINDFULNESS' | 'WORKATION' | 'OFFICE_STRETCHING'}
+                    participants={gathering.participantCount}
+                    image={gathering.image}
+                  />
+                )
+              })}
             </div>
 
             <div className="text-center">
               <Link href="/gatherings" className='inline-block'>
-                <div className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-gray-200 bg-button-text text-button font-semibold transition-all">
+                <div className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-main-300 bg-button-text text-button font-semibold transition-all">
                   더 많은 모임 보기
                 </div>
               </Link>
@@ -236,7 +259,7 @@ export default async function MainPage() {
               <div className="flex items-center gap-3">
                 {/* 로고 이미지 위치 */}
                 <div className='w-10 h-10 bg-gray-50 rounded-lg hover:scale-110 transition-transform cursor-pointer'>
-                  <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713054/logo_hero_lp6zw5.avif" alt="로고 이미지" width={1000} height={1000} className="w-full h-full" />
+                  <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713054/logo_hero_lp6zw5.avif" alt="로고 이미지" width={1000} height={1000} className="w-full h-full pointer-events-none" />
                 </div>
                 <span className="text-xl font-bold">Meet Meet</span>
               </div>
@@ -267,7 +290,7 @@ export default async function MainPage() {
               <div className="flex gap-3">
                 <a href="https://www.github.com/window-ook/meet-meet" target="_blank" className="hover:text-white transition-colors">
                   <div title='Github 링크' className="size-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-                    <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749972038/github_oqdvnr.svg" alt="인스타그램 로고" width={500} height={500} className="size-5" />
+                    <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749972038/github_oqdvnr.svg" alt="깃허브 로고" width={500} height={500} className="size-5 pointer-events-none" />
                   </div>
                 </a>
               </div>
