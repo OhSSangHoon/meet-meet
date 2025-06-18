@@ -4,6 +4,7 @@ import { useFetchCreatedGatherings } from '@/hooks/api/mypage/useFetchCreatedGat
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { getTimeRemaining } from '@/utils/shared/date';
+import { THUMBNAIL_CLASSNAME, THUMBNAIL_WIDTH } from '@/utils/mypage/constants/thumbnailConstants';
 import dynamic from 'next/dynamic';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import GatheringInformation from '@/components/mypage/GatheringInformation';
@@ -43,7 +44,7 @@ export default function CreatedGatherings() {
                 alt='모임 썸네일'
                 width={1000}
                 height={1000}
-                className="w-full sm:w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
+                className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
               />
             </div>
 

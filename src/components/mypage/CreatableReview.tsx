@@ -1,5 +1,6 @@
 import { useGatheringsStore } from '@/store/gatheringsStore';
 import { Gathering } from '@/types/gatherings';
+import { THUMBNAIL_CLASSNAME, THUMBNAIL_WIDTH } from '@/utils/mypage/constants/thumbnailConstants';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import GatheringInformation from '@/components/mypage/GatheringInformation';
 import Button from '@/components/shared/Button';
@@ -18,7 +19,7 @@ export default function CreatableReview({ gathering, myReviewsTab, userId, onOpe
                     alt="모임 썸네일"
                     width={1000}
                     height={1000}
-                    className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
+                    className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
                 />
             </div>
             {/* 정보 */}

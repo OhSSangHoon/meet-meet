@@ -1,5 +1,6 @@
 import { ReviewItem } from '@/types/reviews';
 import { formatDate, formatTime } from '@/utils/shared/date';
+import { THUMBNAIL_CLASSNAME, THUMBNAIL_WIDTH } from '@/utils/mypage/constants/thumbnailConstants';
 import { Heart } from 'lucide-react';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 
@@ -14,7 +15,7 @@ export default function CreatedReview({ review }: { review: ReviewItem }) {
                     alt="모임 썸네일"
                     width={1000}
                     height={1000}
-                    className="w-full sm:w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
+                    className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
                 />
             </div>
             <div className="flex flex-col gap-1">

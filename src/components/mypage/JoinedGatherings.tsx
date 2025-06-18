@@ -5,6 +5,7 @@ import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGatheri
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { getTimeRemaining, toKoreanTime } from '@/utils/shared/date';
+import { THUMBNAIL_CLASSNAME, THUMBNAIL_WIDTH } from '@/utils/mypage/constants/thumbnailConstants';
 import { CheckCircle } from "lucide-react"
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
@@ -92,7 +93,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
               alt='모임 썸네일'
               width={1000}
               height={1000}
-              className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
+              className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
             />
           </figure>
 
@@ -136,7 +137,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
                         setSelectedTab(1);
                         setMyReviewsTab(1);
                       }}
-                      customClassName='w-24 sm:w-36 text-sm md:text-base'
+                      customClassName='w-32 sm:w-36 text-sm md:text-base'
                     />
                   ) : (
                     // 리뷰 작성 미완료 
