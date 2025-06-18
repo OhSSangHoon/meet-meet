@@ -92,7 +92,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
               alt='모임 썸네일'
               width={1000}
               height={1000}
-              className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
+              className="w-full sm:w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
             />
           </figure>
 
@@ -136,7 +136,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
                         setSelectedTab(1);
                         setMyReviewsTab(1);
                       }}
-                      customClassName='w-24 sm:w-36 text-sm md:text-base'
+                      customClassName='w-32 sm:w-36 text-sm md:text-base'
                     />
                   ) : (
                     // 리뷰 작성 미완료 
