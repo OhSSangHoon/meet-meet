@@ -3,7 +3,6 @@
 import { useMemo } from 'react';
 import { ReviewItem } from '@/types/reviews';
 import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteReviews';
-import { isSameDateForFilter } from '@/utils/shared/date';
 import { decodeHtmlEntities } from '@/utils/shared/decodeHtmlEntities';
 import ReviewStats from '@/components/reviews/ReviewStats';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
@@ -14,12 +13,6 @@ const TEXT_GRAY_XS_STYLES = "text-xs text-gray-400";
 
 /**
  * 리뷰 목록 프로퍼티
- * @param ssrReviews 서버 렌더링 리뷰 목록
- * @param selectedMainType 선택된 모임 주제
- * @param selectedSubType 선택된 모임 서브타입
- * @param filters 필터 옵션
- * @param sort 정렬 옵션
- * @param enableInfiniteScroll 무한스크롤 활성화 여부
  */
 interface ReviewsListProps {
     ssrReviews: ReviewItem[];
@@ -38,53 +31,39 @@ interface ReviewsListProps {
 }
 
 /**
- * 리뷰 타입 필터링 (클라이언트 사이드)
- * @param reviewsList 리뷰 목록
- * @param selectedMainType 선택된 메인 타입
- * @param selectedSubType 선택된 서브 타입
- * @returns 필터링된 리뷰 목록
+ * 리뷰 타입 필터링
  */
 const filterReviewsByType = (
     reviewsList: ReviewItem[],
     selectedMainType: string,
     selectedSubType: string
 ): ReviewItem[] => {
-
     if (selectedMainType === 'DORANDORAN') {
-        const result = reviewsList.filter(review =>
+        return reviewsList.filter(review =>
             review.Gathering && review.Gathering.type === 'WORKATION'
         );
-        return result;
     } else {
         if (selectedSubType === 'ALL') {
-            const result = reviewsList.filter(review =>
+            return reviewsList.filter(review =>
                 review.Gathering && (
                     review.Gathering.type === 'OFFICE_STRETCHING' ||
                     review.Gathering.type === 'MINDFULNESS'
                 )
             );
-
-            return result;
         } else {
-            const result = reviewsList.filter(review =>
+            return reviewsList.filter(review =>
                 review.Gathering && review.Gathering.type === selectedSubType
             );
-            return result;
         }
     }
 };
 
 /**
  * 리뷰 위치/날짜 필터링 함수
- * @param reviewsList 리뷰 목록
- * @param location 위치
- * @param date 날짜
- * @returns 필터링된 리뷰 목록
  */
 const filterReviewsByLocationAndDate = (
     reviewsList: ReviewItem[],
-    location: string,
-    date: string
+    location: string
 ): ReviewItem[] => {
     return reviewsList.filter(review => {
         // 위치 필터 (모임 위치 기준)
@@ -92,35 +71,23 @@ const filterReviewsByLocationAndDate = (
             return false;
         }
 
-        // 날짜 필터 (모임 개최일 기준)
-        if (date && review.Gathering?.dateTime) {
-            if (!isSameDateForFilter(review.Gathering.dateTime, date)) {
-                return false;
-            }
-        }
-
+        // 날짜 필터는 서버에서 처리하므로 클라이언트에서는 제거
         return true;
     });
 };
 
 /**
  * 중복 제거 함수
- * @param reviews 리뷰 목록
- * @returns 중복 제거된 리뷰 목록
  */
 const removeDuplicateReviews = (reviews: ReviewItem[]): ReviewItem[] => {
     const seen = new Set<string>();
-    const duplicates: ReviewItem[] = [];
-
-    const result = reviews.filter(review => {
+    return reviews.filter(review => {
         if (seen.has(review.id)) {
-            duplicates.push(review);
             return false;
         }
         seen.add(review.id);
         return true;
     });
-    return result;
 };
 
 export default function ReviewsList({
@@ -148,31 +115,19 @@ export default function ReviewsList({
         sortOrder: sort.sortOrder
     });
 
-    // SSR 데이터 타입 및 위치/날짜 필터링
-    const filteredSSRReviews = useMemo(() => {
-        // 1. 타입 필터링
-        const typeFiltered = filterReviewsByType(ssrReviews, selectedMainType, selectedSubType);
-
-        // 2. 위치/날짜 필터링
-        const locationDateFiltered = filterReviewsByLocationAndDate(typeFiltered, filters.location, filters.date);
-
-        return locationDateFiltered;
-    }, [ssrReviews, selectedMainType, selectedSubType, filters]);
-
-    // CSR 데이터 타입 필터링
-    const filteredCSRReviews = useMemo(() => {
-        const result = filterReviewsByType(infiniteReviews, selectedMainType, selectedSubType);
-
-        return result;
-    }, [infiniteReviews, selectedMainType, selectedSubType]);
-
-    // 중복 제거된 최종 리뷰 목록
+    // 최종 리뷰 목록 처리
     const allReviews = useMemo(() => {
-        const combined = [...filteredSSRReviews, ...filteredCSRReviews];
+        // 1. 서버에서 이미 정렬된 데이터들을 단순 병합
+        const combined = [...ssrReviews, ...infiniteReviews];
         const deduplicated = removeDuplicateReviews(combined);
 
-        return deduplicated;
-    }, [filteredSSRReviews, filteredCSRReviews]);
+        // 2. 타입 필터링만 수행
+        const typeFiltered = filterReviewsByType(deduplicated, selectedMainType, selectedSubType);
+
+        const locationDateFiltered = filterReviewsByLocationAndDate(typeFiltered, filters.location);
+
+        return locationDateFiltered;
+    }, [ssrReviews, infiniteReviews, selectedMainType, selectedSubType, filters]);
 
     // 로딩 상태 계산
     const isLoading = isFilterChanged || (enableInfiniteScroll && status === 'pending');

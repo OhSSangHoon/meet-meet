@@ -1,6 +1,5 @@
 import { internalClient } from "@/lib/api/clientFetchers";
 import { ReviewItem } from "@/types/reviews";
-import { isSameDateForFilter } from '@/utils/shared/date';
 
 // 매직넘버 상수
 const ITEMS_PER_PAGE = 3; // 페이지당 리뷰 개수
@@ -45,6 +44,11 @@ export async function fetchReviewsPaginated(
             params.location = location.trim();
         }
 
+        // 날짜 필터 (서버에서 처리)
+        if (date && date.trim() !== '') {
+            params.date = date.trim();
+        }
+
         // 리뷰 목록 조회
         const response = await internalClient.get('/api/reviews', { params });
 
@@ -62,17 +66,6 @@ export async function fetchReviewsPaginated(
                 console.error('리뷰 응답 데이터 형식 오류:', response.data);
                 return [];
             }
-        }
-
-        // 한국 시간 기준 날짜 필터링
-        if (date && date.trim() !== '') {
-            const targetDate = date.trim();
-
-            reviews = reviews.filter((review: ReviewItem) => {
-                if (!review.Gathering?.dateTime) return false;
-
-                return isSameDateForFilter(review.Gathering.dateTime, targetDate);
-            });
         }
 
         // DALLAEMFIT 서브타입 필터링
@@ -98,38 +91,3 @@ export async function fetchReviewsPaginated(
         return [];
     }
 }
-
-/**
- * 리뷰 타입 필터링
- * @param reviewsList 리뷰 목록
- * @param selectedMainType 모임 주제
- * @param selectedSubType 모임 서브타입
- * @returns 필터링된 리뷰 목록
- */
-export const filterReviews = (
-    reviewsList: ReviewItem[],
-    selectedMainType: string,
-    selectedSubType: string
-): ReviewItem[] => {
-    // 도란도란 (WORKATION)
-    if (selectedMainType === 'DORANDORAN') {
-        return reviewsList.filter(review =>
-            review.Gathering && review.Gathering.type === 'WORKATION'
-        );
-    } else {
-        // 북적북적 (DALLAEMFIT)
-        if (selectedSubType === 'ALL' || !selectedSubType) {
-            return reviewsList.filter(review =>
-                review.Gathering && (
-                    review.Gathering.type === 'OFFICE_STRETCHING' ||
-                    review.Gathering.type === 'MINDFULNESS'
-                )
-            );
-        } else {
-            // 특정 서브타입만
-            return reviewsList.filter(review =>
-                review.Gathering && review.Gathering.type === selectedSubType
-            );
-        }
-    }
-};

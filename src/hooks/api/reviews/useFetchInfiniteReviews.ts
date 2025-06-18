@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { fetchReviewsPaginated } from '@/utils/reviews/fetch';
+import { fetchReviewsPaginated } from '@/utils/reviews/fetchPaginatedReviews';
 import { ReviewItem } from '@/types/reviews';
 import { reviewsQuery } from '@/queries/review.query';
 
@@ -90,7 +90,6 @@ export function useFetchInfiniteReviews({
             return nextPage;
         },
         initialPageParam: startPage,
-        // 스크롤 기반 지연 로딩
         enabled: enabled && infiniteScrollEnabled && hasTriggeredFirstFetch,
         retry: 2,
         refetchOnWindowFocus: false,

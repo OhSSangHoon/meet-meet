@@ -59,12 +59,14 @@ async function getFilteredReviews(searchParams: {
             params.set('location', location.trim());
         }
 
-        // 날짜 필터
+        // 날짜 필터 (서버에서 처리)
         if (date?.trim() && DATE_REGEX_PATTERN.test(date.trim())) {
             params.set('date', date.trim());
         }
 
-        const data = await serverFetcher<Reviews>(`${EXTERNAL_PATHS.REVIEWS}?${params.toString()}`, { cache: 'force-cache' });
+        const data = await serverFetcher<Reviews>(`${EXTERNAL_PATHS.REVIEWS}?${params.toString()}`, { 
+            cache: 'no-store'
+        });
 
         // 응답 데이터 구조 확인
         let reviews: ReviewItem[] = [];
@@ -77,21 +79,7 @@ async function getFilteredReviews(searchParams: {
             return [];
         }
 
-        if (Array.isArray(reviews)) {
-            // DALLAEMFIT의 경우 서브타입 필터링
-            if (mainType === 'DALLAEMFIT') {
-                return reviews.filter((review: ReviewItem) =>
-                    review.Gathering && (
-                        review.Gathering.type === 'OFFICE_STRETCHING' ||
-                        review.Gathering.type === 'MINDFULNESS'
-                    )
-                );
-            }
-            return reviews;
-        } else {
-            console.warn('data가 배열이 아닙니다:', reviews);
-            return [];
-        }
+        return reviews;
 
     } catch (error) {
         console.error('리뷰 SSR 에러:', error);

@@ -6,7 +6,7 @@ import { ChevronDown, Clock, Timer, Star, Users } from 'lucide-react';
 // 스타일 상수
 const BUTTON_BASE_STYLES = "flex items-center gap-2 padding-button bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:border-main-300 focus:outline-none focus:ring-2 focus:ring-main-500 focus:border-main-500";
 const DROPDOWN_CONTAINER_STYLES = "absolute top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50";
-const DROPDOWN_ITEM_BASE_STYLES = "w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150";
+const DROPDOWN_ITEM_BASE_STYLES = "w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-gray-50 dark:bg-dark-2 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-150";
 const SELECTED_INDICATOR_STYLES = "w-2 h-2 bg-main-600 rounded-full mt-1.5 flex-shrink-0";
 
 // 매직넘버 상수
