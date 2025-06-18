@@ -48,7 +48,14 @@ export function useFetchInfiniteReviews({
     const normalizedDate = date?.trim() || '';
 
     // 쿼리 키
-    const queryKey = [...reviewsQuery.infinite()];
+    const queryKey = reviewsQuery.infinite(
+        mainType,
+        normalizedLocation,
+        normalizedDate,
+        sortBy,
+        sortOrder,
+        startPage
+    );
 
     // 리뷰 무한스크롤 데이터
     const {

@@ -136,7 +136,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
                         setSelectedTab(1);
                         setMyReviewsTab(1);
                       }}
-                      customClassName='w-24 sm:w-36'
+                      customClassName='w-24 sm:w-36 text-sm md:text-base'
                     />
                   ) : (
                     // 리뷰 작성 미완료 
@@ -144,7 +144,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
                       variant='default'
                       text='리뷰 남기기'
                       onClick={() => onOpenReviewDialog({ userId, gatheringId: Number(data.id) })}
-                      customClassName='w-28 sm:w-32'
+                      customClassName='w-28 sm:w-32 text-sm md:text-base'
                     />
                   )}
                 </div>
@@ -155,7 +155,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
                 variant='cancel'
                 text='참여 취소하기'
                 onClick={() => leaveGathering(Number(data?.id))}
-                customClassName='w-28 sm:w-32'
+                customClassName='w-28 sm:w-32 text-sm md:text-base'
               />
             </div>
           </article>

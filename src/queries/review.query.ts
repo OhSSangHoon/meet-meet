@@ -12,5 +12,5 @@ export const reviewsQuery = {
         sortBy?: string,
         sortOrder?: string,
         startPage?: number
-    ) => [...reviewsQuery.all(), { mainType, location, date, sortBy, sortOrder, startPage }] as const,
+    ) => [...reviewsQuery.all(), 'infinite', { mainType, location, date, sortBy, sortOrder, startPage }] as const,
 }

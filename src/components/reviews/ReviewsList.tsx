@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { ReviewItem } from '@/types/reviews';
 import { useFetchInfiniteReviews } from '@/hooks/api/reviews/useFetchInfiniteReviews';
 import { isSameDateForFilter } from '@/utils/shared/date';
+import { decodeHtmlEntities } from '@/utils/shared/decodeHtmlEntities';
 import ReviewStats from '@/components/reviews/ReviewStats';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import HeartRating from '@/components/reviews/HeartRating';
@@ -211,7 +212,7 @@ export default function ReviewsList({
                                     {/* 평점 */}
                                     <HeartRating score={review.score} />
                                     {/* 리뷰 내용 */}
-                                    <p className="text-sm text-gray-700 mt-2 mb-3 dark:text-white">{review.comment}</p>
+                                    <p className="text-sm text-gray-700 mt-2 mb-3 dark:text-white">{decodeHtmlEntities(review.comment)}</p>
                                     {/* 모임 정보 */}
                                     <div className="space-y-1">
                                         <p className={TEXT_GRAY_XS_STYLES}>

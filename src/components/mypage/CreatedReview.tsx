@@ -14,7 +14,7 @@ export default function CreatedReview({ review }: { review: ReviewItem }) {
                     alt="모임 썸네일"
                     width={1000}
                     height={1000}
-                    className="w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
+                    className="w-full sm:w-[17.5rem] h-[10rem] rounded-xl object-cover pointer-events-none"
                 />
             </div>
             <div className="flex flex-col gap-1">

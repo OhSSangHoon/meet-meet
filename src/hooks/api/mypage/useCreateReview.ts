@@ -9,6 +9,7 @@ import { AxiosError } from 'axios';
 import { isErrorResponse } from '@/lib/api/surfGuard';
 import { myPageQuery } from '@/queries/mypage.query';
 import { gatheringDetailQuery } from '@/queries/gatherings.query';
+import { reviewsQuery } from '@/queries/review.query';
 
 interface CreateReviewParams {
     gatheringId: number;
@@ -33,9 +34,10 @@ export const useCreateReview = ({ token, onCallback }: GatheringApiParams) => {
             return response.data;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: myPageQuery.myReviews(token!) });
             queryClient.invalidateQueries({ queryKey: myPageQuery.joinedGatherings(token!) });
+            queryClient.invalidateQueries({ queryKey: myPageQuery.myReviews(token!) });
             queryClient.invalidateQueries({ queryKey: gatheringDetailQuery.reviews(currentGatheringId!) });
+            queryClient.invalidateQueries({ queryKey: reviewsQuery.all() });
             onCallback?.('리뷰가 성공적으로 등록되었습니다');
         },
         onError: (error) => {
