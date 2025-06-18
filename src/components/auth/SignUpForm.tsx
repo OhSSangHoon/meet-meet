@@ -76,7 +76,7 @@ export default function SignUpForm() {
                 label="이름"
                 id="user-name"
                 type="text"
-                placeholder="이름을 입력해 주세요"
+                placeholder="이름 입력"
                 {...register('name')}
                 disabled={isSubmitted}
                 isError={errors.name?.message}
@@ -85,7 +85,7 @@ export default function SignUpForm() {
                 label="이메일"
                 id="email"
                 type="email"
-                placeholder="이메일을 입력해 주세요"
+                placeholder="이메일 입력"
                 {...register('email')}
                 disabled={isSubmitted}
                 isError={errors.email?.message}
@@ -95,7 +95,7 @@ export default function SignUpForm() {
                 label='크루'
                 id='company-name'
                 type='text'
-                placeholder='크루 이름을 입력해 주세요'
+                placeholder='크루 이름 입력'
                 {...register('companyName')}
                 disabled={isSubmitted}
                 isError={errors.companyName?.message}
@@ -104,7 +104,7 @@ export default function SignUpForm() {
                 label='비밀번호'
                 id='password'
                 type='password'
-                placeholder='비밀번호를 입력해 주세요'
+                placeholder='비밀번호 입력'
                 {...register('password')}
                 disabled={isSubmitted}
                 handlePasswordVisibility={() => setIsPasswordVisible((v) => !v)}
@@ -123,7 +123,7 @@ export default function SignUpForm() {
                         type={isPasswordCheckVisible ? 'text' : 'password'}
                         id="password-check"
                         className={`w-full rounded-lg bg-gray-50 p-2.5 text-sm border-2 focus:outline-none ${!isPasswordMatch ? 'border-red-600' : 'focus:border-main-300'}`}
-                        placeholder="비밀번호를 다시 한 번 입력해 주세요"
+                        placeholder="비밀번호 다시 입력"
                         onChange={(e) => setPasswordCheck(e.target.value)}
                     />
                     <button

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-const DESCRIPTION_STYLE = 'text-2xs sm:text-sm lg:text-base text-gray-600 dark:text-gray-200';
+const DESCRIPTION_STYLE = 'text-sm lg:text-base text-gray-600 dark:text-gray-200';
 
 /** 로그인 폼, 회원가입 폼 배경 이미지 */
 export default function AuthPoster() {
@@ -15,7 +15,7 @@ export default function AuthPoster() {
                 sizes="(max-width: 500px) 300px, (max-width: 700px) 400px, 800px"
                 className='w-[10rem] h-[14rem] md:w-[18rem] md:h-[26rem] lg:w-[22rem] lg:h-[32rem] hover:scale-105 transtion-all duration-200 ease-in-out pointer-events-none'
             />
-            <figcaption>
+            <figcaption className='flex flex-col items-center justify-center'>
                 <h2 className='mb-1 text-lg lg:text-2xl font-bold'>미리 계획하지 않아도 괜찮아요.</h2>
                 <p className={`${DESCRIPTION_STYLE}`}>MeetMeet과 함께라면 언제든지, 어디서든지</p>
                 <p className={`${DESCRIPTION_STYLE}`}>누구와도 의미 있는 만남을 시작할 수 있습니다.</p>

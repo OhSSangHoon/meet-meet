@@ -170,6 +170,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         if (isLoading) return; // 로딩 중이면 아무것도 하지 않음
         if (!token && pathname === '/mypage') setSignInDialogOpen(true); // 마이페이지: 로그인 필요
         if (!token && pathname === '/saved') setSignInDialogOpen(true); // 찜한 모임: 로그인 필요
+        if (!token && pathname === '/auth/profile') setSignInDialogOpen(true); // 프로필 수정: 로그인 필요
         if (!pathname.includes('/auth')) setPreviousPath(pathname); // 로그인 후 이전 경로 저장
         if (token && pathname === '/auth/signin') router.replace(previousPath); // 로그인: 로그인 되어있는 경우, 이전 경로로 이동
         if (token && pathname === '/auth/signup') router.replace('/'); // 회원가입: 로그인 되어있는 경우, 메인페이지로 이동(이건 직접 주소 입력으로 뚫고 들어오는 경우 때문에 추가)
