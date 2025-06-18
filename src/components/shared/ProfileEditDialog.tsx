@@ -124,13 +124,13 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
         >
             <h1 className='text-2xl font-semibold text-white'>PROFILE EDIT</h1>
             <form
-                className="w-full max-w-md p-6 rounded-md bg-white shadow-md flex flex-col gap-4"
+                className="w-full max-w-md p-6 rounded-md bg-white dark:bg-dark-2 shadow-md flex flex-col gap-4"
                 onSubmit={handleSubmit(onSubmit)}
                 aria-labelledby="profile-edit-title"
             >
                 <h2 id="profile-edit-title" className="sr-only">프로필 수정</h2>
                 <div className="grid grid-cols-3 items-center gap-y-6 gap-x-4 w-full mb-2">
-                    <label htmlFor="profile-image" className="col-span-1 text-left font-semibold">IMAGE (1:1)</label>
+                    <label htmlFor="profile-image" className="col-span-1 text-left text-global-text dark:text-white font-semibold">IMAGE (1:1)</label>
                     <div className="col-span-2 flex items-center gap-4">
                         <Button
                             variant='cancel'

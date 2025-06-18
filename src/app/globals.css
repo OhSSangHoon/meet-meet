@@ -9,8 +9,8 @@ html {
 
 @theme {
   /* 브레이크 포인트 */
-  --breakpoint-sm: 376px;
-  --breakpoint-md: 745px;
+  --breakpoint-sm: 401px;
+  --breakpoint-md: 801px;
   --breakpoint-lg: 1101px;
 
   /* 폰트 */
@@ -186,7 +186,7 @@ html {
 
   /* 페이지의 컨텐츠 컨테이너 */
   .contents-container {
-    @apply max-w-screen-lg min-h-screen h-full mx-auto sm:px-4 md:px-20 pt-2 md:pt-8 pb-4 md:pb-10 dark:bg-dark flex flex-col gap-4 dark:text-gray-100;
+    @apply max-w-screen-lg min-h-screen h-full mx-auto px-4 md:px-20 pt-2 md:pt-8 pb-4 md:pb-10 dark:bg-dark flex flex-col gap-4 dark:text-gray-100;
   }
 
   /* 버튼 padding */

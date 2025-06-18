@@ -1,3 +1,4 @@
+import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { serverFetcher } from '@/lib/api/serverFetcher';
 import { Gathering } from '@/types/gatherings';
@@ -7,8 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: `Meet Meet - 특별한 만남`,
-  description: `Meet Meet 홈페이지 입니다.`,
+  title: 'Meet Meet - 특별한 만남',
+  description: 'Meet Meet 홈페이지 입니다.',
 };
 
 interface FeatureCardProps {
@@ -28,7 +29,6 @@ interface GatheringCardProps {
 }
 
 const SOCIAL_PROOF_STYLE = `size-10 rounded-full border-2 border-white flex items-center justify-center`;
-const FLOATING_ELEMENT_STYLE = `absolute top-4 right-4 size-16 rounded-full flex items-center justify-center shadow-lg animate-bounce`;
 const FOOTER_TEXT_BUTTON_STYLE = `hover:text-white transition-colors`;
 
 const GATHERING_TYPES = [
@@ -90,18 +90,24 @@ const GatheringCard = ({
   participants,
   image
 }: GatheringCardProps) => (
-  <Link href={link} className="group p-6 rounded-2xl shadow-sm border border-gray-100 bg-white hover:shadow-md hover:border-main-300 transition-all">
+  <Link href={link} className="group p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-300 bg-white dark:bg-dark-2 hover:shadow-md hover:border-main-300 dark:hover:border-main-400 transition-all">
     <div className="space-y-4">
       {/* 모임 썸네일 위치 */}
-      <Image src={image} alt={title} width={300} height={128} className="w-full h-32 object-cover rounded-xl pointer-events-none" />
+      <ImageWithFallback
+        src={image}
+        fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
+        alt={title}
+        width={300}
+        height={128}
+        className="w-full h-32 object-cover rounded-xl pointer-events-none" />
       <div className="space-y-2">
-        <h3 className="font-semibold group-hover:text-main-500 transition-all">{title}</h3>
-        <p className="text-sm text-gray-500">{schedule}</p>
+        <h3 className="font-semibold group-hover:text-main-500 dark:text-white dark:group-hover:text-main-500 transition-all">{title}</h3>
+        <p className="text-sm text-gray-500 dark:text-white">{schedule}</p>
         <div className="flex items-center gap-2">
           <span className={`px-2 py-1 rounded-full bg-main-400 text-xs text-white`}>
             {category}
           </span>
-          <span className="text-sm text-gray-500"><span className='font-semibold text-main-500'>{participants}</span>명 참여</span>
+          <span className="text-sm text-gray-500 dark:text-white"><span className='font-semibold text-main-500'>{participants}</span>명 참여</span>
         </div>
       </div>
     </div>
@@ -115,7 +121,7 @@ export default async function MainPage() {
     // 색상 경계를 없애기 위해 
     <main className="bg-transparent contents-container">
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
+      <header className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
         <div className="flex-1 space-y-8">
           <div className="space-y-4">
             <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold leading-tight">
@@ -167,14 +173,14 @@ export default async function MainPage() {
               className="w-2/3 mx-auto pointer-events-none" />
           </div>
           {/* Floating Elements */}
-          <div className={`${FLOATING_ELEMENT_STYLE} bg-[#F6D55C]`}>
+          <div className="absolute top-4 right-4 w-16 h-16 bg-[#F6D55C] rounded-full flex items-center justify-center shadow-lg animate-bounce">
             <span className="text-2xl">💛</span>
           </div>
-          <div className={`${FLOATING_ELEMENT_STYLE} bg-[#6EE7B7]`}>
+          <div className="absolute bottom-8 left-4 w-12 h-12 bg-[#6EE7B7] rounded-full flex items-center justify-center shadow-lg animate-bounce">
             <span className="text-xl">🌟</span>
           </div>
         </div>
-      </section>
+      </header>
 
       {/* 피쳐 */}
       <section
@@ -190,7 +196,7 @@ export default async function MainPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <article className="grid md:grid-cols-3 gap-8">
           <FeatureCard
             icon="👥"
             title="북적북적/도란도란"
@@ -209,7 +215,7 @@ export default async function MainPage() {
             description="실제 이용자들이 남긴 리뷰로 모임의 소감을 알 수 있어요"
             gradient="bg-gradient-to-r from-main-pink to-main-500"
           />
-        </div>
+        </article>
       </section>
 
       {/* 지금 핫한 모임 */}
@@ -220,7 +226,7 @@ export default async function MainPage() {
         <div className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-4xl font-bold dark:text-white">
-              지금 <span className="bg-gradient-to-r from-main-apricot to-[#F472B6] bg-clip-text text-transparent">HOT한</span> 모임들
+              지금 <span className="bg-gradient-to-r from-main-apricot via-main-pink to-main-500 bg-clip-text text-transparent">HOT한</span> 모임들
             </h2>
             <p className="text-lg text-gray-500 dark:text-white">
               다양한 사람들이 만나고 있는 인기 모임에 참여해보시는 건 어떤가요?
@@ -245,7 +251,7 @@ export default async function MainPage() {
 
           <div className="text-center">
             <Link href="/gatherings" className='inline-block'>
-              <div className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-main-300 bg-button-text text-button font-semibold transition-all">
+              <div className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-main-300 bg-button-text dark:bg-dark-2 hover:bg-button dark:hover:bg-button text-button hover:text-button-text font-semibold transition-all">
                 더 많은 모임 보기
               </div>
             </Link>
@@ -296,7 +302,7 @@ export default async function MainPage() {
             <h3 className="font-semibold">팔로우</h3>
             <div className="flex gap-3">
               <a href="https://www.github.com/window-ook/meet-meet" target="_blank">
-                <div title='Github 링크' className="size-8 bg-main-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                <div title='Github 링크' className="size-8 bg-black border border-slate-600 rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
                   <Image
                     src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749972038/github_oqdvnr.svg"
                     alt="깃허브 로고"

@@ -62,7 +62,7 @@ export default function SignInForm() {
                 label="이메일"
                 id="email"
                 type="email"
-                placeholder="이메일을 입력해 주세요"
+                placeholder="이메일 입력"
                 {...register('email')}
                 disabled={isSubmitted}
                 isError={errors.email?.message}
@@ -71,7 +71,7 @@ export default function SignInForm() {
                 label='비밀번호'
                 id='password'
                 type='password'
-                placeholder='비밀번호를 입력해 주세요'
+                placeholder='비밀번호 입력'
                 {...register('password')}
                 disabled={isSubmitted}
                 handlePasswordVisibility={() => setIsPasswordVisible((v) => !v)}
