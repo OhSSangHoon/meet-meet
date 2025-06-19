@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { useCreateReview } from '@/hooks/api/mypage/useCreateReview';
 import { useForm } from 'react-hook-form';
@@ -10,7 +10,6 @@ import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import { Heart } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
-import { useEffect } from 'react';
 
 const ConfirmDialog = dynamic(() => import('@/components/shared/ConfirmDialog'), { ssr: false });
 
@@ -66,8 +65,8 @@ export default function CreateReviewDialog({
     createReview({ gatheringId: reviewFormData.gatheringId, score: data.score, comment: excapeForXSS(data.comment) });
   };
 
+  // ESC 키 눌렀을 때 다이얼로그 닫기
   useEffect(() => {
-    // ESC 키 눌렀을 때 다이얼로그 닫기
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };

@@ -13,6 +13,7 @@ const ProfileEditDialog = dynamic(() => import('@/components/shared/ProfileEditD
 /** 마이페이지 프로필 카드 */
 export default function ProfileCard() {
   const { userName, userCompanyName, userEmail, userImage, userId } = useContext(AuthContext)
+
   const [isProfileEditDialogOpen, setIsProfileEditDialogOpen] = useState(false);
 
   return (

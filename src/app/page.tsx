@@ -102,13 +102,14 @@ const GatheringCard = ({
         className="w-full h-32 object-cover rounded-xl pointer-events-none" />
       <div className="space-y-2">
         <h3 className="font-semibold group-hover:text-main-500 dark:text-white dark:group-hover:text-main-500 transition-all">{title}</h3>
-        <p className="text-sm text-gray-500 dark:text-white">{schedule}</p>
-        <div className="flex items-center gap-2">
-          <span className={`px-2 py-1 rounded-full bg-main-400 text-xs text-white`}>
-            {category}
-          </span>
+        <div className='flex items-center gap-1'>
+          <span className="text-sm text-gray-500 dark:text-white">{schedule}</span>
+          <span className='text-gray-500 dark:text-white'>|</span>
           <span className="text-sm text-gray-500 dark:text-white"><span className='font-semibold text-main-500'>{participants}</span>명 참여</span>
         </div>
+        <span className={`px-2 py-1 rounded-full bg-main-400 text-xs text-white text-center`}>
+          {category}
+        </span>
       </div>
     </div>
   </Link>
