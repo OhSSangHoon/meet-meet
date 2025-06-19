@@ -166,7 +166,7 @@ export default async function MainPage() {
         <div className="flex-1 relative">
           {/* 메인 히어로 이미지 */}
           <div className="w-full max-w-md mx-auto h-96 bg-gradient-to-br from-main-100 to-pink-200 rounded-3xl shadow-2xl flex items-center justify-center">
-            <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713054/logo_hero_lp6zw5.avif"
+            <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1750301404/logo_hero_zeiiec.avif"
               alt="메인 히어로 이미지"
               width={317}
               height={317}
