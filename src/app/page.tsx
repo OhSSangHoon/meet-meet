@@ -170,7 +170,6 @@ export default async function MainPage() {
               alt="메인 히어로 이미지"
               width={317}
               height={317}
-              sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
               priority
               className="w-2/3 mx-auto pointer-events-none" />
           </div>
@@ -270,7 +269,7 @@ export default async function MainPage() {
               {/* 로고 이미지 위치 */}
               <div className='size-10 bg-gray-50 rounded-lg hover:scale-110 transition-transform cursor-pointer'>
                 <Image
-                  src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713054/logo_hero_lp6zw5.avif"
+                  src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1750301404/logo_hero_zeiiec.avif"
                   alt="로고 이미지"
                   width={1000}
                   height={1000}
