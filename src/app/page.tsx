@@ -169,6 +169,7 @@ export default async function MainPage() {
               alt="메인 히어로 이미지"
               width={1000}
               height={1000}
+              sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
               priority
               className="w-2/3 mx-auto pointer-events-none" />
           </div>

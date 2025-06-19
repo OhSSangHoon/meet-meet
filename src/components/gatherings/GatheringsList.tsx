@@ -84,12 +84,12 @@ const InfiniteScrollLoader = memo(() => (
 ));
 
 // 개별 모임 아이템 컴포넌트 memo로 최적화
-const GatheringItem = memo(({ 
-    gathering, 
-    index, 
-    isLastItem, 
+const GatheringItem = memo(({
+    gathering,
+    index,
+    isLastItem,
     lastItemRef,
-    onGatheringClick 
+    onGatheringClick
 }: {
     gathering: Gathering;
     index: number;
@@ -113,8 +113,10 @@ const GatheringItem = memo(({
                 src={gathering.image}
                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                 alt={`${gathering.name} 모임 썸네일`}
-                width={320}
-                height={180}
+                width={1000}
+                height={1000}
+                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+                priority
                 className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
             />
         </div>
@@ -205,7 +207,7 @@ export default function GatheringsList({
         return filterGatheringsByType(infiniteGatherings, selectedMainType, selectedSubType);
     }, [infiniteGatherings, selectedMainType, selectedSubType, isSavedPage]);
 
-    
+
     const allGatherings = useMemo(() => {
         if (isSavedPage) return filteredSSRGatherings;
         const uniqueCSRGatherings = getUniqueGatherings(filteredCSRGatherings, filteredSSRGatherings);
