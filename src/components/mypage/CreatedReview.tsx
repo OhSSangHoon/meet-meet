@@ -15,6 +15,8 @@ export default function CreatedReview({ review }: { review: ReviewItem }) {
                     alt="모임 썸네일"
                     width={1000}
                     height={1000}
+                    sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+                    priority
                     className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
                 />
             </div>
