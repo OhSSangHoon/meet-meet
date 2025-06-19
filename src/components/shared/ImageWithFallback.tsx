@@ -10,27 +10,37 @@ interface ImageWithFallbackProps extends Omit<ImageProps, 'src'> {
     width: number;
     height: number;
     className?: string;
+    priority?: boolean;
+    quality?: number;
+    placeholder?: 'blur' | 'empty';
 }
 
 export default function ImageWithFallback(props: ImageWithFallbackProps) {
-    const { src, fallbackSrc, alt, width, height, className, ...rest } = props;
+    const { src, fallbackSrc, alt, width, height, className, priority = false, quality = 75, placeholder = 'blur', ...rest } = props;
 
     const [imgSrc, setImgSrc] = useState(src);
 
     return (
-        <>
-            <Image
-                {...rest}
-                src={imgSrc}
-                alt={alt}
-                onError={() => {
-                    console.log('이미지 로드 실패 => fallback 이미지 적용');
-                    setImgSrc(fallbackSrc)
-                }}
-                width={width}
-                height={height}
-                className={className}
-            />
-        </>
+        <Image
+            {...rest}
+            src={imgSrc}
+            alt={alt}
+            onError={() => {
+                console.log('이미지 로드 실패 => fallback 이미지 적용');
+                setImgSrc(fallbackSrc)
+            }}
+            width={width}
+            height={height}
+            className={className}
+            priority={priority}
+            fetchPriority={priority ? 'high' : 'auto'}
+            loading={priority ? 'eager' : 'lazy'}
+            crossOrigin=""
+            decoding={priority ? 'sync' : 'async'}
+            quality={quality}
+            placeholder={placeholder}
+            blurDataURL={placeholder === 'blur' ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" : undefined}
+            unoptimized={false}
+        />
     );
 };

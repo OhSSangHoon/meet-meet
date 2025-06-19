@@ -45,7 +45,6 @@ const truncateTitle = (title: string, maxLength: number = DEFAULT_TITLE_MAX_LENG
     return title.length > maxLength ? title.slice(0, maxLength) + '...' : title;
 };
 
-// 정적 컴포넌트들
 const GatheringBadges = memo(({ dateTime }: { dateTime: string }) => (
     <div className="flex flex-wrap gap-2 mb-3 -mt-3">
         <span className={`${BADGE_BASE_STYLES} bg-main-400 text-white dark:bg-main-600 dark:text-gray-100`}>
@@ -88,9 +87,9 @@ const InfiniteScrollLoader = memo(() => (
 InfiniteScrollLoader.displayName = 'InfiniteScrollLoader';
 
 // 개별 모임 아이템 컴포넌트 memo로 최적화
-const GatheringItem = memo(({
-    gathering,
-    index,
+const GatheringItem = memo(({ 
+    gathering, 
+    index, 
     isLastItem,
     lastItemRef,
     onGatheringClick
@@ -117,11 +116,17 @@ const GatheringItem = memo(({
                 src={gathering.image}
                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                 alt={`${gathering.name} 모임 썸네일`}
-                width={1000}
-                height={1000}
-                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
-                priority
+                width={320}
+                height={192}
+                priority={index < 5}
+                sizes="(max-width: 768px) 100vw, 320px"
+                fetchPriority={index < 5 ? 'high' : 'auto'}
+                loading={index < 5 ? 'eager' : 'lazy'}
                 className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
+                crossOrigin=""
+                decoding={index < 5 ? 'sync' : 'async'}
+                quality={index === 0 ? 90 : 80}
+                placeholder={index === 0 ? 'empty' : 'blur'}
             />
         </div>
 
@@ -203,23 +208,25 @@ export default function GatheringsList({
         startIndex: csrStartIndex,
     });
 
+    // 서버 렌더링 모임 필터링
     const filteredSSRGatherings = useMemo(() => {
         return filterGatheringsByType(ssrGatherings, selectedMainType, selectedSubType);
     }, [ssrGatherings, selectedMainType, selectedSubType]);
 
+    // 모임 필터링
     const filteredCSRGatherings = useMemo(() => {
         if (isSavedPage) return [];
         return filterGatheringsByType(infiniteGatherings, selectedMainType, selectedSubType);
     }, [infiniteGatherings, selectedMainType, selectedSubType, isSavedPage]);
 
-
+    // 모임 목록 조합
     const allGatherings = useMemo(() => {
         if (isSavedPage) return filteredSSRGatherings;
         const uniqueCSRGatherings = getUniqueGatherings(filteredCSRGatherings, filteredSSRGatherings);
         return filteredSSRGatherings.concat(uniqueCSRGatherings);
     }, [filteredSSRGatherings, filteredCSRGatherings, isSavedPage]);
 
-    // useCallback으로 함수 최적화 + useTransition 적용
+    // 모임 클릭 핸들러
     const handleGatheringClick = useCallback((gatheringId: number) => {
         startTransition(() => {
             router.push(`/gatherings/detail/${gatheringId}`);

@@ -177,8 +177,14 @@ export default function ReviewsList({
                                     fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                                     alt="리뷰 썸네일"
                                     width={320}
-                                    height={180}
+                                    height={192}
+                                    priority={index < 2}
+                                    sizes="(max-width: 768px) 100vw, 320px"
+                                    fetchPriority={index < 2 ? 'high' : 'auto'}
+                                    loading={index < 2 ? 'eager' : 'lazy'}
                                     className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
+                                    crossOrigin=""
+                                    decoding={index < 2 ? 'sync' : 'async'}
                                 />
                             </div>
 

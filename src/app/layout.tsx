@@ -8,6 +8,8 @@ const pretendard = localFont({
   display: 'swap',
   weight: '45 920',
   variable: '--font-pretendard',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const metadata: Metadata = {
@@ -54,6 +56,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
         <link rel="dns-prefetch" href="//meet-meet-psi.vercel.app" />
         <link rel="preconnect" href="https://meet-meet-psi.vercel.app" />
+        <link rel="dns-prefetch" href="//meet-meet-psi.vercel.app" />
       </head>
       <body
         className={`${pretendard.variable} font-pretendard text-global-text`}
