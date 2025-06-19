@@ -52,14 +52,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        <link rel="dns-prefetch" href="//res.cloudinary.com" />
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="//meet-meet-psi.vercel.app" />
         <link rel="preconnect" href="https://meet-meet-psi.vercel.app" />
         <link rel="dns-prefetch" href="//meet-meet-psi.vercel.app" />
-        <link rel="preconnect" href="https://res.cloudinary.com" />
-        <link rel="dns-prefetch" href="//res.cloudinary.com" />
-        <link rel="preload" href="https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif" as="image" />
-        <link rel="preload" href="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749717219/profile_image_tlr92v.svg" as="image" />
-        <link rel="preload" href="https://res.cloudinary.com/dbvzbdffi/image/upload/v1750301404/logo_hero_zeiiec.avif" as="image" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
       <body
         className={`${pretendard.variable} font-pretendard text-global-text`}
