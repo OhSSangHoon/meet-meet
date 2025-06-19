@@ -18,6 +18,8 @@ export default function Thumbnail({ detail, id }: { detail: Gathering, id: strin
                 alt='모임 썸네일'
                 width={1000}
                 height={1000}
+                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+                priority
                 className='w-full h-full object-cover rounded-lg'
             />
             <div className='absolute sm:hidden top-3 right-3'>

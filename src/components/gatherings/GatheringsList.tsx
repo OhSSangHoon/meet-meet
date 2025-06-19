@@ -12,7 +12,6 @@ import JoinedCountsProgressBar from "@/components/gatherings/shared/JoinedCounts
 import DateReminder from '@/components/shared/DateReminder';
 import dynamic from 'next/dynamic';
 
-// 동적 import로 코드 스플리팅 (문서 지침)
 const SaveToggleButton = dynamic(() => import('@/components/shared/SaveToggleButton'), {
     loading: () => <div className="w-6 h-6 bg-gray-200 rounded animate-pulse" />,
     ssr: false
@@ -40,13 +39,12 @@ interface GatheringsListProps {
     isFilterChanged?: boolean;
 }
 
-// 컴포넌트 외부에 함수 선언 (문서 지침)
+// 컴포넌트 외부에 함수 선언
 const truncateTitle = (title: string, maxLength: number = DEFAULT_TITLE_MAX_LENGTH): string => {
     if (!title) return '';
     return title.length > maxLength ? title.slice(0, maxLength) + '...' : title;
 };
 
-// 정적 컴포넌트들 - memo로 렌더링 최적화
 const GatheringBadges = memo(({ dateTime }: { dateTime: string }) => (
     <div className="flex flex-wrap gap-2 mb-3 -mt-3">
         <span className={`${BADGE_BASE_STYLES} bg-main-400 text-white dark:bg-main-600 dark:text-gray-100`}>
@@ -94,7 +92,7 @@ const GatheringItem = memo(({
     index, 
     isLastItem,
     lastItemRef,
-    onGatheringClick 
+    onGatheringClick
 }: {
     gathering: Gathering;
     index: number;
@@ -118,8 +116,10 @@ const GatheringItem = memo(({
                 src={gathering.image}
                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                 alt={`${gathering.name} 모임 썸네일`}
-                width={320}
-                height={180}
+                width={1000}
+                height={1000}
+                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+                priority
                 className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
             />
         </div>

@@ -12,8 +12,9 @@ export default function AuthPoster() {
                 alt='로그인, 회원가입 페이지 배경 이미지'
                 width={2000}
                 height={2000}
-                sizes="(max-width: 500px) 300px, (max-width: 700px) 400px, 800px"
+                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
                 className='w-[10rem] h-[14rem] md:w-[18rem] md:h-[26rem] lg:w-[22rem] lg:h-[32rem] hover:scale-105 transtion-all duration-200 ease-in-out pointer-events-none'
+                priority
             />
             <figcaption className='flex flex-col items-center justify-center'>
                 <h2 className='mb-1 text-lg lg:text-2xl font-bold'>미리 계획하지 않아도 괜찮아요.</h2>

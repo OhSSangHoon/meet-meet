@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import Image, { ImageProps } from 'next/image';
 
-interface ImageWithFallbackProps {
+interface ImageWithFallbackProps extends Omit<ImageProps, 'src'> {
     src: string;
     fallbackSrc: string;
     alt: string;
