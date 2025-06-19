@@ -49,6 +49,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com" />
+      </head>
+
       <body
         className={`${pretendard.variable} font-pretendard text-global-text`}
       >

@@ -31,10 +31,12 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
                 width={width}
                 height={height}
                 className={className}
-                sizes="240px"
+                sizes="200px"
                 priority={priority}
                 fetchPriority={priority ? 'high' : 'auto'}
                 loading={priority ? 'eager' : 'lazy'}
+                crossOrigin=""
+                decoding={priority ? 'sync' : 'async'}
             />
         </>
     );

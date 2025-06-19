@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
 
-    deviceSizes: [240, 320, 480, 640, 828, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 240],
+    deviceSizes: [200, 240, 320, 480, 640, 828, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 200, 240],
     minimumCacheTTL: 60 * 60 * 24 * 7, // 7일
 
     remotePatterns: [
@@ -23,6 +23,29 @@ const nextConfig: NextConfig = {
   compress: true,
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-dropdown-menu'],
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/image',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          }
+        ]
+      }
+    ];
   },
 
   webpack(config, { isServer: _isServer }) {
