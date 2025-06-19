@@ -11,10 +11,12 @@ interface ImageWithFallbackProps extends Omit<ImageProps, 'src'> {
     height: number;
     className?: string;
     priority?: boolean;
+    quality?: number;
+    placeholder?: 'blur' | 'empty';
 }
 
 export default function ImageWithFallback(props: ImageWithFallbackProps) {
-    const { src, fallbackSrc, alt, width, height, className, priority = false, ...rest } = props;
+    const { src, fallbackSrc, alt, width, height, className, priority = false, quality = 75, placeholder = 'blur', ...rest } = props;
 
     const [imgSrc, setImgSrc] = useState(src);
 
@@ -35,9 +37,10 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
             loading={priority ? 'eager' : 'lazy'}
             crossOrigin=""
             decoding={priority ? 'sync' : 'async'}
-            quality={priority ? 85 : 75}
-            placeholder={priority ? 'empty' : 'blur'}
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+            quality={quality}
+            placeholder={placeholder}
+            blurDataURL={placeholder === 'blur' ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" : undefined}
+            unoptimized={false}
         />
     );
 };

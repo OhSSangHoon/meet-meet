@@ -118,13 +118,15 @@ const GatheringItem = memo(({
                 alt={`${gathering.name} 모임 썸네일`}
                 width={320}
                 height={192}
-                priority={index < 3}
+                priority={index < 5}
                 sizes="(max-width: 768px) 100vw, 320px"
-                fetchPriority={index < 3 ? 'high' : 'auto'}
-                loading={index < 3 ? 'eager' : 'lazy'}
+                fetchPriority={index < 5 ? 'high' : 'auto'}
+                loading={index < 5 ? 'eager' : 'lazy'}
                 className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
                 crossOrigin=""
-                decoding={index < 3 ? 'sync' : 'async'}
+                decoding={index < 5 ? 'sync' : 'async'}
+                quality={index === 0 ? 90 : 80}
+                placeholder={index === 0 ? 'empty' : 'blur'}
             />
         </div>
 

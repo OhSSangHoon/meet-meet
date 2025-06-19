@@ -3,10 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
-
     deviceSizes: [200, 240, 320, 480, 640, 828, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 200, 240],
-    minimumCacheTTL: 60 * 60 * 24 * 7, // 7일
+    imageSizes: [16, 32, 48, 64, 96, 128, 200, 240, 320],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30일로 증가
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 
     remotePatterns: [
       {
@@ -38,6 +39,15 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/_next/image',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          }
+        ]
+      },
+      {
+        source: '/fonts/:path*',
         headers: [
           {
             key: 'Cache-Control',
