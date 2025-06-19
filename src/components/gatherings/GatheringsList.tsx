@@ -12,6 +12,7 @@ import JoinedCountsProgressBar from "@/components/gatherings/shared/JoinedCounts
 import DateReminder from '@/components/shared/DateReminder';
 import dynamic from 'next/dynamic';
 
+// 동적 import로 코드 스플리팅 (문서 지침)
 const SaveToggleButton = dynamic(() => import('@/components/shared/SaveToggleButton'), {
     loading: () => <div className="w-6 h-6 bg-gray-200 rounded animate-pulse" />,
     ssr: false
@@ -39,13 +40,13 @@ interface GatheringsListProps {
     isFilterChanged?: boolean;
 }
 
-// 컴포넌트 외부에 함수 선언
+// 컴포넌트 외부에 함수 선언 (문서 지침)
 const truncateTitle = (title: string, maxLength: number = DEFAULT_TITLE_MAX_LENGTH): string => {
     if (!title) return '';
     return title.length > maxLength ? title.slice(0, maxLength) + '...' : title;
 };
 
-// 정적 컴포넌트들
+// 정적 컴포넌트들 - memo로 렌더링 최적화
 const GatheringBadges = memo(({ dateTime }: { dateTime: string }) => (
     <div className="flex flex-wrap gap-2 mb-3 -mt-3">
         <span className={`${BADGE_BASE_STYLES} bg-main-400 text-white dark:bg-main-600 dark:text-gray-100`}>
@@ -56,7 +57,6 @@ const GatheringBadges = memo(({ dateTime }: { dateTime: string }) => (
         </span>
     </div>
 ));
-GatheringBadges.displayName = 'GatheringBadges';
 
 const LoadingState = memo(() => (
     <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 dark:text-gray-400 font-medium text-sm transition-colors duration-200">
@@ -67,7 +67,6 @@ const LoadingState = memo(() => (
         <p>모임을 불러오고 있어요</p>
     </div>
 ));
-LoadingState.displayName = 'LoadingState';
 
 const EmptyState = memo(() => (
     <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 dark:text-gray-400 font-medium text-sm transition-colors duration-200">
@@ -75,7 +74,6 @@ const EmptyState = memo(() => (
         <p>곧 새로운 모임이 열릴 예정이에요</p>
     </div>
 ));
-EmptyState.displayName = 'EmptyState';
 
 const InfiniteScrollLoader = memo(() => (
     <div className="w-full h-[80px] flex justify-center items-center">
@@ -85,19 +83,20 @@ const InfiniteScrollLoader = memo(() => (
         </div>
     </div>
 ));
-InfiniteScrollLoader.displayName = 'InfiniteScrollLoader';
 
 // 개별 모임 아이템 컴포넌트 memo로 최적화
 const GatheringItem = memo(({ 
     gathering, 
     index, 
-    isLastItem, 
+    isLastItem,
+    isFirstItem,
     lastItemRef,
     onGatheringClick 
 }: {
     gathering: Gathering;
     index: number;
     isLastItem: boolean;
+    isFirstItem: boolean;
     lastItemRef?: (node: HTMLElement | null) => void;
     onGatheringClick: (id: number) => void;
 }) => (
@@ -120,6 +119,10 @@ const GatheringItem = memo(({
                 width={320}
                 height={180}
                 className="w-full h-full rounded-t-2xl md:rounded-l-2xl md:rounded-t-none object-cover pointer-events-none"
+                priority={isFirstItem}
+                loading={isFirstItem ? 'eager' : 'lazy'}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 320px, 280px"
+                quality={75}
             />
         </div>
 
@@ -201,23 +204,25 @@ export default function GatheringsList({
         startIndex: csrStartIndex,
     });
 
+    // 서버 렌더링 모임 필터링
     const filteredSSRGatherings = useMemo(() => {
         return filterGatheringsByType(ssrGatherings, selectedMainType, selectedSubType);
     }, [ssrGatherings, selectedMainType, selectedSubType]);
 
+    // 모임 필터링
     const filteredCSRGatherings = useMemo(() => {
         if (isSavedPage) return [];
         return filterGatheringsByType(infiniteGatherings, selectedMainType, selectedSubType);
     }, [infiniteGatherings, selectedMainType, selectedSubType, isSavedPage]);
 
-    
+    // 모임 목록 조합
     const allGatherings = useMemo(() => {
         if (isSavedPage) return filteredSSRGatherings;
         const uniqueCSRGatherings = getUniqueGatherings(filteredCSRGatherings, filteredSSRGatherings);
         return filteredSSRGatherings.concat(uniqueCSRGatherings);
     }, [filteredSSRGatherings, filteredCSRGatherings, isSavedPage]);
 
-    // useCallback으로 함수 최적화 + useTransition 적용
+    // 모임 클릭 핸들러
     const handleGatheringClick = useCallback((gatheringId: number) => {
         startTransition(() => {
             router.push(`/gatherings/detail/${gatheringId}`);
@@ -234,6 +239,7 @@ export default function GatheringsList({
         >
             {allGatherings.map((gathering: Gathering, index: number) => {
                 const isLastItem = index === allGatherings.length - 1;
+                const isFirstItem = index === 0;
                 const shouldAttachRef = isLastItem && !isFetchingNextPage && enableInfiniteScroll && !isSavedPage;
 
                 return (
@@ -242,6 +248,7 @@ export default function GatheringsList({
                         gathering={gathering}
                         index={index}
                         isLastItem={isLastItem}
+                        isFirstItem={isFirstItem}
                         lastItemRef={shouldAttachRef ? lastItemRef : undefined}
                         onGatheringClick={handleGatheringClick}
                     />
