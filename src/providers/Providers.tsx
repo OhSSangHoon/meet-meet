@@ -3,9 +3,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { useState } from "react";
+import { LazyMotion } from "motion/react";
 import dynamic from 'next/dynamic';
 import AuthProvider from '@/providers/AuthProvider';
 import Navbar from '@/components/shared/Navbar';
+
+const loadFeatures = () => import("@/lib/motion/features").then((res) => res.default);
 
 const ReactQueryDevtools = dynamic(() => import('@tanstack/react-query-devtools').then(mod => mod.ReactQueryDevtools), {
     ssr: false,
@@ -34,7 +37,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             <ThemeProvider>
                 <AuthProvider>
                     <Navbar />
-                    {children}
+                    <LazyMotion strict features={loadFeatures}>
+                        {children}
+                    </LazyMotion>
                 </AuthProvider>
             </ThemeProvider>
             <ReactQueryDevtools initialIsOpen={false} />

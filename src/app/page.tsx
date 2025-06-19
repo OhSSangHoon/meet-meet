@@ -3,9 +3,11 @@ import { serverFetcher } from '@/lib/api/serverFetcher';
 import { Gathering } from '@/types/gatherings';
 import { getTimeRemaining, toKoreanTime } from '@/utils/shared/date';
 import { Metadata } from 'next';
+import * as m from "motion/react-m";
 import Image from 'next/image';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import Link from 'next/link';
+import RollingNumber from '@/components/shared/RollingNumber';
 
 export const metadata: Metadata = {
   title: 'Meet Meet - 특별한 만남',
@@ -90,29 +92,38 @@ const GatheringCard = ({
   participants,
   image
 }: GatheringCardProps) => (
-  <Link href={link} className="group p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-300 bg-white dark:bg-dark-2 hover:shadow-md hover:border-main-300 dark:hover:border-main-400 transition-all">
-    <div className="space-y-4">
+  <Link href={link}>
+    <m.div
+      className="space-y-4 group h-full p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-300 bg-white dark:bg-dark-2 hover:shadow-md hover:border-main-300 dark:hover:border-main-400 transition-all"
+      initial={{ opacity: 0, y: -20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
       {/* 모임 썸네일 위치 */}
       <ImageWithFallback
         src={image}
         fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
         alt={title}
         width={148}
-        height={136}
+        height={148}
         quality={60}
+        priority
         className="w-full h-32 object-cover rounded-xl pointer-events-none" />
       <div className="space-y-2">
         <h3 className="font-semibold group-hover:text-main-500 dark:text-white dark:group-hover:text-main-500 transition-all">{title}</h3>
         <div className='flex items-center gap-1'>
           <span className="text-sm text-gray-500 dark:text-white">{schedule}</span>
           <span className='text-gray-500 dark:text-white'>|</span>
-          <span className="text-sm text-gray-500 dark:text-white"><span className='font-semibold text-main-500'>{participants}</span>명 참여</span>
+          <span className="text-sm text-gray-500 dark:text-white">
+            <RollingNumber value={participants} duration={1000} interval={250} />
+            명 참여
+          </span>
         </div>
         <span className={`px-2 py-1 rounded-full bg-main-400 text-xs text-white text-center`}>
           {category}
         </span>
       </div>
-    </div>
+    </m.div>
   </Link>
 );
 
@@ -123,7 +134,9 @@ export default async function MainPage() {
     // 색상 경계를 없애기 위해 
     <main className="bg-transparent contents-container">
       {/* Hero Section */}
-      <header className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
+      <header
+        id="hero"
+        className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
         <div className="flex-1 space-y-8">
           <div className="space-y-4">
             <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold leading-tight">
@@ -199,7 +212,12 @@ export default async function MainPage() {
           </p>
         </div>
 
-        <article className="grid md:grid-cols-3 gap-8">
+        <m.article className="grid md:grid-cols-3 gap-8"
+          initial={{ opacity: 0, y: 20, }}
+          whileInView={{ opacity: 1, y: 0, }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true, amount: 1, }}
+        >
           <FeatureCard
             icon="👥"
             title="북적북적/도란도란"
@@ -218,7 +236,7 @@ export default async function MainPage() {
             description="실제 이용자들이 남긴 리뷰로 모임의 소감을 알 수 있어요"
             gradient="bg-gradient-to-r from-main-pink to-main-500"
           />
-        </article>
+        </m.article>
       </section>
 
       {/* 지금 핫한 모임 */}
@@ -227,13 +245,20 @@ export default async function MainPage() {
         className="px-6 py-16 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-dark-2 dark:to-dark-2 rounded-3xl"
       >
         <div className="space-y-12">
-          <div className="text-center space-y-4">
+          <div
+            className="text-center space-y-4"
+          >
             <h2 className="text-4xl font-bold dark:text-white">
               지금 <span className="bg-gradient-to-r from-main-apricot via-main-pink to-main-500 bg-clip-text text-transparent">HOT한</span> 모임들
             </h2>
-            <p className="text-lg text-gray-500 dark:text-white">
+            <m.p
+              className="text-lg text-gray-500 dark:text-white"
+              initial={{ x: -30, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               다양한 사람들이 만나고 있는 인기 모임에 참여해보시는 건 어떤가요?
-            </p>
+            </m.p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -254,9 +279,15 @@ export default async function MainPage() {
 
           <div className="text-center">
             <Link href="/gatherings" className='inline-block'>
-              <div className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-main-300 bg-button-text dark:bg-dark-2 hover:bg-button dark:hover:bg-button text-button hover:text-button-text font-semibold transition-all">
+              <m.div
+                className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-main-300 bg-button-text dark:bg-dark-2 hover:bg-button dark:hover:bg-button text-button hover:text-button-text font-semibold transition-all"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true, amount: 0.5, }}
+              >
                 더 많은 모임 보기
-              </div>
+              </m.div>
             </Link>
           </div>
         </div>
