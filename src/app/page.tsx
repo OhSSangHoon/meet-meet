@@ -97,8 +97,9 @@ const GatheringCard = ({
         src={image}
         fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
         alt={title}
-        width={300}
-        height={128}
+        width={148}
+        height={136}
+        quality={60}
         className="w-full h-32 object-cover rounded-xl pointer-events-none" />
       <div className="space-y-2">
         <h3 className="font-semibold group-hover:text-main-500 dark:text-white dark:group-hover:text-main-500 transition-all">{title}</h3>
@@ -308,8 +309,8 @@ export default async function MainPage() {
                   <Image
                     src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1749972038/github_oqdvnr.svg"
                     alt="깃허브 로고"
-                    width={500}
-                    height={500}
+                    width={21.25}
+                    height={21.25}
                     className="size-5 object-cover object-center pointer-events-none" />
                 </div>
               </a>
