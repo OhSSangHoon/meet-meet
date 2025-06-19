@@ -1,11 +1,16 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useState } from "react";
-import AuthProvider from '@/providers/AuthProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
+import { useState } from "react";
+import dynamic from 'next/dynamic';
+import AuthProvider from '@/providers/AuthProvider';
 import Navbar from '@/components/shared/Navbar';
+
+const ReactQueryDevtools = dynamic(() => import('@tanstack/react-query-devtools').then(mod => mod.ReactQueryDevtools), {
+    ssr: false,
+});
+
 
 /** 클라이언트 사이드 Providers
  * @param {React.ReactNode} children 자식 컴포넌트
