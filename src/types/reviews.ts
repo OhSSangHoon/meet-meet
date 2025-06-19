@@ -39,7 +39,6 @@ export interface ReviewItem {
  * @type location: 모임 장소
  * @type image: 모임 이미지
  * @type participantCount: 참여인원 수 (추가)
- * @type capacity: 최대 정원 (추가)
  */
 export interface GatheringInfo {
     teamId: number;
@@ -50,7 +49,6 @@ export interface GatheringInfo {
     location: string;
     image: string;
     participantCount: number;
-    capacity: number;
 }
 
 /**

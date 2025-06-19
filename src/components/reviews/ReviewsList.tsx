@@ -129,9 +129,30 @@ export default function ReviewsList({
         return locationDateFiltered;
     }, [ssrReviews, infiniteReviews, selectedMainType, selectedSubType, filters]);
 
-    // 로딩 상태 계산
-    const isLoading = isFilterChanged || (enableInfiniteScroll && status === 'pending');
-    const isEmpty = allReviews.length === 0 && !isLoading;
+    // 더 명확한 로딩 상태 계산
+    const hasData = allReviews.length > 0;
+    const isApiLoading = enableInfiniteScroll && status === 'pending';
+    const isFilterLoading = isFilterChanged;
+    
+    // 서버에서 데이터를 받았다면 (빈 데이터라도) 로딩 표시하지 않음
+    // 오직 초기 로드 시에만 로딩 표시
+    const shouldShowLoading = isFilterLoading && !hasData;
+    const shouldShowEmpty = !hasData && !shouldShowLoading;
+
+    // 디버깅 로그 (개발 환경에서만)
+    console.log('🔍 ReviewsList Debug:', {
+        ssrReviewsLength: ssrReviews.length,
+        infiniteReviewsLength: infiniteReviews.length,
+        allReviewsLength: allReviews.length,
+        status,
+        isFilterChanged,
+        hasData,
+        isApiLoading,
+        isFilterLoading,
+        shouldShowLoading,
+        shouldShowEmpty,
+        filters
+    });
 
     return (
         <section className="w-full flex flex-col">
@@ -197,7 +218,7 @@ export default function ReviewsList({
                 )}
 
                 {/* 로딩 상태 */}
-                {isLoading && (
+                {shouldShowLoading && (
                     <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 dark:text-gray-400 font-medium text-sm transition-colors duration-200">
                         <div className="flex items-center gap-3 mb-2">
                             <div className="size-6 border-3 border-main-500 border-t-transparent rounded-full animate-spin"></div>
@@ -208,7 +229,7 @@ export default function ReviewsList({
                 )}
 
                 {/* 빈 목록 메시지 */}
-                {isEmpty && (
+                {shouldShowEmpty && (
                     <div className="w-full h-[300px] flex flex-col justify-center items-center text-gray-500 dark:text-gray-400 font-medium text-sm transition-colors duration-200">
                         <p className="text-lg font-semibold mb-2">선택한 조건에 맞는 리뷰가 없어요</p>
                         <p>다른 조건으로 검색해보세요</p>
