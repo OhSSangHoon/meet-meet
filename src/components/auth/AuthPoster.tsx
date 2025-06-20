@@ -6,14 +6,13 @@ const DESCRIPTION_STYLE = 'text-sm lg:text-base text-gray-600 dark:text-gray-200
 export default function AuthPoster() {
 
     return (
-        <figure className='flex flex-col sm:flex-row lg:flex-col gap-2 items-center justify-center dark:text-white'>
+        <figure className='flex flex-col sm:flex-row lg:flex-col gap-2 items-center justify-center dark:text-white hover:scale-105 transtion-all duration-200 ease-in-out '>
             <Image
                 src='https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713004/auth_background_dyr3yy.avif'
                 alt='로그인, 회원가입 페이지 배경 이미지'
-                width={2000}
-                height={2000}
-                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
-                className='w-[10rem] h-[14rem] md:w-[18rem] md:h-[26rem] lg:w-[22rem] lg:h-[32rem] hover:scale-105 transtion-all duration-200 ease-in-out pointer-events-none'
+                width={320}
+                height={480}
+                className='hidden md:block w-auto h-auto pointer-events-none'
                 priority
             />
             <figcaption className='flex flex-col items-center justify-center'>
