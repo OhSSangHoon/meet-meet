@@ -15,7 +15,7 @@ interface InformationProps {
     participants: Participant[],
 }
 
-const LOCATION_POSTER_STYLE = 'text-sm md:text-base text-gray-500 dark:text-gray-400';
+const LOCATION_POSTER_STYLE = 'text-sm text-gray-500 dark:text-gray-400';
 const BOTTOM_SECTION_TEXT_STYLE = 'text-xs md:text-sm';
 
 /** 모임 상세 페이지 상단 우측 정보 */
@@ -29,11 +29,7 @@ export default function Information({ detail, id, participants }: InformationPro
                     {/* 제목, 주소 */}
                     <div className="flex flex-col min-w-0">
                         <h2 className="text-base md:text-xl font-bold max-w-full" title={detail?.name}>
-                            {detail?.name
-                                ? detail.name.length > 20
-                                    ? detail.name.slice(0, 20) + '...'
-                                    : detail.name
-                                : ''}
+                            {shortenName(detail?.name, 20)}
                         </h2>
                         <div className='flex items-center gap-1'>
                             <span className={LOCATION_POSTER_STYLE}>{detail?.location || '-'}</span>

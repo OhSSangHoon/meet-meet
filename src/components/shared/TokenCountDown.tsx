@@ -26,5 +26,5 @@ export default function TokenCountdown() {
     const minutes = String(Math.floor(remaining / 60000)).padStart(2, '0');
     const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
 
-    return <span className='hidden md:block font-medium text-sm dark:text-white'>{minutes}:{seconds}</span>;
+    return <span className='font-medium text-sm dark:text-white'>{minutes}:{seconds}</span>;
 }

@@ -204,6 +204,10 @@ html {
   .dialog-background {
     @apply fixed inset-0 z-50 px-4 sm:px-0 flex flex-col items-center justify-center gap-2 bg-black/40 dark:text-white;
   }
+
+  .transition-gathering-item {
+    @apply transition-all duration-250 ease-in-out;
+  }
 }
 
 @layer base {

@@ -16,9 +16,8 @@ export default function Thumbnail({ detail, id }: { detail: Gathering, id: strin
                 src={detail?.image}
                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                 alt='모임 썸네일'
-                width={1000}
-                height={1000}
-                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+                width={454}
+                height={238}
                 priority
                 className='w-full h-full object-cover rounded-lg'
             />

@@ -18,7 +18,7 @@ const ServiceItem = ({ id, title, subtitle, isSelected, onSelect }: { id: string
             tabIndex={0}
         >
             <div className="flex flex-col justify-start gap-4">
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-center gap-2">
                     <input
                         type="radio"
                         name="service"
@@ -28,10 +28,10 @@ const ServiceItem = ({ id, title, subtitle, isSelected, onSelect }: { id: string
                         className="accent-main-500 rounded-lg w-[18px] h-[18px]"
                         aria-label={`${title} ${subtitle ? subtitle : ''} 선택`}
                     />
-                    <h3 className='font-semibold text-sm md:text-base'>{title}</h3>
+                    <h3 className='font-semibold text-xs sm:text-sm md:text-base'>{title}</h3>
                 </div>
                 {subtitle && (
-                    <span className='text-xs font-medium flex text-gray-600 dark:text-gray-300'>
+                    <span className='text-2xs sm:text-xs font-medium flex items-center sm:items-start text-gray-600 dark:text-gray-300'>
                         {subtitle}
                     </span>
                 )}

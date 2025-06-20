@@ -1,23 +1,32 @@
 import { ReviewItem } from '@/types/reviews';
 import { formatDate, formatTime } from '@/utils/shared/date';
-import { THUMBNAIL_CLASSNAME, THUMBNAIL_WIDTH } from '@/utils/mypage/constants/thumbnailConstants';
+import { THUMBNAIL_CLASSNAME, THUMBNAIL_SIZE } from '@/utils/mypage/constants/thumbnailConstants';
 import { Heart } from 'lucide-react';
+import * as m from "motion/react-m";
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 
+interface CreatedReviewProps {
+    review: ReviewItem,
+}
+
 /** 나의 리뷰 - 작성한 리뷰 */
-export default function CreatedReview({ review }: { review: ReviewItem }) {
+export default function CreatedReview({ review }: CreatedReviewProps) {
     return (
-        <article className='flex flex-col sm:flex-row gap-4'>
-            <div className="flex-shrink-0">
+        <m.article
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            viewport={{ amount: 0.5, once: true }}
+            className={`relative w-full p-4 rounded-xl border hover:border-main-200 hover:shadow-md flex flex-col sm:flex-row gap-4 transition-gathering-item`}>
+            <div className="flex-shrink-0 h-[10rem]">
                 <ImageWithFallback
                     src={review.Gathering.image!}
                     fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                     alt="모임 썸네일"
-                    width={1000}
-                    height={1000}
-                    sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+                    width={298}
+                    height={170}
                     priority
-                    className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
+                    className={`${THUMBNAIL_SIZE} ${THUMBNAIL_CLASSNAME}`}
                 />
             </div>
             <div className="flex flex-col gap-1">
@@ -37,7 +46,7 @@ export default function CreatedReview({ review }: { review: ReviewItem }) {
                     </span>
                 </div>
             </div>
-        </article>
+        </m.article>
     );
 }
 

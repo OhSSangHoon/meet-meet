@@ -4,7 +4,8 @@ import { useFetchCreatedGatherings } from '@/hooks/api/mypage/useFetchCreatedGat
 import { useContext } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { getTimeRemaining } from '@/utils/shared/date';
-import { THUMBNAIL_CLASSNAME, THUMBNAIL_WIDTH } from '@/utils/mypage/constants/thumbnailConstants';
+import { THUMBNAIL_CLASSNAME, THUMBNAIL_SIZE } from '@/utils/mypage/constants/thumbnailConstants';
+import * as m from "motion/react-m";
 import dynamic from 'next/dynamic';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import GatheringInformation from '@/components/mypage/GatheringInformation';
@@ -31,22 +32,25 @@ export default function CreatedGatherings() {
     <section className='flex w-full flex-col gap-2'>
       {!isLoading && !error && gatherings.map(gathering => {
         return (
-          <article
+          <m.article
             key={gathering.id}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            viewport={{ amount: 0.5, once: true }}
             className="relative min-h-[100px] w-full p-4 rounded-xl border-1 hover:border-main-200 dark:bg-dark-2 flex flex-col sm:flex-row gap-4 hover:shadow-md transition-gathering-item"
           >
             {/* 좌측 이미지 */}
-            <div className='relative'>
+            <div className='relative h-[10rem]'>
               <DateReminder registrationEnd={gathering?.registrationEnd} />
               <ImageWithFallback
                 src={gathering?.image}
                 fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
                 alt='모임 썸네일'
-                width={1000}
-                height={1000}
-                sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+                width={298}
+                height={170}
                 priority
-                className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
+                className={`${THUMBNAIL_SIZE} ${THUMBNAIL_CLASSNAME}`}
               />
             </div>
 
@@ -54,7 +58,7 @@ export default function CreatedGatherings() {
             <div className='flex flex-col justify-between'>
               <GatheringInformation data={gathering} />
             </div>
-          </article>
+          </m.article>
         );
       })}
     </section>

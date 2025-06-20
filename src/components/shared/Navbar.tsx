@@ -6,8 +6,9 @@ import { useContext, useMemo } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { validateProfileImage } from '@/utils/shared/validateProfileImage';
 import { shortenName } from '@/utils/shared/shortenName';
+import { AlignJustify } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/shadcn-ui/dropdown-menu';
-import DarkModeToggleButton from '@/components/shared/DarkModeToggleButton';
+import { DarkModeToggleButton, ThemeSelectionButtons } from '@/components/shared/DarkModeToggleButton';
 import TokenCountdown from '@/components/shared/TokenCountDown';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import Link from 'next/link';
@@ -60,7 +61,8 @@ export default function Navbar() {
                         )
                     })}
                 </section>
-                <section className='flex items-center gap-3'>
+                {/* sm 초과 태블릿, PC 프로필 메뉴 */}
+                <section className='hidden sm:flex items-center gap-3'>
                     {token && (
                         <>
                             <TokenCountdown />
@@ -103,6 +105,44 @@ export default function Navbar() {
                         </Link>
                     )}
                     <DarkModeToggleButton />
+                </section>
+
+                {/* sm 이하 모바일 프로필 메뉴 */}
+                <section className='sm:hidden block'>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <AlignJustify className='size-6 text-gray-800 dark:text-gray-200' />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className='flex flex-col'>
+                            {token && (
+                                <>
+                                    <DropdownMenuLabel className='text-main-500 dark:text-main-400 p-1'>{shortenName(userName, 20)}</DropdownMenuLabel>
+                                    <DropdownMenuItem className='pl-1'><TokenCountdown /></DropdownMenuItem>
+                                    <DropdownMenuSeparator className='h-[0.1rem] bg-gray-300' />
+                                    <DropdownMenuItem className='text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-1 transition-colors duration-200'>
+                                        <Link href='/mypage'>마이페이지</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() => signOut()}
+                                        className='cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-1 transition-colors duration-200'
+                                    >
+                                        로그아웃
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                            {!token && (
+                                <DropdownMenuItem className='cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-1 transition-colors duration-200'
+                                >
+                                    <Link href='/auth/signin' className='w-full'>
+                                        로그인
+                                    </Link>
+                                </DropdownMenuItem>
+                            )}
+                            <div className='flex justify-center'>
+                                <ThemeSelectionButtons />
+                            </div>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </section>
             </main>
         </nav>

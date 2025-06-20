@@ -73,9 +73,10 @@ export default function MyReviews({ myReviewsTab, setMyReviewsTab, onOpenReviewD
             :
             <section className='flex flex-col gap-4'>
               {createdReviews?.map((review: ReviewItem) => (
-                <div key={`${review?.Gathering?.id}-${review?.id}`}
-                  className={`relative w-full p-4 rounded-xl border-1 hover:border-main-200 hover:shadow-md transition-gathering-item ${myReviewsTab === 0 ? 'bg-main-apricot' : 'dark:bg-gray-700 dark:text-white'}`}
-                ><CreatedReview review={review} /></div>
+                <CreatedReview
+                  key={`${review?.Gathering?.id}-${review?.id}`}
+                  review={review}
+                />
               ))}
             </section>
         )

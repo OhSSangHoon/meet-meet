@@ -5,8 +5,9 @@ import { useLeaveGathering } from '@/hooks/api/gatherings/detail/useLeaveGatheri
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { getTimeRemaining, toKoreanTime } from '@/utils/shared/date';
-import { THUMBNAIL_CLASSNAME, THUMBNAIL_WIDTH } from '@/utils/mypage/constants/thumbnailConstants';
+import { THUMBNAIL_CLASSNAME, THUMBNAIL_SIZE } from '@/utils/mypage/constants/thumbnailConstants';
 import { CheckCircle } from "lucide-react"
+import * as m from "motion/react-m";
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
 import GatheringInformation from '@/components/mypage/GatheringInformation';
@@ -73,8 +74,12 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
   return (
     <section className='flex flex-col gap-2'>
       {sortedGatherings.map(data => (
-        <article
+        <m.article
           key={data.id}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          viewport={{ amount: 0.5, once: true }}
           className="relative min-h-[100px] w-full p-4 rounded-xl flex flex-col sm:flex-row gap-4 border-1 hover:border-main-200 hover:shadow-md transition-gathering-item dark:bg-dark-2 dark:text-white"
         >
           {/* 마감 완료 및 5명 미만 */}
@@ -85,17 +90,16 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
           />
 
           {/* 좌측 */}
-          <figure className='relative'>
+          <figure className='relative h-[10rem]'>
             <DateReminder registrationEnd={data?.registrationEnd} />
             <ImageWithFallback
               src={data?.image}
               fallbackSrc='https://res.cloudinary.com/dbvzbdffi/image/upload/v1750048546/error_fallback_icbngz.avif'
               alt='모임 썸네일'
-              width={1000}
-              height={1000}
-              sizes="(max-width: 401px) 300px, (max-width: 801px) 500px, 1000px"
+              width={298}
+              height={170}
               priority
-              className={`${THUMBNAIL_WIDTH} ${THUMBNAIL_CLASSNAME}`}
+              className={`${THUMBNAIL_SIZE} ${THUMBNAIL_CLASSNAME}`}
             />
           </figure>
 
@@ -162,7 +166,7 @@ export default function JoinedGatherings({ setSelectedTab, setMyReviewsTab, onOp
               />
             </div>
           </article>
-        </article>
+        </m.article>
       ))}
 
       <ConfirmDialog

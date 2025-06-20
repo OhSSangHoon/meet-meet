@@ -70,7 +70,7 @@ async function getFourMostPopularGatherings(): Promise<Gathering[]> {
 
 /** 피처 카드 */
 const FeatureCard = ({ icon, title, description, gradient }: FeatureCardProps) => (
-  <div className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-lg transition-all group dark:bg-dark-2 dark:text-white">
+  <div className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-lg border-1 transition-all group dark:bg-dark-2 dark:text-white">
     <div className="space-y-6">
       <div className={`size-16 ${gradient} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
         <span className="text-2xl text-white">{icon}</span>
@@ -97,7 +97,8 @@ const GatheringCard = ({
       className="space-y-4 group h-full p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-300 bg-white dark:bg-dark-2 hover:shadow-md hover:border-main-300 dark:hover:border-main-400 transition-all"
       initial={{ opacity: 0, y: -20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: "linear" }}
     >
       {/* 모임 썸네일 위치 */}
       <ImageWithFallback
@@ -131,55 +132,61 @@ export default async function MainPage() {
   const fourMostPopularGatherings = await getFourMostPopularGatherings();
 
   return (
-    // 색상 경계를 없애기 위해 
-    <main className="bg-transparent contents-container">
-      {/* Hero Section */}
+    <div className="bg-transparent contents-container">
+      {/* Header */}
       <header
         id="hero"
-        className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-12">
-        <div className="flex-1 space-y-8">
+        className="flex-1 flex flex-col lg:flex-row items-center gap-6 py-12">
+        {/* 텍스트 및 프루프 */}
+        <section className="flex-1 space-y-8">
           <div className="space-y-4">
-            <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-              <span className="dark:text-white">가볍게 시작하는</span><br />
-              특별한<span className="bg-gradient-to-r from-[#8B5CF6] to-[#F472B6] bg-clip-text text-transparent"> 만남</span><br />
-            </h1>
+            <div className='flex items-center justify-between'>
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                <span className="dark:text-white">가볍게 시작하는</span><br />
+                특별한<span className="bg-gradient-to-r from-main-500 to-main-pink bg-clip-text text-transparent"> 만남</span><br />
+              </h1>
+              <Link href="/gatherings" className='inline-block sm:hidden'>
+                <div className="padding-button hover-button bg-button rounded-lg text-button-text text-sm sm:text-base font-semibold hover:bg-main-600 shadow-lg hover:shadow-xl">
+                  지금 시작하기
+                </div>
+              </Link>
+            </div>
             <p className="text-sm sm:text-xl text-gray-500 dark:text-white leading-relaxed max-w-md whitespace-nowrap">
-              서울의 2030이라면 <strong className="text-[#8B5CF6]">Meet Meet</strong>에서 모임을 만들고<br />
+              서울의 2030이라면 <strong className="text-main-500">Meet Meet</strong>에서 모임을 만들고<br />
               새로운 친구를 만들어보세요!
             </p>
           </div>
 
-          <Link href="/gatherings" className='inline-block'>
+          <Link href="/gatherings" className='hidden sm:inline-block'>
             <div className="padding-button hover-button bg-button rounded-lg text-button-text text-sm sm:text-base font-semibold hover:bg-main-600 shadow-lg hover:shadow-xl">
               지금 시작하기
             </div>
           </Link>
 
-          {/* Social Proof */}
-          <div className="flex items-center gap-6 pt-4">
+          <div className="flex items-center gap-4 pt-4">
             <div className="flex -space-x-2">
-              <div className={`${SOCIAL_PROOF_STYLE} bg-[#F6D55C]`}>
+              <div className={`${SOCIAL_PROOF_STYLE} bg-main-apricot`}>
                 <span className="text-sm font-semibold">😊</span>
               </div>
-              <div className={`${SOCIAL_PROOF_STYLE} bg-[#6EE7B7]`}>
+              <div className={`${SOCIAL_PROOF_STYLE} bg-main-jade`}>
                 <span className="text-sm font-semibold">🎨</span>
               </div>
-              <div className={`${SOCIAL_PROOF_STYLE} bg-[#F472B6]`}>
+              <div className={`${SOCIAL_PROOF_STYLE} bg-main-pink`}>
                 <span className="text-sm font-semibold">🏃</span>
               </div>
-              <div className={`${SOCIAL_PROOF_STYLE} bg-gray-200`}>
-                <span className="text-xs font-bold text-gray-500">+99</span>
+              <div className={`${SOCIAL_PROOF_STYLE} bg-slate-200`}>
+                <span className="text-xs font-bold text-gray-500">+88</span>
               </div>
             </div>
             <div className="text-sm text-gray-500 dark:text-white">
-              <strong className="text-[#8B5CF6]">12,000+</strong> 명이 이미 만남을 시작했어요
+              <strong className="text-main-500">3,300+</strong> 명이 이미 만남을 시작했어요
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className="flex-1 relative">
-          {/* 메인 히어로 이미지 */}
-          <div className="w-full max-w-md mx-auto h-96 bg-gradient-to-br from-main-100 to-pink-200 rounded-3xl shadow-2xl flex items-center justify-center">
+        {/* 히어로  */}
+        <section className="flex-1 relative">
+          <div className="w-full mx-auto h-96 bg-gradient-to-br from-main-100 to-pink-200 rounded-3xl shadow-2xl flex items-center justify-center">
             <Image src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1750301404/logo_hero_zeiiec.avif"
               alt="메인 히어로 이미지"
               width={317}
@@ -188,111 +195,113 @@ export default async function MainPage() {
               fetchPriority='high'
               className="w-2/3 mx-auto pointer-events-none" />
           </div>
-          {/* Floating Elements */}
-          <div className="absolute top-4 right-4 w-16 h-16 bg-[#F6D55C] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+          <div className="absolute top-4 right-4 w-16 h-16 bg-main-apricot rounded-full flex items-center justify-center shadow-lg animate-bounce">
             <span className="text-2xl">💛</span>
           </div>
-          <div className="absolute bottom-8 left-4 w-12 h-12 bg-[#6EE7B7] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+          <div className="absolute bottom-8 left-4 w-12 h-12 bg-main-jade rounded-full flex items-center justify-center shadow-lg animate-bounce">
             <span className="text-xl">🌟</span>
           </div>
-        </div>
+        </section>
       </header>
 
-      {/* 피쳐 */}
-      <section
-        id="features"
-        className="px-6 py-16 space-y-16"
-      >
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl sm:text-4xl font-bold dark:text-white">
-            왜 <span className="bg-gradient-to-r from-[#8B5CF6] to-[#F472B6] bg-clip-text text-transparent">Meet Meet</span>일까요?
-          </h2>
-          <p className="text-sm sm:text-lg text-gray-500 dark:text-white max-w-2xl mx-auto">
-            내가 찾는 모임을 쉽게 조건에 따라 찾을 수 있어요
-          </p>
-        </div>
-
-        <m.article className="grid md:grid-cols-3 gap-8"
-          initial={{ opacity: 0, y: 20, }}
-          whileInView={{ opacity: 1, y: 0, }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true, amount: 1, }}
+      {/* Main */}
+      <main>
+        {/* 피쳐 */}
+        <section
+          id="features"
+          className="py-16 space-y-10"
         >
-          <FeatureCard
-            icon="👥"
-            title="북적북적/도란도란"
-            description="모임의 성격을 기준으로 구분했어요"
-            gradient="bg-gradient-to-r from-main-jade to-main-apricot"
-          />
-          <FeatureCard
-            icon="🎯"
-            title="찜해두기"
-            description="찜해두기 기능으로 원하는 모임을 쉽게 찾을 수 있어요"
-            gradient="bg-gradient-to-r from-main-apricot to-main-pink"
-          />
-          <FeatureCard
-            icon="💬"
-            title="리뷰 시스템"
-            description="실제 이용자들이 남긴 리뷰로 모임의 소감을 알 수 있어요"
-            gradient="bg-gradient-to-r from-main-pink to-main-500"
-          />
-        </m.article>
-      </section>
-
-      {/* 지금 핫한 모임 */}
-      <section
-        id="community"
-        className="px-6 py-16 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-dark-2 dark:to-dark-2 rounded-3xl"
-      >
-        <div className="space-y-12">
-          <div
-            className="text-center space-y-4"
-          >
-            <h2 className="text-4xl font-bold dark:text-white">
-              지금 <span className="bg-gradient-to-r from-main-apricot via-main-pink to-main-500 bg-clip-text text-transparent">HOT한</span> 모임들
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl sm:text-4xl font-bold dark:text-white">
+              왜 <span className="bg-gradient-to-r from-main-500 to-main-pink bg-clip-text text-transparent">Meet Meet</span>일까요?
             </h2>
-            <m.p
-              className="text-lg text-gray-500 dark:text-white"
-              initial={{ x: -30, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+            <p className="text-sm sm:text-lg text-gray-500 dark:text-white max-w-2xl mx-auto">
+              내가 찾는 모임을 쉽게 조건에 따라 찾을 수 있어요
+            </p>
+          </div>
+
+          <m.article className="grid md:grid-cols-3 gap-8"
+            initial={{ opacity: 0, y: 20, }}
+            whileInView={{ opacity: 1, y: 0, }}
+            viewport={{ once: true, amount: 0.4, }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <FeatureCard
+              icon="👥"
+              title="북적북적/도란도란"
+              description="모임의 성격을 기준으로 구분했어요"
+              gradient="bg-gradient-to-r from-main-jade to-main-apricot"
+            />
+            <FeatureCard
+              icon="🎯"
+              title="찜해두기"
+              description="찜해두기 기능으로 원하는 모임을 쉽게 찾을 수 있어요"
+              gradient="bg-gradient-to-r from-main-apricot to-main-pink"
+            />
+            <FeatureCard
+              icon="💬"
+              title="리뷰 시스템"
+              description="실제 이용자들이 남긴 리뷰로 모임의 소감을 알 수 있어요"
+              gradient="bg-gradient-to-r from-main-pink to-main-500"
+            />
+          </m.article>
+        </section>
+
+        {/* 지금 핫한 모임 */}
+        <section
+          id="community"
+          className="px-6 py-16 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-dark-2 dark:to-dark-2 rounded-3xl"
+        >
+          <div className="space-y-12">
+            <div
+              className="text-center space-y-4"
             >
-              다양한 사람들이 만나고 있는 인기 모임에 참여해보시는 건 어떤가요?
-            </m.p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {fourMostPopularGatherings.map((gathering) => {
-              return (
-                <GatheringCard
-                  key={`${gathering.id} - ${gathering.dateTime}`}
-                  title={gathering.name}
-                  link={`/gatherings/detail/${gathering.id}`}
-                  schedule={getTimeRemaining(gathering.registrationEnd)}
-                  category={GATHERING_TYPES.find(type => type.id === gathering.type)?.title as 'MINDFULNESS' | 'WORKATION' | 'OFFICE_STRETCHING'}
-                  participants={gathering.participantCount}
-                  image={gathering.image}
-                />
-              )
-            })}
-          </div>
-
-          <div className="text-center">
-            <Link href="/gatherings" className='inline-block'>
-              <m.div
-                className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-main-300 bg-button-text dark:bg-dark-2 hover:bg-button dark:hover:bg-button text-button hover:text-button-text font-semibold transition-all"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+              <h2 className="text-4xl font-bold dark:text-white">
+                지금 <span className="bg-gradient-to-r from-main-apricot via-main-pink to-main-500 bg-clip-text text-transparent">HOT한</span> 모임들
+              </h2>
+              <m.p
+                className="text-lg text-gray-500 dark:text-white"
+                initial={{ x: -30, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true, amount: 0.5, }}
+                viewport={{ once: true }}
               >
-                더 많은 모임 보기
-              </m.div>
-            </Link>
-          </div>
-        </div>
-      </section>
+                다양한 사람들이 만나고 있는 인기 모임에 참여해보시는 건 어떤가요?
+              </m.p>
+            </div>
 
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {fourMostPopularGatherings.map((gathering) => {
+                return (
+                  <GatheringCard
+                    key={`${gathering.id} - ${gathering.dateTime}`}
+                    title={gathering.name}
+                    link={`/gatherings/detail/${gathering.id}`}
+                    schedule={getTimeRemaining(gathering.registrationEnd)}
+                    category={GATHERING_TYPES.find(type => type.id === gathering.type)?.title as 'MINDFULNESS' | 'WORKATION' | 'OFFICE_STRETCHING'}
+                    participants={gathering.participantCount}
+                    image={gathering.image}
+                  />
+                )
+              })}
+            </div>
+
+            <div className="text-center">
+              <Link href="/gatherings" className='inline-block'>
+                <m.div
+                  className="px-8 py-3 rounded-xl shadow-sm hover:shadow-md border border-main-300 bg-button-text dark:bg-dark-2 hover:bg-button dark:hover:bg-button text-button hover:text-button-text font-semibold transition-all"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  viewport={{ once: true, amount: 0.5, }}
+                >
+                  더 많은 모임 보기
+                </m.div>
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
       <footer className="px-6 py-12 bg-gray-800 rounded-3xl text-white">
@@ -360,7 +369,7 @@ export default async function MainPage() {
           </div>
         </div>
       </footer>
-    </main>
+    </div>
   );
 };
 

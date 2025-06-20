@@ -97,7 +97,7 @@ const useThemeState = () => {
  * 테마 토글 버튼
  * @returns 테마 토글 버튼
  */
-export default function DarkModeToggleButton() {
+export function DarkModeToggleButton() {
     const { handleToggle, currentThemeInfo, nextThemeInfo } = useThemeState();
     const CurrentIcon = currentThemeInfo.icon;
 
@@ -135,5 +135,65 @@ export function DarkModeToggleWithLabel() {
                 {currentThemeInfo.label}
             </span>
         </button>
+    );
+}
+
+// =================================================================================================
+// 테마 선택 버튼 그룹
+// =================================================================================================
+
+const useThemeSelector = () => {
+    const { toggleDarkMode } = useTheme();
+    const [currentTheme, setCurrentTheme] = useState<ThemeMode>("system");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const savedTheme = localStorage.getItem("theme") as ThemeMode | null;
+            if (savedTheme) {
+                setCurrentTheme(savedTheme);
+            } else {
+                setCurrentTheme("system");
+            }
+        }
+    }, []);
+
+    const selectTheme = (theme: ThemeMode) => {
+        setCurrentTheme(theme);
+        toggleDarkMode(theme);
+    };
+
+    return {
+        currentTheme,
+        selectTheme,
+    };
+}
+
+export function ThemeSelectionButtons() {
+    const { currentTheme, selectTheme } = useThemeSelector();
+    const themes: ThemeMode[] = ["light", "dark", "system"];
+
+    return (
+        <div className="flex items-center gap-2 p-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800">
+            {themes.map((theme) => {
+                const themeInfo = getThemeInfo(theme);
+                const Icon = themeInfo.icon;
+                const isActive = currentTheme === theme;
+
+                return (
+                    <button
+                        key={theme}
+                        onClick={() => selectTheme(theme)}
+                        className={`w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors duration-200 ${isActive
+                            ? "bg-white dark:bg-gray-900/50 text-gray-800 dark:text-gray-100 shadow-sm"
+                            : "text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700/50"
+                            }`}
+                        aria-pressed={isActive}
+                        title={themeInfo.fullLabel}
+                    >
+                        <Icon size={16} className={isActive ? themeInfo.color : ""} />
+                    </button>
+                );
+            })}
+        </div>
     );
 }
