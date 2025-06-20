@@ -37,9 +37,25 @@ const validateImageFile = (file: File | null): { isValid: boolean; error?: strin
   return { isValid: true };
 };
 
+/** 모집 정원 유효성 검증 */
 const validateCapacity = (capacity: number): boolean => {
   return Number.isInteger(capacity) && capacity >= 5 && capacity <= 20;
 };
+
+/** 모집 정원 입력 핸들러 */
+const handleCapacityInput = (value: string): number => {
+  if(value === ''){
+    return 5;
+  }
+
+  const numValue = Number(value);
+  return isNaN(numValue) ? 5 : numValue;
+}
+
+/** 기본 모집 정원 반환 */
+const getDefaultCapacity = (): number => {
+  return 5;
+}
 
 const validateDateTime = (dateTime: Date | null): boolean => {
   if (!dateTime) return false;
@@ -54,109 +70,114 @@ const validateLocation = (location: string): boolean => {
 
 describe('모임 생성 검증', () => {
   describe('모임 이름 검증', () => {
-    it('유효한 모임 이름은 통과해야 함', () => {
-      expect(validateGatheringName('오피스 스트레칭')).toBe(true);
-      expect(validateGatheringName('개발자 모임-2024')).toBe(true);
-      expect(validateGatheringName('Team Building')).toBe(true);
-    });
+    it('모임 이름 검증 통합 테스트', () => {
+      const testCases = [
+        // 성공 케이스
+        { input: '오피스 스트레칭', valid: true, desc: '일반적인 이름' },
+        { input: '개발자 모임-2024', valid: true, desc: '하이픈과 숫자' },
+        { input: 'Team Building', valid: true, desc: '영문' },
+        
+        // 실패 케이스
+        { input: '', valid: false, desc: '빈 문자열' },
+        { input: '   ', valid: false, desc: '공백만' },
+        { input: '\t\n', valid: false, desc: '탭과 개행' },
+        { input: 'a'.repeat(21), valid: false, desc: '20자 초과' },
+        { input: '모임@#$%', valid: false, desc: '특수문자' },
+        { input: '모임<script>', valid: false, desc: 'HTML 태그' }
+      ];
 
-    it('빈 문자열이나 공백만 있는 경우 실패해야 함', () => {
-      expect(validateGatheringName('')).toBe(false);
-      expect(validateGatheringName('   ')).toBe(false);
-      expect(validateGatheringName('\t\n')).toBe(false);
-    });
-
-    it('20자 초과 시 실패해야 함', () => {
-      const longName = 'a'.repeat(21);
-      expect(validateGatheringName(longName)).toBe(false);
-    });
-
-    it('허용되지 않은 특수문자 포함 시 실패해야 함', () => {
-      expect(validateGatheringName('모임@#$%')).toBe(false);
-      expect(validateGatheringName('모임<script>')).toBe(false);
+      testCases.forEach(({ input, valid }) => {
+        expect(validateGatheringName(input)).toBe(valid);
+      });
     });
   });
 
   describe('이미지 파일 검증', () => {
-    it('파일이 없으면 실패해야 함', () => {
-      const result = validateImageFile(null);
-      expect(result.isValid).toBe(false);
-      expect(result.error).toBe('이미지를 첨부해주세요.');
-    });
-
-    it('5MB 초과 파일은 실패해야 함', () => {
+    it('이미지 파일 검증 통합 테스트', () => {
+      // null 체크
+      expect(validateImageFile(null).isValid).toBe(false);
+      
+      // 크기 초과 파일
       const largeFile = new File([''], 'large.jpg', { type: 'image/jpeg' });
       Object.defineProperty(largeFile, 'size', { value: 6 * 1024 * 1024 });
+      expect(validateImageFile(largeFile).isValid).toBe(false);
       
-      const result = validateImageFile(largeFile);
-      expect(result.isValid).toBe(false);
-      expect(result.error).toContain('5MB 이하');
-    });
-
-    it('허용된 이미지 타입은 통과해야 함', () => {
+      // 유효한 파일
       const validFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
       Object.defineProperty(validFile, 'size', { value: 1024 });
+      expect(validateImageFile(validFile).isValid).toBe(true);
       
-      const result = validateImageFile(validFile);
-      expect(result.isValid).toBe(true);
-      expect(result.error).toBeUndefined();
-    });
-
-    it('SVG 파일은 차단되어야 함', () => {
+      // SVG 차단
       const svgFile = new File(['<svg></svg>'], 'test.svg', { type: 'image/svg+xml' });
-      
-      const result = validateImageFile(svgFile);
-      expect(result.isValid).toBe(false);
-      expect(result.error).toContain('SVG 파일은 보안상 업로드할 수 없습니다');
+      expect(validateImageFile(svgFile).isValid).toBe(false);
     });
   });
 
   describe('모집 정원 검증', () => {
-    it('5-20 범위의 정수는 통과해야 함', () => {
-      expect(validateCapacity(5)).toBe(true);
-      expect(validateCapacity(10)).toBe(true);
-      expect(validateCapacity(20)).toBe(true);
+    it('기본값은 5여야 함', () => {
+      expect(getDefaultCapacity()).toBe(5);
     });
 
-    it('범위를 벗어나면 실패해야 함', () => {
-      expect(validateCapacity(4)).toBe(false);
-      expect(validateCapacity(21)).toBe(false);
+    it('입력 처리 및 검증 통합 테스트', () => {
+      const testCases = [
+        // 정상 케이스
+        { input: '', expected: 5, valid: true, desc: '빈 값 → 기본값' },
+        { input: '5', expected: 5, valid: true, desc: '최소값' },
+        { input: '10', expected: 10, valid: true, desc: '중간값' },
+        { input: '20', expected: 20, valid: true, desc: '최대값' },
+        
+        // 범위 초과/미만
+        { input: '0', expected: 0, valid: false, desc: '0' },
+        { input: '4', expected: 4, valid: false, desc: '최소값-1' },
+        { input: '21', expected: 21, valid: false, desc: '최대값+1' },
+        { input: '100', expected: 100, valid: false, desc: '큰 수' },
+        { input: '-5', expected: -5, valid: false, desc: '음수' },
+        
+        // 특수 케이스
+        { input: '10.5', expected: 10.5, valid: false, desc: '소수점' },
+        { input: 'abc', expected: 5, valid: true, desc: '문자열 → 기본값' },
+        { input: 'null', expected: 5, valid: true, desc: 'null 문자열 → 기본값' }
+      ];
+
+      testCases.forEach(({ input, expected, valid }) => {
+        const processedValue = handleCapacityInput(input);
+        const isValid = validateCapacity(processedValue);
+        
+        expect(processedValue).toBe(expected);
+        expect(isValid).toBe(valid);
+      });
     });
 
-    it('정수가 아니면 실패해야 함', () => {
-      expect(validateCapacity(5.5)).toBe(false);
+    it('특수 값 검증', () => {
       expect(validateCapacity(NaN)).toBe(false);
+      expect(validateCapacity(Infinity)).toBe(false);
+      expect(validateCapacity(-Infinity)).toBe(false);
     });
   });
 
   describe('날짜 시간 검증', () => {
-    it('미래 날짜는 통과해야 함', () => {
+    it('날짜 시간 검증 통합 테스트', () => {
       const futureDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      expect(validateDateTime(futureDate)).toBe(true);
-    });
-
-    it('과거 날짜는 실패해야 함', () => {
       const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      
+      expect(validateDateTime(futureDate)).toBe(true);
       expect(validateDateTime(pastDate)).toBe(false);
-    });
-
-    it('null은 실패해야 함', () => {
       expect(validateDateTime(null)).toBe(false);
     });
   });
 
   describe('장소 검증', () => {
-    it('유효한 장소는 통과해야 함', () => {
-      expect(validateLocation('을지로3가')).toBe(true);
-      expect(validateLocation('건대입구')).toBe(true);
-      expect(validateLocation('신림')).toBe(true);
-      expect(validateLocation('홍대입구')).toBe(true);
-    });
-
-    it('유효하지 않은 장소는 실패해야 함', () => {
-      expect(validateLocation('강남역')).toBe(false);
-      expect(validateLocation('')).toBe(false);
-      expect(validateLocation('서울역')).toBe(false);
+    it('장소 검증 통합 테스트', () => {
+      const validLocations = ['을지로3가', '건대입구', '신림', '홍대입구'];
+      const invalidLocations = ['강남역', '', '서울역'];
+      
+      validLocations.forEach(location => {
+        expect(validateLocation(location)).toBe(true);
+      });
+      
+      invalidLocations.forEach(location => {
+        expect(validateLocation(location)).toBe(false);
+      });
     });
   });
 

@@ -7,6 +7,7 @@ import { decodeHtmlEntities } from '@/utils/shared/decodeHtmlEntities';
 import ReviewStats from '@/components/reviews/ReviewStats';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
 import HeartRating from '@/components/reviews/HeartRating';
+import * as m from "motion/react-m";
 
 // 스타일 상수
 const TEXT_GRAY_XS_STYLES = "text-xs text-gray-400";
@@ -165,8 +166,16 @@ export default function ReviewsList({
                     const isLastItem = index === allReviews.length - 1;
 
                     return (
-                        <article
+                        <m.article
                             key={`${review.id}-${index}`}
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ 
+                                duration: 0.4, 
+                                delay: Math.min(index * 0.02, 0.1),
+                                ease: "easeOut" 
+                            }}
+                            viewport={{ amount: 0.1, once: true }}
                             className="w-full flex flex-col md:flex-row justify-start border border-gray-200 rounded-2xl bg-white hover:border-main-300 hover:shadow-lg transition-all duration-300 overflow-hidden relative dark:border-gray-700 dark:bg-dark-2 dark:text-white"
                             ref={isLastItem && !isFetchingNextPage && enableInfiniteScroll ? lastItemRef : undefined}
                         >
@@ -209,7 +218,7 @@ export default function ReviewsList({
                                     </div>
                                 </div>
                             </div>
-                        </article>
+                        </m.article>
                     );
                 })}
 
