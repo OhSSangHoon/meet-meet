@@ -111,7 +111,10 @@ export const createGatheringFormSchema = z.object({
         }, '마감 날짜는 현재 시간 이후여야 합니다.'),
 
     capacity: z
-        .number()
+        .number({
+            required_error: '모집 정원을 입력해주세요.',
+            invalid_type_error: '모집 정원은 숫자로 입력해주세요.'
+        })
         .min(5, '모집 정원은 최소 5명 이상이어야 합니다.')
         .max(20, '모집 정원은 최대 20명까지 가능합니다.')
 }).refine((data) => {

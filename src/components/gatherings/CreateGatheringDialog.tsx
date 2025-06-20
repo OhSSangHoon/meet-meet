@@ -379,7 +379,19 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
                                             id="capacity"
                                             type="number"
                                             {...field}
-                                            onChange={(e) => field.onChange(parseInt(e.target.value))}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (value === '') {
+                                                    field.onChange(5);
+                                                } else {
+                                                    const numValue = Number(value);
+                                                    if (isNaN(numValue) || !Number.isInteger(numValue)) {
+                                                        field.onChange(5);
+                                                    } else {
+                                                        field.onChange(numValue);
+                                                    }
+                                                }
+                                            }}
                                             min="5"
                                             max="20"
                                             className="w-full h-[44px] rounded-lg bg-gray-50 py-2 px-4 text-semibold"
