@@ -56,8 +56,8 @@ describe('찜목록 관리', () => {
 
     it('유효하지 않은 형식은 false를 반환해야 함', () => {
       expect(validateSavedIds(['1', '', '3'])).toBe(false);
-      expect(validateSavedIds([1, 2, 3] as any)).toBe(false);
-      expect(validateSavedIds('not-array' as any)).toBe(false);
+      expect(validateSavedIds([1, 2, 3] as unknown as string[])).toBe(false);
+      expect(validateSavedIds('not-array' as unknown as string[])).toBe(false);
     });
   });
 
