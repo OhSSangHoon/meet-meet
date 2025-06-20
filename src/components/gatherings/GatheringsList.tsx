@@ -10,6 +10,7 @@ import { filterGatheringsByType, getUniqueGatherings } from '@/utils/gatherings/
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import JoinedCountsProgressBar from "@/components/gatherings/shared/JoinedCountsProgressBar";
 import DateReminder from '@/components/shared/DateReminder';
+import * as m from "motion/react-m";
 import dynamic from 'next/dynamic';
 
 const SaveToggleButton = dynamic(() => import('@/components/shared/SaveToggleButton'), {
@@ -100,10 +101,18 @@ const GatheringItem = memo(({
     lastItemRef?: (node: HTMLElement | null) => void;
     onGatheringClick: (id: number) => void;
 }) => (
-    <article
+    <m.article
         role="button"
         tabIndex={0}
         key={`${gathering.teamId || 'unknown'}-${gathering.id}-${index}`}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ 
+            duration: 0.4, 
+            delay: Math.min(index * 0.1, 0.1),
+            ease: "easeOut" 
+        }}
+        viewport={{ amount: 0.1, once: true }}
         onClick={() => onGatheringClick(gathering.id)}
         ref={isLastItem ? lastItemRef : undefined}
         className="w-full flex flex-col md:flex-row justify-start border border-gray-200 dark:border-dark-2 dark:bg-dark-2 rounded-2xl bg-white hover:border-main-300 dark:hover:border-main-400 hover:shadow-lg dark:hover:shadow-dark-lg transition-all duration-300 overflow-hidden relative cursor-pointer"
@@ -167,7 +176,7 @@ const GatheringItem = memo(({
                 </div>
             </div>
         </div>
-    </article>
+    </m.article>
 ));
 GatheringItem.displayName = 'GatheringItem';
 
