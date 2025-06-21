@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SavedGatheringsUI from '@/components/saved/SavedGatheringUI';
+import SavedGatherings from '@/components/saved/SavedGatherings';
 
 export const metadata: Metadata = {
   title: `찜한 모임 | Meet Meet`,
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function SavedPage() {
   return (
     <main className="contents-container">
-      <SavedGatheringsUI />
+      <SavedGatherings />
     </main>
   );
 }

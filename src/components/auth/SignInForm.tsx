@@ -3,22 +3,13 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/providers/AuthProvider';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { signInFormSchema, SignInFormSchemaType } from '@/utils/auth/authSchema';
 import { excapeForXSS } from '@/utils/shared/excapeForXSS';
 import axios from 'axios';
 import InputField from '@/components/auth/InputField';
 import SubmitButton from '@/components/auth/SubmitButton';
 import AuthSwitchLink from '@/components/auth/AuthSwitchLink';
-
-const signInFormSchema = z.object({
-    email: z.string().email('올바른 이메일 형식이 아닙니다.'),
-    password: z
-        .string()
-        .min(8, '비밀번호는 8자 이상이어야 합니다.')
-});
-
-type SignInFormSchemaType = z.infer<typeof signInFormSchema>;
 
 export default function SignInForm() {
     const { signIn } = useContext(AuthContext);
@@ -41,7 +32,10 @@ export default function SignInForm() {
     const onSubmit = async (data: SignInFormSchemaType) => {
         setErrorResponseMessage(null);
         try {
-            await signIn(excapeForXSS(data.email), excapeForXSS(data.password));
+            await signIn({
+                email: excapeForXSS(data.email),
+                password: excapeForXSS(data.password)
+            });
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const serverError = error?.response?.data?.error;

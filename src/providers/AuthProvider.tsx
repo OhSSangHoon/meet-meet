@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { internalClient } from '@/lib/api/clientFetchers';
 import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { SignInRequest, SignUpRequest, UpdateUserProfileRequest } from '@/types/auth';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 
@@ -15,10 +16,10 @@ type AuthContextType = {
     signInDialogOpen: boolean;
     setSignInDialogOpen: Dispatch<SetStateAction<boolean>>;
     setToken: Dispatch<SetStateAction<string | null>>;
-    signUp: (email: string, password: string, name: string, companyName: string) => Promise<void>;
-    signIn: (email: string, password: string) => Promise<void>;
+    signUp: (data: SignUpRequest) => Promise<void>;
+    signIn: (data: SignInRequest) => Promise<void>;
     signOut: () => Promise<void>;
-    updateUserProfile: (data: { name: string, id: number, email: string, companyName: string, image: string }) => void;
+    updateUserProfile: (data: UpdateUserProfileRequest) => void;
     userName: string;
     userId: number;
     userEmail: string;
@@ -59,10 +60,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const router = useRouter();
     const pathname = usePathname();
 
-    const signUp = async (email: string, password: string, name: string, companyName: string) => {
+    const signUp = async ({ email, password, name, companyName }: SignUpRequest) => {
         try {
-            const result = await internalClient.post(INTERNAL_PATHS.SIGN_UP, { email, password, name, companyName })
-            if (result.status === 200 || result.status === 201) {
+            const response = await internalClient.post(INTERNAL_PATHS.SIGN_UP, { email, password, name, companyName })
+            if (response.status === 200 || response.status === 201) {
                 const signInResult = await internalClient.post(INTERNAL_PATHS.SIGN_IN, { email, password });
                 if (signInResult.status === 200) {
                     localStorage.setItem('token', signInResult.data.token);
@@ -76,12 +77,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }
     }
 
-    const signIn = async (email: string, password: string) => {
+    const signIn = async ({ email, password }: SignInRequest) => {
         try {
-            const result = await internalClient.post(INTERNAL_PATHS.SIGN_IN, { email, password });
-            if (result.status === 200) {
-                localStorage.setItem('token', result.data.token);
-                setToken(result.data.token);
+            const response = await internalClient.post(INTERNAL_PATHS.SIGN_IN, { email, password });
+            if (response.status === 200) {
+                localStorage.setItem('token', response.data.token);
+                setToken(response.data.token);
                 await fetchUser();
                 router.replace(previousPath);
             }
@@ -92,18 +93,19 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const fetchUser = async () => {
         try {
-            const result = await internalClient.get(INTERNAL_PATHS.USER);
-            if (result.status === 200) {
-                setUserName(result.data.name);
-                setUserId(result.data.id);
-                setUserEmail(result.data.email);
-                setUserCompanyName(result.data.companyName);
-                setUserImage(result.data.image);
-                localStorage.setItem('user_id', result.data.id);
-                localStorage.setItem('user_email', result.data.email);
-                localStorage.setItem('user_name', result.data.name);
-                localStorage.setItem('user_company_name', result.data.companyName);
-                localStorage.setItem('user_image', result.data.image);
+            const response = await internalClient.get(INTERNAL_PATHS.USER);
+            if (response.status === 200) {
+                console.log('유저 정보:', response.data);
+                setUserName(response.data.name);
+                setUserId(response.data.id);
+                setUserEmail(response.data.email);
+                setUserCompanyName(response.data.companyName);
+                setUserImage(response.data.image);
+                localStorage.setItem('user_id', response.data.id);
+                localStorage.setItem('user_email', response.data.email);
+                localStorage.setItem('user_name', response.data.name);
+                localStorage.setItem('user_company_name', response.data.companyName);
+                localStorage.setItem('user_image', response.data.image);
                 localStorage.setItem('token_issued_at', Date.now().toString());
             }
         } catch (error) {
@@ -130,15 +132,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         await axios.post(INTERNAL_PATHS.SIGN_OUT);
     }
 
-    const updateUserProfile = (data: { name: string, id: number, email: string, companyName: string, image: string }) => {
-        localStorage.setItem('user_id', data.id.toString());
-        localStorage.setItem('user_email', data.email);
-        localStorage.setItem('user_name', data.name);
+    const updateUserProfile = (data: UpdateUserProfileRequest) => {
         localStorage.setItem('user_company_name', data.companyName);
         localStorage.setItem('user_image', data.image);
-        setUserName(data.name);
-        setUserId(data.id);
-        setUserEmail(data.email);
         setUserCompanyName(data.companyName);
         setUserImage(data.image);
     };

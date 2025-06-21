@@ -7,7 +7,7 @@ import GatheringsList from '@/components/gatherings/GatheringsList';
 import GatheringFilters from '@/components/shared/GatheringsFilters';
 import PagesHeader from '@/components/shared/PagesHeader';
 
-export default function SavedGatheringsUI() {
+export default function SavedGatherings() {
     const [selectedMainType, setSelectedMainType] = useState('DALLAEMFIT');
     const [selectedSubType, setSelectedSubType] = useState('ALL');
 

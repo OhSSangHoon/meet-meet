@@ -1,8 +1,6 @@
-import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
-import { serverFetcher } from '@/lib/api/serverFetcher';
-import { Gathering } from '@/types/gatherings';
-import { getTimeRemaining, toKoreanTime } from '@/utils/shared/date';
+import { getTimeRemaining } from '@/utils/shared/date';
 import { Metadata } from 'next';
+import { getPopularGatherings } from '@/actions/getPopularGatherings';
 import * as m from "motion/react-m";
 import Image from 'next/image';
 import ImageWithFallback from '@/components/shared/ImageWithFallback';
@@ -47,26 +45,6 @@ const GATHERING_TYPES = [
     title: '도란도란',
   }
 ];
-
-async function getFourMostPopularGatherings(): Promise<Gathering[]> {
-  try {
-    let data: Gathering[] = [];
-    const response = await serverFetcher(`${EXTERNAL_PATHS.GATHERINGS}?sortBy=participantCount&sortOrder=desc`, { cache: 'force-cache', next: { revalidate: 60 * 60 } });
-    if (Array.isArray(response)) data = response as Gathering[];
-
-    const now = new Date();
-    const koreanNow = toKoreanTime(now);
-
-    // 모집 마감 안 지난 모임만 필터링
-    const filtered = data.filter((gathering) => new Date(gathering.registrationEnd) > koreanNow);
-
-    // 상위 4개만 반환
-    return filtered.slice(0, 4);
-  } catch (error) {
-    console.error('인기 모임 4개 조회 실패:', error);
-    return [];
-  }
-}
 
 /** 피처 카드 */
 const FeatureCard = ({ icon, title, description, gradient }: FeatureCardProps) => (
@@ -113,9 +91,9 @@ const GatheringCard = ({
       <div className="space-y-2">
         <h3 className="font-semibold group-hover:text-main-500 dark:text-white dark:group-hover:text-main-500 transition-all">{title}</h3>
         <div className='flex items-center gap-1'>
-          <span className="text-sm text-gray-500 dark:text-white">{schedule}</span>
-          <span className='text-gray-500 dark:text-white'>|</span>
-          <span className="text-sm text-gray-500 dark:text-white">
+          <span className="text-xs text-gray-500 dark:text-white">{schedule}</span>
+          <span className='text-xs text-gray-500 dark:text-white'>•</span>
+          <span className="text-xs text-gray-500 dark:text-white">
             <RollingNumber value={participants} duration={1000} interval={250} />
             명 참여
           </span>
@@ -129,7 +107,7 @@ const GatheringCard = ({
 );
 
 export default async function MainPage() {
-  const fourMostPopularGatherings = await getFourMostPopularGatherings();
+  const fourMostPopularGatherings = await getPopularGatherings();
 
   return (
     <div className="bg-transparent contents-container">
@@ -145,7 +123,9 @@ export default async function MainPage() {
                 <span className="dark:text-white">가볍게 시작하는</span><br />
                 특별한<span className="bg-gradient-to-r from-main-500 to-main-pink bg-clip-text text-transparent"> 만남</span><br />
               </h1>
-              <Link href="/gatherings" className='inline-block sm:hidden'>
+              <Link
+
+                href="/gatherings" className='inline-block sm:hidden'>
                 <div className="padding-button hover-button bg-button rounded-lg text-button-text text-sm sm:text-base font-semibold hover:bg-main-600 shadow-lg hover:shadow-xl">
                   지금 시작하기
                 </div>
