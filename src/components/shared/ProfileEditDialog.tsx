@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { excapeForXSS } from '@/utils/shared/excapeForXSS';
+import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDialog';
 import { Upload } from 'lucide-react';
 import axios from 'axios';
@@ -86,7 +86,7 @@ export default function ProfileEditDialog({ setIsProfileEditDialogOpen }: { setI
         }
 
         try {
-            const response = await editProfile(imageFile, excapeForXSS(data.companyName), token!);
+            const response = await editProfile(imageFile, escapeForXSS(data.companyName), token!);
             if (response.status === 200) {
                 updateUserProfile(response.data);
                 setError(null);

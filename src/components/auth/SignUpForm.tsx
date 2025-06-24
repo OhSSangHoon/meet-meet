@@ -5,7 +5,7 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { useForm } from 'react-hook-form';
 import { signUpFormSchema, SignUpFormSchemaType } from '@/utils/auth/authSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { excapeForXSS } from '@/utils/shared/excapeForXSS';
+import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import Image from 'next/image';
 import axios from 'axios';
 import InputField from '@/components/auth/InputField';
@@ -38,10 +38,10 @@ export default function SignUpForm() {
     const onSubmit = async (data: SignUpFormSchemaType) => {
         try {
             await signUp({
-                email: excapeForXSS(data.email),
-                password: excapeForXSS(data.password),
-                name: excapeForXSS(data.name),
-                companyName: excapeForXSS(data.companyName)
+                email: escapeForXSS(data.email),
+                password: escapeForXSS(data.password),
+                name: escapeForXSS(data.name),
+                companyName: escapeForXSS(data.companyName)
             });
         } catch (error) {
             if (axios.isAxiosError(error)) {

@@ -7,7 +7,7 @@ import { AuthContext } from '@/providers/AuthProvider';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmDialogState, openConfirmDialog } from '@/utils/shared/confirmDialog';
-import { excapeForXSS } from '@/utils/shared/excapeForXSS';
+import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { formatDateToISO, DateTimeValue, dateTimeValueToDate, formatDateTimeValue } from '@/utils/shared/date';
 import { CreateGatheringFormSchemaType, createGatheringFormSchema } from '@/utils/gatherings/createGatheringSchema';
 import { X } from "lucide-react";
@@ -154,10 +154,10 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
     const createApiFormData = (data: CreateGatheringFormSchemaType): FormData => {
         const apiFormData = new FormData();
 
-        apiFormData.append('name', excapeForXSS(data.name));
-        apiFormData.append('location', excapeForXSS(data.location));
-        apiFormData.append('type', excapeForXSS(data.type));
-        apiFormData.append('capacity', excapeForXSS(data.capacity.toString()));
+        apiFormData.append('name', escapeForXSS(data.name));
+        apiFormData.append('location', escapeForXSS(data.location));
+        apiFormData.append('type', escapeForXSS(data.type));
+        apiFormData.append('capacity', escapeForXSS(data.capacity.toString()));
 
         if (data.meetingDateTime) {
             const finalGatheringDateTime = dateTimeValueToDate(data.meetingDateTime);
@@ -203,10 +203,10 @@ export default function CreateGatheringDialog({ onClose }: CreateGatheringDialog
 
             // 성공 처리
             await queryClient.invalidateQueries({ queryKey: gatheringsQuery.all() });
-            
+
             // 생성된 모임 ID 추출 후 상세페이지로 이동
             const createdGatheringId = response?.id || response?.data?.id;
-            
+
             if (createdGatheringId) {
                 openConfirmDialog(setConfirmDialog, '모임 생성 완료', () => {
                     setIsSubmitting(false);

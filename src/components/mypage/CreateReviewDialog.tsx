@@ -6,7 +6,7 @@ import { useCreateReview } from '@/hooks/api/mypage/useCreateReview';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { excapeForXSS } from '@/utils/shared/excapeForXSS';
+import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { Heart } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Button from '@/components/shared/Button';
@@ -62,7 +62,7 @@ export default function CreateReviewDialog({
   const openConfirmDialog = (text: string, onConfirm?: () => void) => setConfirmDialog({ open: true, text, onConfirm });
 
   const onSubmit = (data: ReviewFormSchemaType) => {
-    createReview({ gatheringId: reviewFormData.gatheringId, score: data.score, comment: excapeForXSS(data.comment) });
+    createReview({ gatheringId: reviewFormData.gatheringId, score: data.score, comment: escapeForXSS(data.comment) });
   };
 
   // ESC 키 눌렀을 때 다이얼로그 닫기
