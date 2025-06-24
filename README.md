@@ -171,18 +171,31 @@
     └── 💾 saved
 
 ⚖️ utils
+    ├── 🔐 auth
     ├── 👥 gatherings
     ├── 📄 mypage
     ├── ⭐ reviews
     └── 🌐 shared
 ```
 
-`shared`는 global, common과 동일한 의미를 가진 디렉토리입니다.
+**components**<br>
+UI와 클라이언트 로직을 담당하는 컴포넌트들이 위치합니다.
 
-- '전역에서 Feature에 구애받지 않고 참조하여 사용할 수 있는' 재사용 컴포넌트가 위치합니다.
+**hooks/api**<br>
+Tanstack Query에서 제공하는 Hook에 기반된 커스텀 Hooks입니다.
+이는 `Async Surf`의 주요 구성요소로 역할을 하기도 합니다. 자세한 설명은 아키텍처 설명에 있습니다.
 
-이를 제외한 나머지 디렉토리는 모두 역할(페이지) 기반의 디렉토리입니다.
-이들 중 gatherings만 내부에 `shared` 디렉토리를 2nd detph로 가지고 있습니다.<br>
+**utils**<br>
+유틸리티 함수가 대부분을 차지하고, 극히 일부 유효성 검사 목적의 스키마나 상수도 포함되어있습니다.
+컴포넌트에 위치할 필요가 없고 순수 함수의 성격을 띌 수 있으면서 분리가 가능한 함수는 이곳에 위치합니다.
+
+### 특이사항?
+
+`components`, `hook/api`, `utils`에 위한 `shared`는 global, common과 동일한 의미를 가진 디렉토리입니다.
+'전역에서 Feature에 구애받지 않고 참조하여 사용할 수 있는' 재사용 컴포넌트가 위치합니다.<br>
+
+이를 제외한 나머지 디렉토리는 모두 역할 기반의 디렉토리입니다.
+이 중 `gatherings`만 내부에 `shared` 디렉토리를 2nd detph로 가지고 있습니다.
 
 > 왜일까요?
 
@@ -202,7 +215,8 @@
 ```
 
 `gatherings`는 모임 찾기, 모임 상세 페이지를 포함한 Feature입니다.
-페이지 경로 또한 `/detail`로 gatherings의 하위 엔드포인트이므로, `gatherings` 한정 내부 `shared`가 존재합니다.
+페이지 경로 또한 `gatherings/detail`로 gatherings의 하위 엔드포인트입니다.
+따라서 찾기와 상세에서 공통 재사용되는 컴포넌트와 페이지별 따로 쓰는 컴포넌트를 구분하기 위해 내부 `shared`가 하나 존재합니다.
 
 ### 구조 채택의 근거
 
