@@ -29,9 +29,9 @@ export default function Navbar() {
     }, [userImage]);
 
     const navLinks = [
-        { href: '/gatherings', label: '모임 찾기' },
+        { href: '/gatherings?mainType=DALLAEMFIT&sortBy=registrationEnd&sortOrder=asc', label: '모임 찾기' },
         { href: '/saved', label: '찜한 모임' },
-        { href: '/reviews', label: '모든 리뷰' },
+        { href: '/reviews?mainType=DALLAEMFIT&sortBy=createdAt&sortOrder=desc', label: '모든 리뷰' },
     ]
 
     return (
