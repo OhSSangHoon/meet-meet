@@ -45,6 +45,8 @@ export default function Navbar() {
                             alt="로고 이미지"
                             width={100}
                             height={100}
+                            placeholder='blur'
+                            priority
                             className='w-[3rem] h-[3rem] md:w-[6rem] md:h-[6rem] pointer-events-none'
                         />
                     </Link>

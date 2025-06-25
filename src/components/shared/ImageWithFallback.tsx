@@ -25,13 +25,13 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
             {...rest}
             src={imgSrc}
             alt={alt}
+            className={className}
             onError={() => {
                 console.log('이미지 로드 실패 => fallback 이미지 적용');
                 setImgSrc(fallbackSrc)
             }}
             width={width}
             height={height}
-            className={className}
             priority={priority}
             fetchPriority={priority ? 'high' : 'auto'}
             loading={priority ? 'eager' : 'lazy'}
@@ -39,7 +39,7 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
             decoding={priority ? 'sync' : 'async'}
             quality={quality}
             placeholder={placeholder}
-            blurDataURL={placeholder === 'blur' ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" : undefined}
+            blurDataURL={placeholder === 'blur' ? "data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" : undefined}
             unoptimized={false}
         />
     );

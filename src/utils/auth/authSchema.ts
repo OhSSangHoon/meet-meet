@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-/** 회언가입 폼 유효성 검증
+/** 회원가입 폼 유효성 검증
  * @target name
  * @target email
  * @target companyName
