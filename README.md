@@ -87,6 +87,11 @@
     <img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white"> 
 </div>
 
+## 👤 체험 계정
+
+이메일: test@sample.com
+패스워드: 1567@zcvb
+
 ## ✨ 주요 기능
 
 ### 1. 모임 찾기
