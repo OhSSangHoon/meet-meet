@@ -85,7 +85,9 @@
 <div style='display:flex; align-items:center'>
     <img src="https://img.shields.io/badge/Git Actions-2088FF?style=flat-square&logo=github&logoColor=white"> 
     <img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white"> 
-</div>
+</div><br>
+
+<img src="https://github.com/user-attachments/assets/ac233649-9881-44f8-b3a6-eef7f7d9dfcb" width="600" height="330" />
 
 ## 👤 체험 계정
 
